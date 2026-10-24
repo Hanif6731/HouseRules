@@ -258,6 +258,11 @@ code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-multi-target-is-refused fails "does not support projects with several target frameworks"
 
+dir=$(new_project both-target-properties Clean.cs Baseline '<TargetFrameworks>net8.0;net10.0</TargetFrameworks>')
+build "$dir"
+check both-target-properties fails "sets both TargetFramework \(net10.0\) and TargetFrameworks \(net8.0;net10.0\)" \
+  "!HouseRulesLevel changes"
+
 dir=$(new_project nested-level Violations.cs Strict)
 mkdir "$dir/app"
 mv "$dir/Sample.csproj" "$dir/Violations.cs" "$dir/app/"
