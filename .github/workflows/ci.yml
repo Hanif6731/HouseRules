@@ -42,30 +42,23 @@ jobs:
   smoke-sdk10:
     needs: pack
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # The newest SDK 10, and 10.0.1xx: its Roslyn 5.0 is the oldest compiler the package supports.
+          - sdk: 10.0.x
+            pin: ""
+          - sdk: 10.0.1xx
+            pin: 10.0.100
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
-      - uses: actions/download-artifact@v4
-        with:
-          name: package
-          path: artifacts
-      - run: tests/smoke/smoke.sh artifacts
-
-  smoke-sdk8:
-    needs: pack
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-dotnet@v6
-        with:
-          # 8.0.1xx ships Roslyn 4.8, the oldest compiler the package supports.
-          dotnet-version: 8.0.1xx
+          dotnet-version: ${{ matrix.sdk }}
       - uses: actions/download-artifact@v4
         with:
           name: package
           path: artifacts
       - run: tests/smoke/smoke.sh artifacts
         env:
-          SMOKE_SDK: 8.0.100
+          SMOKE_SDK: ${{ matrix.pin }}

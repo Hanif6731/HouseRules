@@ -11,6 +11,8 @@ errors.
 
 ### Added
 
+- Requires the .NET 10 SDK (10.0.100) or later; projects may target any framework the SDK builds, including net8.0.
+  The analyzers are built against Roslyn 5.0, the compiler in .NET SDK 10.0.100.
 - Three levels, chosen with `<HouseRulesLevel>`: `Baseline`, `Recommended` (the default) and `Strict`. Each level is
   a superset of the one below; [docs/levels.md](docs/levels.md) lists every setting and rule per level.
 - HR0001, blank line after a multi-line statement, with a code fix that `dotnet format` applies.
@@ -20,7 +22,7 @@ errors.
 - Roslynator.Formatting.Analyzers 5.0.1 wrapping rules configured to 120 columns.
 - Banned APIs in six categories, each with its own switch: `HouseRulesBanWeakCrypto`, `HouseRulesBanHttpClient`
   (`Baseline`), `HouseRulesBanWallClock`, `HouseRulesBanRandom`, `HouseRulesBanConsole`, `HouseRulesBanEnvironment`
-  (`Recommended`), through Microsoft.CodeAnalysis.BannedApiAnalyzers 3.3.4.
+  (`Recommended`), through Microsoft.CodeAnalysis.BannedApiAnalyzers 5.6.0.
 - The ratchet: `dotnet build -p:HouseRulesBaseline=init` records a project's existing findings in
   `houserules.baseline`, the build tolerates exactly those, and `dotnet build -p:HouseRulesBaseline=prune` drops the
   fixed ones. The file never grows.

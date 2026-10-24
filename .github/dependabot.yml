@@ -8,7 +8,7 @@ updates:
       prefix: build
       include: scope
     ignore:
-      # Pinned to .NET SDK 8.0.1xx, the oldest SDK the package supports: its Roslyn and MSBuild, and its rule ids.
+      # Pinned to .NET SDK 10.0.1xx, the oldest SDK the package supports: its Roslyn and MSBuild, and its rule ids.
       - dependency-name: Microsoft.CodeAnalysis.CSharp
       - dependency-name: Microsoft.CodeAnalysis.CSharp.Workspaces
       - dependency-name: Microsoft.Build.Utilities.Core

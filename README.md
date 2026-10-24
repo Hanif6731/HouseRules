@@ -144,8 +144,9 @@ Every SDK and Roslynator rule the levels configure is in [docs/levels.md](docs/l
 
 ## Requirements
 
-- .NET 8 SDK or later, SDK-style C# projects. The analyzers are built against Roslyn 4.8, the compiler in .NET SDK
-  8.0.100.
+- .NET 10 SDK or later; projects may target any framework the SDK builds, including net8.0. The analyzers are built
+  against Roslyn 5.0, the compiler in .NET SDK 10.0.100.
+- SDK-style projects.
 - C# only.
 
 Restore-time settings a package cannot set are worth adding yourself: central package management, lock files,
@@ -160,13 +161,15 @@ dotnet restore --locked-mode
 HouseRules follows [Semantic Versioning](https://semver.org/). Only a major version can add a build error, at any
 level: a new rule, a higher severity, or a dependency update that reports more. Minor and patch versions never do.
 Each major pins `AnalysisLevel` and the versions of Roslynator and BannedApiAnalyzers; the SDK analyzers themselves
-come from your SDK, so upgrading the SDK can still change what an existing rule reports.
+come from your SDK, so upgrading the SDK can still change what an existing rule reports. Raising the minimum .NET
+SDK also takes a major version.
 See [CHANGELOG.md](CHANGELOG.md).
 
 ## What's maintained
 
 - The latest major version. Fixes are not backported to older majors.
-- .NET SDK 8 and later; CI tests every change on SDK 8.0.1xx and SDK 10.
+- .NET SDK 10 and later; CI tests every change on SDK 10.0.1xx and the newest SDK 10, with projects that target
+  net10.0 and net8.0.
 - C# in SDK-style projects. VB and F# are not planned.
 - All three levels and the ratchet.
 

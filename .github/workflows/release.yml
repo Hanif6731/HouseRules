@@ -52,8 +52,8 @@ jobs:
         include:
           - sdk: 10.0.x
             pin: ""
-          - sdk: 8.0.1xx
-            pin: 8.0.100
+          - sdk: 10.0.1xx
+            pin: 10.0.100
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6

@@ -4,7 +4,7 @@
 #   tests/smoke/smoke.sh <folder that holds HouseRules.Analyzers.<version>.nupkg>
 #
 # DOTNET     the dotnet executable to use (default: dotnet on PATH)
-# SMOKE_SDK  pin the consumer projects to this SDK band with latestPatch, e.g. 8.0.100 (default: newest installed)
+# SMOKE_SDK  pin the consumer projects to this SDK band with latestPatch, e.g. 10.0.100 (default: newest installed)
 set -euo pipefail
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -133,6 +133,17 @@ check lowercase-level fails "$(reported HR0001)" "$(reported IDE1006)" "$(report
 dir=$(new_project clean-strict Clean.cs Strict)
 build "$dir"
 check clean-strict passes "!warning [A-Z]+[0-9]+"
+
+# The SDK floor is 10, but a project may target any framework that SDK builds.
+for level in Baseline Recommended Strict; do
+  dir=$(new_project "net8.0-$level" Clean.cs "$level" '<TargetFramework>net8.0</TargetFramework>')
+  build "$dir"
+  check "net8.0-$level-clean" passes "!warning [A-Z]+[0-9]+"
+
+  cp "$here/sample/Violations.cs" "$dir/"
+  build "$dir"
+  check "net8.0-$level-violations" fails "$(reported HR0001)"
+done
 
 dir=$(new_project editorconfig-opt-out Violations.cs Baseline)
 printf 'root = true\n\n[*.cs]\ndotnet_diagnostic.HR0001.severity = none\n' > "$dir/.editorconfig"

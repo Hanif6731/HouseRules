@@ -57,7 +57,7 @@ body:
     id: sdk
     attributes:
       label: .NET SDK version
-      description: The output of `dotnet --version`.
+      description: The output of `dotnet --version`. HouseRules needs SDK 10.0.100 or later.
       placeholder: 10.0.402
     validations:
       required: true

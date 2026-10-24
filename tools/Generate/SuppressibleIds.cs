@@ -18,7 +18,7 @@ internal static class SuppressibleIds
             .Order(StringComparer.Ordinal)];
 
     // Roslyn names its warning codes WRN_*. The CS9xxx block is added whole, so warnings from compilers newer than
-    // the 4.8 referenced here can be recorded too.
+    // the 5.0 referenced here can be recorded too.
     private static IEnumerable<string> CompilerWarnings()
     {
         var errorCode = typeof(CSharpCompilation).Assembly.GetType("Microsoft.CodeAnalysis.CSharp.ErrorCode", true)!;

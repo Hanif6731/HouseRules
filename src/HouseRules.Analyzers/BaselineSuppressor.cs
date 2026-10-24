@@ -17,8 +17,7 @@ public sealed class BaselineSuppressor : DiagnosticSuppressor
 
     private static readonly ImmutableDictionary<string, SuppressionDescriptor> Descriptors = LoadDescriptors();
 
-    public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions { get; } =
-        Descriptors.Values.ToImmutableArray();
+    public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions { get; } = [.. Descriptors.Values];
 
     public override void ReportSuppressions(SuppressionAnalysisContext context)
     {
