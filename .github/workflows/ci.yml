@@ -34,7 +34,7 @@ jobs:
         with:
           global-json-file: global.json
       - run: dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: package
           path: artifacts/*.nupkg
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ matrix.sdk }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: package
           path: artifacts
