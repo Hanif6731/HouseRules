@@ -1,9 +1,9 @@
 using System.Text.RegularExpressions;
 
-using Microsoft.CodeAnalysis.Diagnostics;
-
 using HouseRules.Analyzers;
 using HouseRules.Generate;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace HouseRules.Tests;
 
@@ -81,7 +81,8 @@ public sealed class CatalogueTests
             .Order();
 
         var catalogued = CatalogueGenerator.Load(RepoRoot.Path)
-            .Rules.Where(rule => rule.Source == "HouseRules")
+            .Rules
+            .Where(rule => rule.Source == "HouseRules")
             .Select(rule => rule.Id)
             .Order();
 

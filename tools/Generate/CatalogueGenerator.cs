@@ -20,6 +20,9 @@ public static class CatalogueGenerator
 
     private const string CodeAnalysisDocs = "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/";
 
+    // Microsoft.NET.Test.Sdk sets IsTestProject; test projects on Microsoft.Testing.Platform alone set only the other.
+    private const string TestProject = "'$(IsTestProject)' == 'true' or '$(IsTestingPlatformApplication)' == 'true'";
+
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     public static Catalogue Load(string repoRoot)
@@ -201,7 +204,7 @@ public static class CatalogueGenerator
         text.Line("       values. -->");
         text.Line("""  <ItemGroup Condition="'$(_HouseRulesRank)' != '0'">""");
         text.Line(ConfigItem("EditorConfigFiles", "$(_HouseRulesLevelAtProps).globalconfig"));
-        text.Line(ConfigItem("EditorConfigFiles", "Tests.globalconfig", "'$(IsTestProject)' == 'true'"));
+        text.Line(ConfigItem("EditorConfigFiles", "Tests.globalconfig", TestProject));
         foreach (var ban in catalogue.Banned)
         {
             var file = $"BannedSymbols.{ban.Category}.txt";
@@ -320,7 +323,9 @@ public static class CatalogueGenerator
         text.Line();
         text.Line("## Test projects");
         text.Line();
-        text.Line("Projects with `IsTestProject` set to `true` also get these relaxations (naming only, never bans):");
+        text.Line("Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also get these "
+            + "relaxations (naming only, never bans):");
+
         text.Line();
         text.Line("| Setting | Value | Why |");
         text.Line("|---|---|---|");

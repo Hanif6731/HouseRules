@@ -190,7 +190,7 @@ Adds nullable reference types, every compiler warning wave, code metrics and the
 
 ## Test projects
 
-Projects with `IsTestProject` set to `true` also get these relaxations (naming only, never bans):
+Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also get these relaxations (naming only, never bans):
 
 | Setting | Value | Why |
 |---|---|---|

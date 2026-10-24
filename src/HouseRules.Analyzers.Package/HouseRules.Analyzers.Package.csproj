@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>HouseRules.Analyzers</PackageId>
+    <Version>1.0.0</Version>
+    <Description>A .NET coding standard that the build enforces for people and AI agents alike: strict build settings, SDK and Roslynator rules, banned APIs and HouseRules' own rules in one package, adoptable level by level.</Description>
+    <PackageTags>analyzers;roslyn;coding-standard;code-style;editorconfig;formatting</PackageTags>
+    <PackageProjectUrl>https://github.com/Hanif6731/HouseRules</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <!-- The package ships analyzers and MSBuild files only, so its dependency group has no lib folder. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- PrivateAssets="none": these analyzers must flow to the projects that reference HouseRules. -->
+    <PackageReference Include="Roslynator.Formatting.Analyzers" PrivateAssets="none" />
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" PrivateAssets="none" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HouseRules.Analyzers\HouseRules.Analyzers.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\HouseRules.CodeFixes\HouseRules.CodeFixes.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\HouseRules.Analyzers\bin\$(Configuration)\netstandard2.0\HouseRules.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
+    <None Include="..\HouseRules.CodeFixes\bin\$(Configuration)\netstandard2.0\HouseRules.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
+    <None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive" />
+    <None Include="config\**" Pack="true" PackagePath="config" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

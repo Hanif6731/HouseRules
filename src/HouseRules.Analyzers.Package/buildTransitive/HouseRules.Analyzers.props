@@ -58,7 +58,7 @@
        values. -->
   <ItemGroup Condition="'$(_HouseRulesRank)' != '0'">
     <EditorConfigFiles Include="$(_HouseRulesConfig)$(_HouseRulesLevelAtProps).globalconfig" />
-    <EditorConfigFiles Include="$(_HouseRulesConfig)Tests.globalconfig" Condition="'$(IsTestProject)' == 'true'" />
+    <EditorConfigFiles Include="$(_HouseRulesConfig)Tests.globalconfig" Condition="'$(IsTestProject)' == 'true' or '$(IsTestingPlatformApplication)' == 'true'" />
     <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.WeakCrypto.txt" Condition="'$(HouseRulesBanWeakCrypto)' == 'true'" />
     <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.HttpClient.txt" Condition="'$(HouseRulesBanHttpClient)' == 'true'" />
     <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.WallClock.txt" Condition="'$(HouseRulesBanWallClock)' == 'true'" />

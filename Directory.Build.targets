@@ -1,0 +1,25 @@
+<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory)src/HouseRules.Analyzers.Package/buildTransitive/HouseRules.Analyzers.targets" />
+
+  <!-- What the package brings to a consumer, wired from source. The package project brings the two analyzer
+       packages itself, and the analyzer projects cannot load their own output. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' != 'HouseRules.Analyzers.Package'">
+    <PackageReference Include="Roslynator.Formatting.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(MSBuildProjectName)' != 'HouseRules.Analyzers' and '$(MSBuildProjectName)' != 'HouseRules.CodeFixes'">
+    <ProjectReference
+      Include="$(MSBuildThisFileDirectory)src/HouseRules.Analyzers/HouseRules.Analyzers.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+      PrivateAssets="all" />
+    <ProjectReference
+      Include="$(MSBuildThisFileDirectory)src/HouseRules.CodeFixes/HouseRules.CodeFixes.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+      PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

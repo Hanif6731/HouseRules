@@ -1,9 +1,9 @@
+using HouseRules.Analyzers;
+using HouseRules.CodeFixes;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-
-using HouseRules.Analyzers;
-using HouseRules.CodeFixes;
 
 namespace HouseRules.Tests;
 
@@ -202,9 +202,9 @@ public sealed class Hr0001CodeFixTests
     {
         await VerifyAsync(
             "class C\r\n{\r\n    void M()\r\n    {\r\n        Call(\r\n            1);\r\n"
-            + "        {|HR0001:Call|}(2);\r\n    }\r\n\r\n    void Call(int value) { }\r\n}\r\n",
+                + "        {|HR0001:Call|}(2);\r\n    }\r\n\r\n    void Call(int value) { }\r\n}\r\n",
             "class C\r\n{\r\n    void M()\r\n    {\r\n        Call(\r\n            1);\r\n\r\n"
-            + "        Call(2);\r\n    }\r\n\r\n    void Call(int value) { }\r\n}\r\n");
+                + "        Call(2);\r\n    }\r\n\r\n    void Call(int value) { }\r\n}\r\n");
     }
 
     private static Task VerifyAsync(

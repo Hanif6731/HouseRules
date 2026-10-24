@@ -1,0 +1,12 @@
+<Project>
+
+  <Target Name="HouseRulesCheckLevel" BeforeTargets="CoreCompile">
+    <Error
+      Condition="'$(_HouseRulesRank)' == '0'"
+      Text="HouseRulesLevel is '$(HouseRulesLevel)'. Set it to Baseline, Recommended or Strict." />
+    <Error
+      Condition="'$(_HouseRulesRank)' != '0' and '$(HouseRulesLevel)' != '$(_HouseRulesLevelAtProps)'"
+      Text="HouseRulesLevel changes from '$(_HouseRulesLevelAtProps)' to '$(HouseRulesLevel)' in the project file, after HouseRules has applied the build settings for '$(_HouseRulesLevelAtProps)'. Set HouseRulesLevel in Directory.Build.props (a Directory.Build.props next to this project works for a single project) or on the command line." />
+  </Target>
+
+</Project>

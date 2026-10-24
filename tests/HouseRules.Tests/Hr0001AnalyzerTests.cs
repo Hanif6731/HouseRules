@@ -1,8 +1,10 @@
+using System.Globalization;
+
+using HouseRules.Analyzers;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-
-using HouseRules.Analyzers;
 
 namespace HouseRules.Tests;
 
@@ -155,8 +157,9 @@ public sealed class Hr0001AnalyzerTests
         Assert.Equal(RuleIds.BlankLineAfterMultiLineStatement, descriptor.Id);
         Assert.Equal(
             "Add a blank line before this statement: the statement above spans several lines "
-            + "('dotnet format' fixes this)",
-            descriptor.MessageFormat.ToString());
+                + "('dotnet format' fixes this)",
+            descriptor.MessageFormat.ToString(CultureInfo.InvariantCulture));
+
         Assert.Equal(
             "https://github.com/Hanif6731/HouseRules/blob/main/docs/rules/HR0001.md",
             descriptor.HelpLinkUri);
