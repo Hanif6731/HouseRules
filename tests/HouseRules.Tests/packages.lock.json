@@ -357,6 +357,12 @@
       "houserules.analyzers": {
         "type": "Project"
       },
+      "houserules.codefixes": {
+        "type": "Project",
+        "dependencies": {
+          "HouseRules.Analyzers": "[1.0.0, )"
+        }
+      },
       "Microsoft.CodeAnalysis.CSharp": {
         "type": "CentralTransitive",
         "requested": "[4.8.0, )",
