@@ -162,6 +162,33 @@ NuGet audit, and a locked restore in CI:
 dotnet restore --locked-mode
 ```
 
+## Build cost
+
+Measured on 2026-10-24 on a 6-project ASP.NET Core backend (~57K lines in ~495 hand-written files, plus ~100 EF Core
+migration files) that already built with the SDK analyzers at `latest-recommended` and code style enforced in the
+build. Each configuration was restored once, then built clean five times with `dotnet build -c Release --no-restore
+--no-incremental -m -p:TreatWarningsAsErrors=false`, so every build ran to the end despite the new findings. The
+configurations took turns in each round, and none of the timed builds was discarded:
+
+| Configuration | Median | Range | Over the build without HouseRules |
+|---|---|---|---|
+| Without HouseRules | 7.5 s | 6.7–8.7 s | |
+| `Baseline` | 8.5 s | 7.7–15.6 s | +1.0 s (+14%) |
+| `Recommended` | 9.0 s | 8.1–10.8 s | +1.5 s (+20%) |
+| `Strict` | 9.2 s | 8.7–9.4 s | +1.7 s (+23%) |
+
+Machine: AMD Ryzen 9 8945HX (16 cores, 32 threads), 16 GB RAM, Windows 11, .NET SDK 10.0.402, on mains power. The
+build servers were warm: one untimed build per configuration ran first, so a cold CI build adds start-up time not
+shown here. Single builds varied by about a second, so compare the medians.
+
+Most of the extra time is the SDK's own analyzers and code-style rules that the levels turn on. At `Strict`,
+HouseRules' analyzer, Roslynator and the banned-API analyzer took under 1 s of the 16.5 s of analyzer time summed over
+the six projects, as reported by `-p:ReportAnalyzer=true`. A codebase that does not run the SDK analyzers yet starts
+from a faster build and pays more. Live analysis in an IDE is not measured.
+
+To measure your own codebase, time the same clean build several times with and without the package reference, and add
+`-p:ReportAnalyzer=true -bl` to one build to see the time per analyzer in the binary log.
+
 ## Versioning
 
 HouseRules follows [Semantic Versioning](https://semver.org/). Only a major version can add a build error, at any
