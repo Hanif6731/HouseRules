@@ -4,6 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <IsRoslynComponent>true</IsRoslynComponent>
+    <!-- The rules catalogue and CHANGELOG record every shipped rule; AnalyzerReleases files would duplicate them. -->
+    <NoWarn>$(NoWarn);RS2008</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+  </ItemGroup>
 
 </Project>

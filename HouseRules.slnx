@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/HouseRules.Analyzers/HouseRules.Analyzers.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HouseRules.Tests/HouseRules.Tests.csproj" />
+  </Folder>
 </Solution>
