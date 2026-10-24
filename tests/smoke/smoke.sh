@@ -164,6 +164,18 @@ build "$dir"
 check format-fixes-layout fails "!$(reported HR0001)" "!$(reported RCS0056)" "!$(reported IDE0161)" \
   "!$(reported IDE0055)" "$(reported CA5351)"
 
+# dotnet format fixes only what it found before its first fix, so a statement it wraps gets its HR0001 blank line on
+# the next run; two runs must leave nothing for a third.
+dir=$(new_project format-twice-converges Wrap.cs Baseline)
+(cd "$dir" && dotnet format > /dev/null 2>&1) || true
+(cd "$dir" && dotnet format > /dev/null 2>&1) || true
+code=0
+output=$(cd "$dir" && dotnet format --verify-no-changes 2>&1) || code=$?
+check format-twice-converges passes
+
+build "$dir"
+check format-twice-fixes-wrapped-statements passes "!$(reported HR0001)" "!$(reported RCS0056)"
+
 dir=$(new_project level-in-project-file Clean.cs Baseline '<HouseRulesLevel>Strict</HouseRulesLevel>')
 build "$dir"
 check level-in-project-file fails "Set HouseRulesLevel in Directory.Build.props"

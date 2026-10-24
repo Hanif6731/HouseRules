@@ -49,6 +49,9 @@ Layout findings fix themselves:
 dotnet format
 ```
 
+`dotnet format` fixes what it found before its first fix, so a statement it wraps gets its HR0001 blank line only on
+the next run: run `dotnet format` again if the build reports HR0001 after wrapping.
+
 What remains needs a decision: a weak hash, a clock read that a test cannot control, a name that breaks the
 convention.
 
