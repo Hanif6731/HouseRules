@@ -19,6 +19,8 @@ jobs:
       - run: dotnet restore --locked-mode
       - run: dotnet build -c Release --no-restore
       - run: dotnet test -c Release --no-build
+      - name: Generated files match the catalogue
+        run: dotnet run --project tools/Generate -c Release --no-build && git diff --exit-code
       - run: dotnet format --verify-no-changes --no-restore
       - name: Line endings are LF
         run: "! git ls-files --eol | grep 'i/crlf'"
