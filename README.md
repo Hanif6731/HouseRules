@@ -1,5 +1,11 @@
 # HouseRules
 
+[![NuGet](https://img.shields.io/nuget/vpre/HouseRules.Analyzers)](https://www.nuget.org/packages/HouseRules.Analyzers)
+[![CI](https://github.com/Hanif6731/HouseRules/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Hanif6731/HouseRules/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/Hanif6731/HouseRules)](LICENSE)
+
+<img align="right" width="100" alt="HouseRules logo" src="https://raw.githubusercontent.com/Hanif6731/HouseRules/main/docs/logo.svg">
+
 A .NET coding standard that the build enforces, for people and AI agents alike.
 
 AI agents now write much of the code, and they drift from a style guide they read once. A build error holds where a
