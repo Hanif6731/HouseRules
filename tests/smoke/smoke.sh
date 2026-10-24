@@ -154,6 +154,14 @@ dir=$(new_project warnings-not-errors Violations.cs Baseline '<TreatWarningsAsEr
 build "$dir"
 check warnings-not-errors passes "warning HR0001:" "!error [A-Z]+[0-9]+"
 
+# Directory.Build.props is read before the package's defaults, so this opt-out depends on them being conditional.
+dir=$(new_project warnings-not-errors-from-props Violations.cs Baseline)
+sed -i.bak -e 's|^    <HouseRulesLevel>Baseline</HouseRulesLevel>$|&\n    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>|' \
+  "$dir/Directory.Build.props"
+rm "$dir/Directory.Build.props.bak"
+build "$dir"
+check warnings-not-errors-from-props passes "warning HR0001:" "!error [A-Z]+[0-9]+"
+
 dir=$(new_project wall-clock-ban-off Violations.cs Recommended '<HouseRulesBanWallClock>false</HouseRulesBanWallClock>')
 build "$dir"
 check wall-clock-ban-off fails "!'DateTime.UtcNow' is banned" "'MD5' is banned"
@@ -211,6 +219,9 @@ check ratchet-prune passes "records [0-9]+ finding"
 code=0
 output=$(< "$dir/houserules.baseline")
 check ratchet-prune-drops-fixed-entries passes "!\|HR0001\|" "\|RCS0056\|"
+
+build "$dir"
+check ratchet-pruned-baseline-passes passes "!error [A-Z]+[0-9]+"
 
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
