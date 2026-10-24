@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HouseRules.CodeFixes;
 
@@ -57,26 +58,48 @@ public sealed class BlankLineAfterMultiLineStatementCodeFix : CodeFixProvider
         return document.WithSyntaxRoot(root.ReplaceToken(token, fixedToken));
     }
 
-    // Directives right after the statement belong to it (e.g. `#pragma warning restore`), so the blank line goes
-    // after the last of them; anything else (a comment) starts the next paragraph, so the blank line goes above it.
+    // A directive that closes something opened before this trivia (`#pragma warning restore`, `#endregion`, `#endif`,
+    // `#else`) belongs to the statement above, and so does everything before it, comments included; the blank line goes
+    // after the last such directive. Directives that open something (`#region`, `#if`, `#pragma warning disable`),
+    // pairs opened and closed here, and comments after the last closing directive belong to the next statement.
     private static int InsertionIndex(SyntaxTriviaList leading)
     {
         var index = 0;
+        var depth = 0;
         for (var i = 0; i < leading.Count; i++)
         {
-            var trivia = leading[i];
-            if (trivia.IsDirective || trivia.IsKind(SyntaxKind.DisabledTextTrivia))
+            switch (DirectionOf(leading[i]))
             {
-                index = i + 1;
-            }
-            else if (!trivia.IsKind(SyntaxKind.WhitespaceTrivia) && !trivia.IsKind(SyntaxKind.EndOfLineTrivia))
-            {
-                break;
+                case Direction.Opens:
+                    depth++;
+                    break;
+                case Direction.Closes when depth > 0:
+                    depth--;
+                    break;
+                case Direction.Closes or Direction.Continues when depth == 0:
+                    index = i + 1;
+                    break;
+                default:
+                    break;
             }
         }
 
         return index;
     }
+
+    private static Direction DirectionOf(SyntaxTrivia trivia) => trivia.GetStructure() switch
+    {
+        IfDirectiveTriviaSyntax or RegionDirectiveTriviaSyntax => Direction.Opens,
+        EndIfDirectiveTriviaSyntax or EndRegionDirectiveTriviaSyntax => Direction.Closes,
+        ElseDirectiveTriviaSyntax or ElifDirectiveTriviaSyntax => Direction.Continues,
+        PragmaWarningDirectiveTriviaSyntax pragma => pragma.DisableOrRestoreKeyword.IsKind(SyntaxKind.RestoreKeyword)
+            ? Direction.Closes
+            : Direction.Opens,
+        NullableDirectiveTriviaSyntax nullable => nullable.SettingToken.IsKind(SyntaxKind.RestoreKeyword)
+            ? Direction.Closes
+            : Direction.Opens,
+        _ => Direction.None,
+    };
 
     private static string NewLineOf(SyntaxToken token)
     {
@@ -89,5 +112,13 @@ public sealed class BlankLineAfterMultiLineStatementCodeFix : CodeFixProvider
         }
 
         return "\n";
+    }
+
+    private enum Direction
+    {
+        None,
+        Opens,
+        Closes,
+        Continues,
     }
 }

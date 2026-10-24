@@ -116,6 +116,122 @@ public sealed class Hr0001CodeFixTests
             """);
     }
 
+    [Theory]
+    [InlineData("#pragma warning disable CS0168", "#pragma warning restore CS0168")]
+    [InlineData("#region Next", "#endregion")]
+    [InlineData("#if true", "#endif")]
+    public async Task The_blank_line_goes_above_a_directive_that_opens_the_next_statement(string open, string close)
+    {
+        await VerifyAsync(
+            $$"""
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        1);
+            {{open}}
+                    {|HR0001:Call|}(2);
+            {{close}}
+                }
+
+                void Call(int value) { }
+            }
+            """,
+            $$"""
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        1);
+
+            {{open}}
+                    Call(2);
+            {{close}}
+                }
+
+                void Call(int value) { }
+            }
+            """);
+    }
+
+    [Fact]
+    public async Task The_blank_line_goes_after_a_closing_directive_with_a_comment_above_it()
+    {
+        await VerifyAsync(
+            """
+            class C
+            {
+                void M()
+                {
+            #pragma warning disable CS0168
+                    Call(
+                        1);
+                    // still covered
+            #pragma warning restore CS0168
+                    {|HR0001:Call|}(2);
+                }
+
+                void Call(int value) { }
+            }
+            """,
+            """
+            class C
+            {
+                void M()
+                {
+            #pragma warning disable CS0168
+                    Call(
+                        1);
+                    // still covered
+            #pragma warning restore CS0168
+
+                    Call(2);
+                }
+
+                void Call(int value) { }
+            }
+            """);
+    }
+
+    [Fact]
+    public async Task A_directive_pair_before_the_next_statement_belongs_to_it()
+    {
+        await VerifyAsync(
+            """
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        1);
+            #region Setup
+            #endregion
+                    {|HR0001:Call|}(2);
+                }
+
+                void Call(int value) { }
+            }
+            """,
+            """
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        1);
+
+            #region Setup
+            #endregion
+                    Call(2);
+                }
+
+                void Call(int value) { }
+            }
+            """);
+    }
+
     [Fact]
     public async Task Fix_all_repairs_two_multi_line_statements_in_a_row()
     {

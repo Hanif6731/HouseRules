@@ -154,6 +154,14 @@ dir=$(new_project warnings-not-errors Violations.cs Baseline '<TreatWarningsAsEr
 build "$dir"
 check warnings-not-errors passes "warning HR0001:" "!error [A-Z]+[0-9]+"
 
+# Directory.Build.props is read before the package's defaults, so this opt-out depends on them being conditional.
+dir=$(new_project warnings-not-errors-from-props Violations.cs Baseline)
+sed -i.bak -e 's|^    <HouseRulesLevel>Baseline</HouseRulesLevel>$|&\n    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>|' \
+  "$dir/Directory.Build.props"
+rm "$dir/Directory.Build.props.bak"
+build "$dir"
+check warnings-not-errors-from-props passes "warning HR0001:" "!error [A-Z]+[0-9]+"
+
 dir=$(new_project wall-clock-ban-off Violations.cs Recommended '<HouseRulesBanWallClock>false</HouseRulesBanWallClock>')
 build "$dir"
 check wall-clock-ban-off fails "!'DateTime.UtcNow' is banned" "'MD5' is banned"
@@ -163,6 +171,18 @@ dir=$(new_project format-fixes-layout Violations.cs Baseline)
 build "$dir"
 check format-fixes-layout fails "!$(reported HR0001)" "!$(reported RCS0056)" "!$(reported IDE0161)" \
   "!$(reported IDE0055)" "$(reported CA5351)"
+
+# dotnet format fixes only what it found before its first fix, so a statement it wraps gets its HR0001 blank line on
+# the next run; two runs must leave nothing for a third.
+dir=$(new_project format-twice-converges Wrap.cs Baseline)
+(cd "$dir" && dotnet format > /dev/null 2>&1) || true
+(cd "$dir" && dotnet format > /dev/null 2>&1) || true
+code=0
+output=$(cd "$dir" && dotnet format --verify-no-changes 2>&1) || code=$?
+check format-twice-converges passes
+
+build "$dir"
+check format-twice-fixes-wrapped-statements passes "!$(reported HR0001)" "!$(reported RCS0056)"
 
 dir=$(new_project level-in-project-file Clean.cs Baseline '<HouseRulesLevel>Strict</HouseRulesLevel>')
 build "$dir"
@@ -200,6 +220,9 @@ code=0
 output=$(< "$dir/houserules.baseline")
 check ratchet-prune-drops-fixed-entries passes "!\|HR0001\|" "\|RCS0056\|"
 
+build "$dir"
+check ratchet-pruned-baseline-passes passes "!error [A-Z]+[0-9]+"
+
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-init-refuses-to-grow fails "already exists, and a baseline never grows"
@@ -221,6 +244,24 @@ check ratchet-info-baseline-lists-hr0001-only passes "^HR0001 $"
 build "$dir"
 check ratchet-info-baselined-passes passes "!error [A-Z]+[0-9]+"
 
+dir=$(new_project ratchet-linked-file Clean.cs Baseline)
+mkdir "$dir/app" "$dir/shared"
+mv "$dir/Sample.csproj" "$dir/Clean.cs" "$dir/app/"
+cp "$here/sample/Violations.cs" "$dir/shared/"
+sed -i.bak -e 's|^</Project>$|  <ItemGroup>\n    <Compile Include="../shared/Violations.cs" />\n  </ItemGroup>\n</Project>|' \
+  "$dir/app/Sample.csproj"
+rm "$dir/app/Sample.csproj.bak"
+code=0
+output=$(cd "$dir/app" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-linked-file-init passes "records [0-9]+ finding"
+
+code=0
+output=$(grep -v '^#' "$dir/app/houserules.baseline" | cut -d'|' -f1 | sort -u | tr '\n' ' ') || true
+check ratchet-linked-file-path-is-relative passes "^\.\./shared/Violations\.cs $"
+
+build "$dir/app"
+check ratchet-linked-file-baselined-passes passes "!error [A-Z]+[0-9]+"
+
 dir=$(new_project ratchet-unrecordable Legacy.cs Baseline)
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
@@ -239,6 +280,11 @@ check multi-target-builds passes "!warning [A-Z]+[0-9]+"
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-multi-target-is-refused fails "does not support projects with several target frameworks"
+
+dir=$(new_project both-target-properties Clean.cs Baseline '<TargetFrameworks>net8.0;net10.0</TargetFrameworks>')
+build "$dir"
+check both-target-properties fails "sets both TargetFramework \(net10.0\) and TargetFrameworks \(net8.0;net10.0\)" \
+  "!HouseRulesLevel changes"
 
 dir=$(new_project nested-level Violations.cs Strict)
 mkdir "$dir/app"

@@ -1,6 +1,11 @@
 <Project>
 
   <Target Name="HouseRulesCheckLevel" BeforeTargets="CoreCompile">
+    <!-- With both properties, NuGet imports the package's .props only for a TargetFramework known before the project
+         file, so this file runs without it. -->
+    <Error
+      Condition="'$(_HouseRulesConfig)' == '' and '$(TargetFramework)' != '' and '$(TargetFrameworks)' != ''"
+      Text="This project sets both TargetFramework ($(TargetFramework)) and TargetFrameworks ($(TargetFrameworks)), so NuGet did not import HouseRules.Analyzers.props and none of HouseRules' build settings apply. Keep only one of the two properties." />
     <Error
       Condition="'$(_HouseRulesRank)' == '0'"
       Text="HouseRulesLevel is '$(HouseRulesLevel)'. Set it to Baseline, Recommended or Strict." />

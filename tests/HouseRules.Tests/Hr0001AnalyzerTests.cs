@@ -126,6 +126,66 @@ public sealed class Hr0001AnalyzerTests
             """);
     }
 
+    [Theory]
+    [InlineData("#pragma warning disable CS0168", "#pragma warning restore CS0168")]
+    [InlineData("#region Next", "#endregion")]
+    [InlineData("#if true", "#endif")]
+    public async Task A_directive_that_opens_the_next_statement_does_not_replace_the_blank_line(
+        string open,
+        string close)
+    {
+        await VerifyAsync(
+            $$"""
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        1);
+            {{open}}
+                    {|HR0001:Call|}(2);
+            {{close}}
+                    Call(
+                        3);
+
+            {{open}}
+                    Call(4);
+            {{close}}
+                }
+
+                void Call(int value) { }
+            }
+            """);
+    }
+
+    [Fact]
+    public async Task A_comment_above_the_closing_directive_may_sit_before_the_blank_line()
+    {
+        await VerifyAsync("""
+            class C
+            {
+                void M()
+                {
+            #pragma warning disable CS0168
+                    Call(
+                        1);
+                    // still covered
+            #pragma warning restore CS0168
+                    {|HR0001:Call|}(2);
+            #pragma warning disable CS0168
+                    Call(
+                        3);
+                    // still covered
+            #pragma warning restore CS0168
+
+                    Call(4);
+                }
+
+                void Call(int value) { }
+            }
+            """);
+    }
+
     [Fact]
     public async Task Switch_sections_and_top_level_statements_follow_the_same_rule()
     {
