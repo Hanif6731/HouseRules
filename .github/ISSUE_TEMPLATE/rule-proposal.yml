@@ -1,5 +1,6 @@
 name: Rule proposal
 description: Propose a new HouseRules rule.
+labels: [rule-proposal]
 body:
   - type: markdown
     attributes:
