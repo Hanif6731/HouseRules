@@ -52,6 +52,16 @@ public sealed class BaselineSuppressorTests
     }
 
     [Fact]
+    public async Task A_finding_in_a_file_linked_from_outside_the_project_folder_is_suppressed()
+    {
+        var diagnostics = await AnalyzeAsync(
+            Entry("../shared/Linked.cs", "HR0001", "Call(2);"),
+            ("../shared/Linked.cs", Violation));
+
+        Assert.True(diagnostics.Single().IsSuppressed);
+    }
+
+    [Fact]
     public async Task The_same_finding_in_another_file_is_still_reported()
     {
         var diagnostics = await AnalyzeAsync(

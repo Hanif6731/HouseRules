@@ -95,8 +95,9 @@ dotnet build -p:HouseRulesBaseline=prune
 ```
 
 A baseline never grows: `prune` only removes entries, and `init` refuses to run over an existing file. An entry is
-the file, the rule and a hash of the line's text, so edits elsewhere in the file do not disturb it; renaming the file
-does.
+the file's path relative to the project folder (also for a file linked from outside it), the rule and a hash of the
+line's text, so the file reads the same on every machine and edits elsewhere in the file do not disturb it; renaming
+the file does.
 
 The ratchet covers the rules HouseRules configures, compiler warnings and the SDK code analysis rules. When `init`
 meets a finding it cannot record, such as another package's analyzer or a custom `[Obsolete]` id, it names the rule

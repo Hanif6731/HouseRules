@@ -221,6 +221,24 @@ check ratchet-info-baseline-lists-hr0001-only passes "^HR0001 $"
 build "$dir"
 check ratchet-info-baselined-passes passes "!error [A-Z]+[0-9]+"
 
+dir=$(new_project ratchet-linked-file Clean.cs Baseline)
+mkdir "$dir/app" "$dir/shared"
+mv "$dir/Sample.csproj" "$dir/Clean.cs" "$dir/app/"
+cp "$here/sample/Violations.cs" "$dir/shared/"
+sed -i.bak -e 's|^</Project>$|  <ItemGroup>\n    <Compile Include="../shared/Violations.cs" />\n  </ItemGroup>\n</Project>|' \
+  "$dir/app/Sample.csproj"
+rm "$dir/app/Sample.csproj.bak"
+code=0
+output=$(cd "$dir/app" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-linked-file-init passes "records [0-9]+ finding"
+
+code=0
+output=$(grep -v '^#' "$dir/app/houserules.baseline" | cut -d'|' -f1 | sort -u | tr '\n' ' ') || true
+check ratchet-linked-file-path-is-relative passes "^\.\./shared/Violations\.cs $"
+
+build "$dir/app"
+check ratchet-linked-file-baselined-passes passes "!error [A-Z]+[0-9]+"
+
 dir=$(new_project ratchet-unrecordable Legacy.cs Baseline)
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?

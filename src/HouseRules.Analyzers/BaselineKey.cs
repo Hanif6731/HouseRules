@@ -25,11 +25,25 @@ internal static class BaselineKey
         return $"{relativePath}|{id}|{hex}";
     }
 
+    /// <summary>
+    /// The path from the baseline's folder to the file with forward slashes, climbing with <c>..</c> for a file
+    /// linked from outside the folder, so the baseline is the same on every machine. A file on another drive has no
+    /// relative path and keeps its full one.
+    /// </summary>
     public static string RelativePath(string baselineDirectory, string filePath)
     {
-        var root = Path.GetFullPath(baselineDirectory).TrimEnd('\\', '/') + Path.DirectorySeparatorChar;
-        var full = Path.GetFullPath(filePath);
-        var relative = full.StartsWith(root, StringComparison.OrdinalIgnoreCase) ? full.Substring(root.Length) : full;
-        return relative.Replace('\\', '/');
+        var from = Path.GetFullPath(baselineDirectory).Replace('\\', '/').TrimEnd('/').Split('/');
+        var to = Path.GetFullPath(filePath).Replace('\\', '/').Split('/');
+        var common = 0;
+        while (common < from.Length
+            && common < to.Length - 1
+            && string.Equals(from[common], to[common], StringComparison.OrdinalIgnoreCase))
+        {
+            common++;
+        }
+
+        return common == 0
+            ? string.Join("/", to)
+            : string.Join("/", Enumerable.Repeat("..", from.Length - common).Concat(to.Skip(common)));
     }
 }

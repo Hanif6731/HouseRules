@@ -84,6 +84,16 @@ public sealed class BaselineTests
     }
 
     [Fact]
+    public void A_file_linked_from_outside_the_baseline_folder_is_keyed_on_a_relative_path()
+    {
+        var sibling = Path.Combine(Root, "..", "shared", "Linked.cs");
+        var above = Path.Combine(Root, "Linked.cs");
+
+        Assert.Equal("../shared/Linked.cs", BaselineKey.RelativePath(Root, sibling));
+        Assert.Equal("../../Linked.cs", BaselineKey.RelativePath(Path.Combine(Root, "a", "b"), above));
+    }
+
+    [Fact]
     public void Findings_are_read_from_a_compiler_error_log()
     {
         var uri = new Uri(FileA).AbsoluteUri;
