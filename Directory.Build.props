@@ -11,6 +11,8 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
+    <!-- The package ships bare assemblies; an embedded PDB carries Source Link to consumers' debuggers. -->
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -25,3 +25,4 @@ errors.
   `houserules.baseline`, the build tolerates exactly those, and `dotnet build -p:HouseRulesBaseline=prune` drops the
   fixed ones. The file never grows.
 - Naming and code-metric relaxations for test projects.
+- Embedded PDBs with Source Link, so a debugger can step into the analyzers, code fixes and baseline task.
