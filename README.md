@@ -12,7 +12,7 @@ switch.
 ## Install
 
 ```bash
-dotnet add package HouseRules.Analyzers
+dotnet add package HouseRules.Analyzers --prerelease
 ```
 
 For a whole repository, reference it once in `Directory.Build.props`:
@@ -23,10 +23,12 @@ For a whole repository, reference it once in `Directory.Build.props`:
     <HouseRulesLevel>Strict</HouseRulesLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.1" PrivateAssets="all" />
   </ItemGroup>
 </Project>
 ```
+
+1.0.0-preview.1 is a preview; 1.0.0 follows it, and the [release policy](CHANGELOG.md) applies from 1.0.0.
 
 ## Quick start
 

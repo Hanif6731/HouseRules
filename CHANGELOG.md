@@ -7,7 +7,9 @@ All notable changes to HouseRules.Analyzers are listed here. The format follows
 update that reports more) ships only in a major version and is listed here. Minor and patch versions never add
 errors.
 
-## [1.0.0] - unreleased
+## [1.0.0-preview.1] - 2026-10-24
+
+The first preview of 1.0.0. It carries no stability promise: the release policy above applies from 1.0.0.
 
 ### Added
 

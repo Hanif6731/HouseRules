@@ -65,11 +65,11 @@ EOF
     <HouseRulesLevel>Strict</HouseRulesLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.1" PrivateAssets="all" />
   </ItemGroup>
 </Project>
 EOF
-    sed -i.bak -e "s|<HouseRulesLevel>Strict<|<HouseRulesLevel>$3<|" -e "s|Version=\"1.0.0\"|Version=\"$version\"|" \
+    sed -i.bak -e "s|<HouseRulesLevel>Strict<|<HouseRulesLevel>$3<|" -e "s|Version=\"[^\"]*\"|Version=\"$version\"|" \
       "$dir/Directory.Build.props"
     rm "$dir/Directory.Build.props.bak"
   fi
@@ -193,9 +193,13 @@ build "$dir"
 check invalid-level fails "Set it to Baseline, Recommended or Strict"
 
 dir=$(new_project add-package Clean.cs "")
-(cd "$dir" && dotnet add package HouseRules.Analyzers > /dev/null)
+(cd "$dir" && dotnet add package HouseRules.Analyzers --prerelease > /dev/null)
 build "$dir"
 check add-package passes "!warning [A-Z]+[0-9]+"
+
+code=0
+output=$(< "$dir/Sample.csproj")
+check add-package-takes-the-packed-version passes "Include=\"HouseRules.Analyzers\" Version=\"${version//./\\.}\""
 
 dir=$(new_project ratchet Violations.cs Baseline)
 code=0
