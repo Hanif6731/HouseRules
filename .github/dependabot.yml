@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # Pinned to .NET SDK 8.0.1xx, the oldest SDK the package supports: its Roslyn and MSBuild, and its rule ids.
+      - dependency-name: Microsoft.CodeAnalysis.CSharp
+      - dependency-name: Microsoft.CodeAnalysis.CSharp.Workspaces
+      - dependency-name: Microsoft.Build.Utilities.Core
+      - dependency-name: Microsoft.CodeAnalysis.NetAnalyzers
+    groups:
+      # Shipped with the package: an update that reports more waits for the next major (see CHANGELOG.md).
+      shipped-analyzers:
+        patterns:
+          - Roslynator.*
+          - Microsoft.CodeAnalysis.BannedApiAnalyzers
+      development:
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - "*"
