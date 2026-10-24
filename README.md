@@ -241,6 +241,11 @@ page. `main` is kept green, and the repository builds itself at `Strict`.
   standard as one reference; it is meant to be forked rather than consumed directly. HouseRules is meant to be
   consumed directly, adds errors only in major versions, and ships a rollout path (levels and the ratchet).
 
+## Support
+
+HouseRules is free and stays free. If it saves your team time, you can support its maintenance on
+[SupportKori](https://www.supportkori.com/mdhanif).
+
 ## License
 
 [MIT](LICENSE)
