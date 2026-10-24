@@ -181,8 +181,9 @@ configs and `docs/levels.md`; a test fails until you do:
 dotnet run --project tools/Generate
 ```
 
-To propose a rule, open an issue first. A new rule covers what no maintained analyzer does, and arrives with an
-analyzer, a code fix, tests and a docs page. `main` is kept green, and the repository builds itself at `Strict`.
+To propose a rule, [open a rule proposal](https://github.com/Hanif6731/HouseRules/issues/new?template=rule-proposal.yml)
+first. A new rule covers what no maintained analyzer does, and arrives with an analyzer, a code fix, tests and a docs
+page. `main` is kept green, and the repository builds itself at `Strict`.
 
 ## Credits
 

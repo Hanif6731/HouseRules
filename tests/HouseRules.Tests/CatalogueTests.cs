@@ -9,6 +9,9 @@ namespace HouseRules.Tests;
 
 public sealed class CatalogueTests
 {
+    private const string FalsePositiveForm =
+        "https://github.com/Hanif6731/HouseRules/issues/new?template=false-positive.yml";
+
     private static readonly string[] Levels = ["Baseline", "Recommended", "Strict"];
 
     [Fact]
@@ -64,9 +67,11 @@ public sealed class CatalogueTests
     {
         foreach (var rule in CatalogueGenerator.Load(RepoRoot.Path).Rules.Where(rule => rule.Source == "HouseRules"))
         {
+            var page = Path.Combine(RepoRoot.Path, "docs", "rules", rule.Id + ".md");
+            Assert.True(File.Exists(page), $"{rule.Id} has no docs/rules/{rule.Id}.md.");
             Assert.True(
-                File.Exists(Path.Combine(RepoRoot.Path, "docs", "rules", rule.Id + ".md")),
-                $"{rule.Id} has no docs/rules/{rule.Id}.md.");
+                File.ReadAllText(page).Contains(FalsePositiveForm, StringComparison.Ordinal),
+                $"docs/rules/{rule.Id}.md does not link the false-positive issue form.");
         }
     }
 

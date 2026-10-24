@@ -1,0 +1,46 @@
+name: Rule proposal
+description: Propose a new HouseRules rule.
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        A new rule covers what no maintained analyzer does, and ships with a code fix, tests and a docs page.
+  - type: textarea
+    id: rule
+    attributes:
+      label: What the rule asks for
+      description: One or two sentences, as the diagnostic message would say it.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Reported and fixed code
+      description: A short example the rule would report, and the same code after the fix.
+      render: csharp
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: How the code fix works
+      description: What `dotnet format` would change, and any case it could not fix safely.
+    validations:
+      required: true
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Existing analyzers checked
+      description: Why the .NET SDK analyzers, Roslynator, StyleCop and Meziantou.Analyzer do not cover it.
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Proposed level
+      options:
+        - Baseline
+        - Recommended
+        - Strict
+    validations:
+      required: true

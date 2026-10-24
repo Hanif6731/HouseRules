@@ -1,0 +1,63 @@
+name: False positive
+description: A rule reports code that it should not report.
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Any rule a HouseRules level turns on is welcome here, not only HR rules. For an SDK (CA, IDE, CS) or
+        Roslynator (RCS) rule, the fix may be a different level or severity here and a bug report upstream.
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID
+      placeholder: HR0001
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Level
+      options:
+        - Baseline
+        - Recommended
+        - Strict
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal repro
+      description: The smallest code that is reported, plus any .editorconfig or project settings it needs.
+      render: csharp
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What the build should report, or that it should report nothing.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: The diagnostic line from the build output.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: HouseRules version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: sdk
+    attributes:
+      label: .NET SDK version
+      description: The output of `dotnet --version`.
+      placeholder: 10.0.402
+    validations:
+      required: true
