@@ -8,14 +8,37 @@ permissions:
   contents: read
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: The tag is on main and matches the CHANGELOG
+        id: version
+        run: |
+          version=$(.github/scripts/release-version.sh "$GITHUB_REF_NAME")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet restore --locked-mode
+      - run: dotnet build -c Release --no-restore
+      - run: dotnet test -c Release --no-build
+
   pack:
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-      - run: dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts "-p:Version=${GITHUB_REF_NAME#v}"
+      - run: dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts "-p:Version=$VERSION"
+        env:
+          VERSION: ${{ needs.verify.outputs.version }}
       - uses: actions/upload-artifact@v4
         with:
           name: package

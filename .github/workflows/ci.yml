@@ -24,6 +24,7 @@ jobs:
       - run: dotnet format --verify-no-changes --no-restore
       - name: Line endings are LF
         run: "! git ls-files --eol | grep 'i/crlf'"
+      - run: .github/scripts/release-version.test.sh
 
   pack:
     runs-on: ubuntu-latest

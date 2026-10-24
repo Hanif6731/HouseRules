@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <PackageId>HouseRules.Analyzers</PackageId>
-    <Version>1.0.0</Version>
     <Description>A .NET coding standard that the build enforces for people and AI agents alike: strict build settings, SDK and Roslynator rules, banned APIs and HouseRules' own rules in one package, adoptable level by level.</Description>
     <PackageTags>analyzers;roslyn;coding-standard;code-style;editorconfig;formatting</PackageTags>
     <PackageProjectUrl>https://github.com/Hanif6731/HouseRules</PackageProjectUrl>
