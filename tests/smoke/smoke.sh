@@ -209,6 +209,18 @@ code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=Init 2>&1) || code=$?
 check ratchet-mode-casing passes "records [0-9]+ finding"
 
+dir=$(new_project ratchet-info-level InfoFinding.cs Baseline)
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-init-skips-info-findings passes "records 1 finding"
+
+code=0
+output=$(grep -v '^#' "$dir/houserules.baseline" | cut -d'|' -f2 | sort -u | tr '\n' ' ') || true
+check ratchet-info-baseline-lists-hr0001-only passes "^HR0001 $"
+
+build "$dir"
+check ratchet-info-baselined-passes passes "!error [A-Z]+[0-9]+"
+
 dir=$(new_project ratchet-unrecordable Legacy.cs Baseline)
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?

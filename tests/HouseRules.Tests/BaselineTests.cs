@@ -117,5 +117,41 @@ public sealed class BaselineTests
             findings);
     }
 
+    [Fact]
+    public void Init_records_only_findings_that_fail_or_warn_the_build()
+    {
+        var findings = Baseline.ReadErrorLog(
+            ErrorLog(("SYSLIB1045", "note", 5), ("IDE0005", "none", 3), ("HR0001", "warning", 5)));
+
+        var recorded = Baseline.Init(findings, Root, ReadLines);
+        var unrecordable = Baseline.Unrecordable(findings, id => id is "HR0001");
+
+        Assert.Equal(new Dictionary<string, int> { [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 1 }, recorded);
+        Assert.Empty(unrecordable);
+    }
+
+    [Fact]
+    public void An_error_the_suppressor_cannot_suppress_is_still_named()
+    {
+        var findings = Baseline.ReadErrorLog(ErrorLog(("SYSLIB1045", "note", 5), ("LEGACY001", "error", 5)));
+
+        var unrecordable = Baseline.Unrecordable(findings, id => id is "HR0001");
+
+        Assert.Equal(["LEGACY001"], unrecordable);
+    }
+
+    private static string ErrorLog(params (string RuleId, string Level, int Line)[] results)
+    {
+        var uri = new Uri(FileA).AbsoluteUri;
+        var entries = results.Select(
+            result => $$"""
+                { "ruleId": "{{result.RuleId}}", "level": "{{result.Level}}",
+                  "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "{{uri}}" },
+                    "region": { "startLine": {{result.Line}} } } } ] }
+                """);
+
+        return $$"""{ "version": "2.1.0", "runs": [ { "results": [ {{string.Join(",", entries)}} ] } ] }""";
+    }
+
     private static string[] ReadLines(string path) => path == FileA ? LinesOfA : [];
 }

@@ -30,7 +30,6 @@ namespace Sample
             ArgumentNullException.ThrowIfNull(value);
         }
 
-        public bool Matches(string text, string pattern) =>
-            System.Text.RegularExpressions.Regex.Match(text, pattern).Success;
+        public bool Matches(string text) => System.Text.RegularExpressions.Regex.Match(text, "a+").Success;
     }
 }

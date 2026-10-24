@@ -91,7 +91,10 @@ public static class Baseline
         return pruned;
     }
 
-    /// <summary>Findings with a source location from a SARIF 2.1 error log written by the compiler.</summary>
+    /// <summary>
+    /// The findings that fail or warn the build, from a SARIF 2.1 error log written by the compiler. Info and hidden
+    /// findings (SARIF <c>note</c> and <c>none</c>) never fail a build, so the ratchet neither records nor refuses them.
+    /// </summary>
     public static IReadOnlyList<Finding> ReadErrorLog(string sarif)
     {
         var serializer = new DataContractJsonSerializer(typeof(SarifLog));
@@ -100,7 +103,7 @@ public static class Baseline
         var findings = new List<Finding>();
         foreach (var result in (log?.Runs ?? []).SelectMany(run => run.Results ?? []))
         {
-            if (result.RuleId is null)
+            if (result.RuleId is null || result.Level is "note" or "none")
             {
                 continue;
             }
@@ -166,6 +169,9 @@ public static class Baseline
     {
         [DataMember(Name = "ruleId")]
         public string? RuleId { get; set; }
+
+        [DataMember(Name = "level")]
+        public string? Level { get; set; }
 
         [DataMember(Name = "locations")]
         public SarifLocation[]? Locations { get; set; }
