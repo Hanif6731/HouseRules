@@ -1,0 +1,103 @@
+# Generated from catalogue/rules.json by tools/Generate. Do not edit.
+is_global = true
+global_level = -50
+
+# HR0001: Blank line after a multi-line statement.
+dotnet_diagnostic.HR0001.severity = warning
+
+# IDE0055: Formatting: Allman braces, indentation, spacing.
+dotnet_diagnostic.IDE0055.severity = warning
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_between_query_expression_clauses = true
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_indent_labels = one_less_than_current
+csharp_indent_block_contents = true
+csharp_indent_braces = false
+csharp_indent_case_contents_when_block = false
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_around_binary_operators = before_and_after
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+csharp_space_between_method_call_parameter_list_parentheses = false
+csharp_space_between_parentheses = false
+csharp_space_after_comma = true
+csharp_space_after_dot = false
+csharp_space_after_semicolon_in_for_statement = true
+csharp_space_before_colon_in_inheritance_clause = true
+csharp_space_after_colon_in_inheritance_clause = true
+csharp_preserve_single_line_blocks = true
+csharp_preserve_single_line_statements = false
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = true
+
+# IDE0011: Braces on every if, else, for, foreach, while and using body.
+dotnet_diagnostic.IDE0011.severity = warning
+csharp_prefer_braces = true
+
+# IDE0161: File-scoped namespaces.
+dotnet_diagnostic.IDE0161.severity = warning
+csharp_style_namespace_declarations = file_scoped
+
+# IDE0065: Using directives outside the namespace.
+dotnet_diagnostic.IDE0065.severity = warning
+csharp_using_directive_placement = outside_namespace
+
+# RCS0056: Lines are at most 120 characters long.
+dotnet_diagnostic.RCS0056.severity = warning
+roslynator_max_line_length = 120
+
+# RCS0054: Once a call chain wraps, one call per line.
+dotnet_diagnostic.RCS0054.severity = warning
+
+# RCS0053: Argument and parameter lists: on one line, or one element per line.
+dotnet_diagnostic.RCS0053.severity = warning
+
+# RCS0032: A wrapped expression body breaks after `=>`.
+dotnet_diagnostic.RCS0032.severity = warning
+roslynator_arrow_token_new_line = after
+
+# RCS0052: A wrapped assignment breaks after `=`.
+dotnet_diagnostic.RCS0052.severity = warning
+roslynator_equals_token_new_line = after
+
+# RCS0027: A wrapped binary expression puts the operator first on the new line.
+dotnet_diagnostic.RCS0027.severity = warning
+roslynator_binary_operator_new_line = before
+
+# RCS0028: A wrapped conditional expression puts `?` and `:` first on the new line.
+dotnet_diagnostic.RCS0028.severity = warning
+roslynator_conditional_operator_new_line = before
+
+# RCS0059: A wrapped null-conditional access puts `?.` first on the new line.
+dotnet_diagnostic.RCS0059.severity = warning
+roslynator_null_conditional_operator_new_line = before
+
+# RCS0055: Once a binary expression wraps, it breaks at every operator.
+dotnet_diagnostic.RCS0055.severity = warning
+
+# RS0030: Banned APIs (see the ban categories).
+dotnet_diagnostic.RS0030.severity = warning
+
+# CA2100: SQL built from strings is reviewed for injection.
+dotnet_diagnostic.CA2100.severity = warning
+
+# CA3075: No insecure DTD processing in XML.
+dotnet_diagnostic.CA3075.severity = warning
+
+# CA5350: No weak cryptographic algorithms.
+dotnet_diagnostic.CA5350.severity = warning
+
+# CA5351: No broken cryptographic algorithms.
+dotnet_diagnostic.CA5351.severity = warning
+
+# CA5394: No insecure randomness.
+dotnet_diagnostic.CA5394.severity = warning
+
+# CA2007: Off: ConfigureAwait on every await is noise in apps without a synchronization context.
+dotnet_diagnostic.CA2007.severity = none

@@ -1,0 +1,1 @@
+T:System.Random;Not cryptographically secure and not injectable. Use RandomNumberGenerator for tokens and keys; inject a source of randomness where tests need control.

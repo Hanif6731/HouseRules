@@ -1,0 +1,5 @@
+# Code-metric thresholds for CA1502 (complexity), CA1505 (maintainability index) and CA1506 (coupling).
+CA1502: 15
+CA1505: 20
+CA1506(Method): 30
+CA1506(Type): 60

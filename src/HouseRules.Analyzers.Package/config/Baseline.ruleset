@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from catalogue/rules.json by tools/Generate. Do not edit. -->
+<RuleSet Name="HouseRules Baseline" Description="HouseRules Baseline" ToolsVersion="17.0">
+  <Rules AnalyzerId="HouseRules" RuleNamespace="HouseRules">
+    <Rule Id="HR0001" Action="Warning" />
+    <Rule Id="IDE0055" Action="Warning" />
+    <Rule Id="IDE0011" Action="Warning" />
+    <Rule Id="IDE0161" Action="Warning" />
+    <Rule Id="IDE0065" Action="Warning" />
+    <Rule Id="RCS0056" Action="Warning" />
+    <Rule Id="RCS0054" Action="Warning" />
+    <Rule Id="RCS0053" Action="Warning" />
+    <Rule Id="RCS0032" Action="Warning" />
+    <Rule Id="RCS0052" Action="Warning" />
+    <Rule Id="RCS0027" Action="Warning" />
+    <Rule Id="RCS0028" Action="Warning" />
+    <Rule Id="RCS0059" Action="Warning" />
+    <Rule Id="RCS0055" Action="Warning" />
+    <Rule Id="RS0030" Action="Warning" />
+    <Rule Id="CA2100" Action="Warning" />
+    <Rule Id="CA3075" Action="Warning" />
+    <Rule Id="CA5350" Action="Warning" />
+    <Rule Id="CA5351" Action="Warning" />
+    <Rule Id="CA5394" Action="Warning" />
+    <Rule Id="CA2007" Action="None" />
+  </Rules>
+</RuleSet>

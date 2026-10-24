@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\HouseRules.Analyzers\HouseRules.Analyzers.csproj" />
     <ProjectReference Include="..\..\src\HouseRules.CodeFixes\HouseRules.CodeFixes.csproj" />
+    <ProjectReference Include="..\..\tools\Generate\Generate.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,74 @@
+<Project>
+
+  <!-- Generated from catalogue/rules.json by tools/Generate. Do not edit. -->
+
+  <!-- Build settings must be defaults set here, before the SDK sets its own defaults. They
+       therefore follow the level known at this point: Directory.Build.props or the command
+       line. -->
+  <PropertyGroup>
+    <HouseRulesLevel Condition="'$(HouseRulesLevel)' == ''">Recommended</HouseRulesLevel>
+    <_HouseRulesLevelAtProps>$(HouseRulesLevel)</_HouseRulesLevelAtProps>
+    <_HouseRulesRank>0</_HouseRulesRank>
+    <_HouseRulesRank Condition="'$(HouseRulesLevel)' == 'Baseline'">1</_HouseRulesRank>
+    <_HouseRulesRank Condition="'$(HouseRulesLevel)' == 'Recommended'">2</_HouseRulesRank>
+    <_HouseRulesRank Condition="'$(HouseRulesLevel)' == 'Strict'">3</_HouseRulesRank>
+    <_HouseRulesConfig>$(MSBuildThisFileDirectory)../config/</_HouseRulesConfig>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(_HouseRulesRank)' >= '1'">
+    <TreatWarningsAsErrors Condition="'$(TreatWarningsAsErrors)' == ''">true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors Condition="'$(CodeAnalysisTreatWarningsAsErrors)' == ''">true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == ''">true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">true</EnableNETAnalyzers>
+    <AnalysisLevel Condition="'$(AnalysisLevel)' == ''">8.0</AnalysisLevel>
+    <Deterministic Condition="'$(Deterministic)' == ''">true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and ('$(CI)' == 'true')">true</ContinuousIntegrationBuild>
+    <AnalysisModeSecurity Condition="'$(AnalysisModeSecurity)' == ''">All</AnalysisModeSecurity>
+    <AnalysisModeReliability Condition="'$(AnalysisModeReliability)' == ''">All</AnalysisModeReliability>
+    <HouseRulesBanWeakCrypto Condition="'$(HouseRulesBanWeakCrypto)' == ''">true</HouseRulesBanWeakCrypto>
+    <HouseRulesBanHttpClient Condition="'$(HouseRulesBanHttpClient)' == ''">true</HouseRulesBanHttpClient>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(_HouseRulesRank)' >= '2'">
+    <GenerateDocumentationFile Condition="'$(GenerateDocumentationFile)' == ''">true</GenerateDocumentationFile>
+    <AnalysisModeUsage Condition="'$(AnalysisModeUsage)' == ''">All</AnalysisModeUsage>
+    <AnalysisModePerformance Condition="'$(AnalysisModePerformance)' == ''">Recommended</AnalysisModePerformance>
+    <AnalysisModeMaintainability Condition="'$(AnalysisModeMaintainability)' == ''">Recommended</AnalysisModeMaintainability>
+    <AnalysisModeDesign Condition="'$(AnalysisModeDesign)' == ''">Recommended</AnalysisModeDesign>
+    <AnalysisModeNaming Condition="'$(AnalysisModeNaming)' == ''">Recommended</AnalysisModeNaming>
+    <AnalysisModeGlobalization Condition="'$(AnalysisModeGlobalization)' == ''">Recommended</AnalysisModeGlobalization>
+    <HouseRulesBanWallClock Condition="'$(HouseRulesBanWallClock)' == ''">true</HouseRulesBanWallClock>
+    <HouseRulesBanRandom Condition="'$(HouseRulesBanRandom)' == ''">true</HouseRulesBanRandom>
+    <HouseRulesBanConsole Condition="'$(HouseRulesBanConsole)' == ''">true</HouseRulesBanConsole>
+    <HouseRulesBanEnvironment Condition="'$(HouseRulesBanEnvironment)' == ''">true</HouseRulesBanEnvironment>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(_HouseRulesRank)' >= '3'">
+    <Nullable Condition="'$(Nullable)' == ''">enable</Nullable>
+    <Features Condition="'$(Features)' == ''">strict</Features>
+    <WarningLevel Condition="'$(WarningLevel)' == ''">9999</WarningLevel>
+    <CheckForOverflowUnderflow Condition="'$(CheckForOverflowUnderflow)' == '' and ('$(Configuration)' == 'Debug' or '$(Configuration)' == '')">true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(_HouseRulesRank)' != '0'">
+    <CodeAnalysisRuleSet Condition="'$(CodeAnalysisRuleSet)' == ''">$(_HouseRulesConfig)$(_HouseRulesLevelAtProps).ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <!-- Items are evaluated after every property, so the conditions below see the project's final
+       values. -->
+  <ItemGroup Condition="'$(_HouseRulesRank)' != '0'">
+    <EditorConfigFiles Include="$(_HouseRulesConfig)$(_HouseRulesLevelAtProps).globalconfig" />
+    <EditorConfigFiles Include="$(_HouseRulesConfig)Tests.globalconfig" Condition="'$(IsTestProject)' == 'true'" />
+    <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.WeakCrypto.txt" Condition="'$(HouseRulesBanWeakCrypto)' == 'true'" />
+    <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.HttpClient.txt" Condition="'$(HouseRulesBanHttpClient)' == 'true'" />
+    <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.WallClock.txt" Condition="'$(HouseRulesBanWallClock)' == 'true'" />
+    <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.Random.txt" Condition="'$(HouseRulesBanRandom)' == 'true'" />
+    <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.Console.txt" Condition="'$(HouseRulesBanConsole)' == 'true'" />
+    <AdditionalFiles Include="$(_HouseRulesConfig)BannedSymbols.Environment.txt" Condition="'$(HouseRulesBanEnvironment)' == 'true'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(_HouseRulesRank)' >= '3'">
+    <AdditionalFiles Include="$(_HouseRulesConfig)CodeMetricsConfig.txt" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,4 @@
+T:System.Net.WebClient;Obsolete. Inject an HttpClient from IHttpClientFactory.
+M:System.Net.Http.HttpClient.#ctor;A new HttpClient per use exhausts sockets and skips configuration. Inject one from IHttpClientFactory.
+M:System.Net.Http.HttpClient.#ctor(System.Net.Http.HttpMessageHandler);Inject an HttpClient from IHttpClientFactory.
+M:System.Net.Http.HttpClient.#ctor(System.Net.Http.HttpMessageHandler,System.Boolean);Inject an HttpClient from IHttpClientFactory.

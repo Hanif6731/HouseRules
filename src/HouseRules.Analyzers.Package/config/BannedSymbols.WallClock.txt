@@ -1,0 +1,5 @@
+P:System.DateTime.Now;Inject TimeProvider and call GetUtcNow(), so time is testable and never server-local.
+P:System.DateTime.UtcNow;Inject TimeProvider and call GetUtcNow(), so time is testable.
+P:System.DateTime.Today;Inject TimeProvider; "today" depends on a time zone, so make it explicit.
+P:System.DateTimeOffset.Now;Inject TimeProvider and call GetUtcNow().
+P:System.DateTimeOffset.UtcNow;Inject TimeProvider and call GetUtcNow(), so time is testable.

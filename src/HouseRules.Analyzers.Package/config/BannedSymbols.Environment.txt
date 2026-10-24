@@ -1,0 +1,4 @@
+M:System.Environment.GetEnvironmentVariable(System.String);Read settings through IConfiguration or IOptions<T>.
+M:System.Environment.GetEnvironmentVariable(System.String,System.EnvironmentVariableTarget);Read settings through IConfiguration or IOptions<T>.
+M:System.Environment.GetEnvironmentVariables;Read settings through IConfiguration or IOptions<T>.
+M:System.Environment.GetEnvironmentVariables(System.EnvironmentVariableTarget);Read settings through IConfiguration or IOptions<T>.

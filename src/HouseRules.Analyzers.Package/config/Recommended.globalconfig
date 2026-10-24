@@ -1,0 +1,334 @@
+# Generated from catalogue/rules.json by tools/Generate. Do not edit.
+is_global = true
+global_level = -50
+
+# HR0001: Blank line after a multi-line statement.
+dotnet_diagnostic.HR0001.severity = warning
+
+# IDE0055: Formatting: Allman braces, indentation, spacing.
+dotnet_diagnostic.IDE0055.severity = warning
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_between_query_expression_clauses = true
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_indent_labels = one_less_than_current
+csharp_indent_block_contents = true
+csharp_indent_braces = false
+csharp_indent_case_contents_when_block = false
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_around_binary_operators = before_and_after
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+csharp_space_between_method_call_parameter_list_parentheses = false
+csharp_space_between_parentheses = false
+csharp_space_after_comma = true
+csharp_space_after_dot = false
+csharp_space_after_semicolon_in_for_statement = true
+csharp_space_before_colon_in_inheritance_clause = true
+csharp_space_after_colon_in_inheritance_clause = true
+csharp_preserve_single_line_blocks = true
+csharp_preserve_single_line_statements = false
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = true
+
+# IDE0011: Braces on every if, else, for, foreach, while and using body.
+dotnet_diagnostic.IDE0011.severity = warning
+csharp_prefer_braces = true
+
+# IDE0161: File-scoped namespaces.
+dotnet_diagnostic.IDE0161.severity = warning
+csharp_style_namespace_declarations = file_scoped
+
+# IDE0065: Using directives outside the namespace.
+dotnet_diagnostic.IDE0065.severity = warning
+csharp_using_directive_placement = outside_namespace
+
+# RCS0056: Lines are at most 120 characters long.
+dotnet_diagnostic.RCS0056.severity = warning
+roslynator_max_line_length = 120
+
+# RCS0054: Once a call chain wraps, one call per line.
+dotnet_diagnostic.RCS0054.severity = warning
+
+# RCS0053: Argument and parameter lists: on one line, or one element per line.
+dotnet_diagnostic.RCS0053.severity = warning
+
+# RCS0032: A wrapped expression body breaks after `=>`.
+dotnet_diagnostic.RCS0032.severity = warning
+roslynator_arrow_token_new_line = after
+
+# RCS0052: A wrapped assignment breaks after `=`.
+dotnet_diagnostic.RCS0052.severity = warning
+roslynator_equals_token_new_line = after
+
+# RCS0027: A wrapped binary expression puts the operator first on the new line.
+dotnet_diagnostic.RCS0027.severity = warning
+roslynator_binary_operator_new_line = before
+
+# RCS0028: A wrapped conditional expression puts `?` and `:` first on the new line.
+dotnet_diagnostic.RCS0028.severity = warning
+roslynator_conditional_operator_new_line = before
+
+# RCS0059: A wrapped null-conditional access puts `?.` first on the new line.
+dotnet_diagnostic.RCS0059.severity = warning
+roslynator_null_conditional_operator_new_line = before
+
+# RCS0055: Once a binary expression wraps, it breaks at every operator.
+dotnet_diagnostic.RCS0055.severity = warning
+
+# RS0030: Banned APIs (see the ban categories).
+dotnet_diagnostic.RS0030.severity = warning
+
+# CA2100: SQL built from strings is reviewed for injection.
+dotnet_diagnostic.CA2100.severity = warning
+
+# CA3075: No insecure DTD processing in XML.
+dotnet_diagnostic.CA3075.severity = warning
+
+# CA5350: No weak cryptographic algorithms.
+dotnet_diagnostic.CA5350.severity = warning
+
+# CA5351: No broken cryptographic algorithms.
+dotnet_diagnostic.CA5351.severity = warning
+
+# CA5394: No insecure randomness.
+dotnet_diagnostic.CA5394.severity = warning
+
+# CA2007: Off: ConfigureAwait on every await is noise in apps without a synchronization context.
+dotnet_diagnostic.CA2007.severity = none
+
+# IDE1006: Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters, Async suffix on async methods.
+dotnet_diagnostic.IDE1006.severity = warning
+dotnet_naming_rule.interfaces_begin_with_i.symbols = interfaces
+dotnet_naming_rule.interfaces_begin_with_i.style = prefix_i
+dotnet_naming_rule.interfaces_begin_with_i.severity = warning
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_style.prefix_i.capitalization = pascal_case
+dotnet_naming_style.prefix_i.required_prefix = I
+dotnet_naming_rule.type_parameters_begin_with_t.symbols = type_parameters
+dotnet_naming_rule.type_parameters_begin_with_t.style = prefix_t
+dotnet_naming_rule.type_parameters_begin_with_t.severity = warning
+dotnet_naming_symbols.type_parameters.applicable_kinds = type_parameter
+dotnet_naming_style.prefix_t.capitalization = pascal_case
+dotnet_naming_style.prefix_t.required_prefix = T
+dotnet_naming_rule.types_and_members_pascal.symbols = types_and_members
+dotnet_naming_rule.types_and_members_pascal.style = pascal_case
+dotnet_naming_rule.types_and_members_pascal.severity = warning
+dotnet_naming_symbols.types_and_members.applicable_kinds = class, struct, enum, delegate, method, property, event, namespace, local_function
+dotnet_naming_rule.constants_pascal.symbols = constants
+dotnet_naming_rule.constants_pascal.style = pascal_case
+dotnet_naming_rule.constants_pascal.severity = warning
+dotnet_naming_symbols.constants.applicable_kinds = field, local
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_rule.static_readonly_pascal.symbols = static_readonly_fields
+dotnet_naming_rule.static_readonly_pascal.style = pascal_case
+dotnet_naming_rule.static_readonly_pascal.severity = warning
+dotnet_naming_symbols.static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.static_readonly_fields.required_modifiers = static, readonly
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel_case
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private, protected, private_protected
+dotnet_naming_rule.parameters_and_locals_camel.symbols = parameters_and_locals
+dotnet_naming_rule.parameters_and_locals_camel.style = camel_case
+dotnet_naming_rule.parameters_and_locals_camel.severity = warning
+dotnet_naming_symbols.parameters_and_locals.applicable_kinds = parameter, local
+dotnet_naming_rule.async_methods_end_with_async.symbols = async_methods
+dotnet_naming_rule.async_methods_end_with_async.style = end_with_async
+dotnet_naming_rule.async_methods_end_with_async.severity = warning
+dotnet_naming_symbols.async_methods.applicable_kinds = method
+dotnet_naming_symbols.async_methods.required_modifiers = async
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+dotnet_naming_style.camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.end_with_async.capitalization = pascal_case
+dotnet_naming_style.end_with_async.required_suffix = Async
+
+# IDE0005: No unused using directives.
+dotnet_diagnostic.IDE0005.severity = warning
+
+# CS1591: Off: documentation files are generated for IDE0005, doc comments stay optional.
+dotnet_diagnostic.CS1591.severity = none
+
+# CA2016: Pass the CancellationToken on when the callee accepts one.
+dotnet_diagnostic.CA2016.severity = warning
+
+# IDE0040: Explicit accessibility modifiers.
+dotnet_diagnostic.IDE0040.severity = warning
+dotnet_style_require_accessibility_modifiers = for_non_interface_members
+
+# IDE0044: Fields that never change are readonly.
+dotnet_diagnostic.IDE0044.severity = warning
+dotnet_style_readonly_field = true
+
+# IDE0036: Modifiers in one order.
+dotnet_diagnostic.IDE0036.severity = warning
+csharp_preferred_modifier_order = public,private,protected,internal,file,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async
+
+# IDE0003: No `this.` qualification.
+dotnet_diagnostic.IDE0003.severity = warning
+dotnet_style_qualification_for_field = false
+dotnet_style_qualification_for_property = false
+dotnet_style_qualification_for_method = false
+dotnet_style_qualification_for_event = false
+
+# IDE0009: No `this.` qualification (the opposite preference is off).
+dotnet_diagnostic.IDE0009.severity = warning
+
+# IDE0049: Language keywords over BCL type names (`string`, not `String`).
+dotnet_diagnostic.IDE0049.severity = warning
+dotnet_style_predefined_type_for_locals_parameters_members = true
+dotnet_style_predefined_type_for_member_access = true
+
+# IDE0017: Object initializers.
+dotnet_diagnostic.IDE0017.severity = warning
+dotnet_style_object_initializer = true
+
+# IDE0028: Collection initializers.
+dotnet_diagnostic.IDE0028.severity = warning
+dotnet_style_collection_initializer = true
+
+# IDE0300: Collection expressions for arrays.
+dotnet_diagnostic.IDE0300.severity = warning
+dotnet_style_prefer_collection_expression = when_types_loosely_match
+
+# IDE0305: Collection expressions instead of fluent `ToList()`/`ToArray()` calls.
+dotnet_diagnostic.IDE0305.severity = warning
+
+# IDE0029: `??` instead of a null-check ternary.
+dotnet_diagnostic.IDE0029.severity = warning
+dotnet_style_coalesce_expression = true
+
+# IDE0030: `??` for nullable value types.
+dotnet_diagnostic.IDE0030.severity = warning
+
+# IDE0031: `?.` instead of a null-check ternary.
+dotnet_diagnostic.IDE0031.severity = warning
+dotnet_style_null_propagation = true
+
+# IDE0041: `is null` instead of `ReferenceEquals`.
+dotnet_diagnostic.IDE0041.severity = warning
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true
+
+# IDE0032: Auto-properties instead of a property over a private field.
+dotnet_diagnostic.IDE0032.severity = warning
+dotnet_style_prefer_auto_properties = true
+
+# IDE0075: Simplified conditional expressions.
+dotnet_diagnostic.IDE0075.severity = warning
+dotnet_style_prefer_simplified_boolean_expressions = true
+
+# IDE0037: Inferred tuple and anonymous type member names.
+dotnet_diagnostic.IDE0037.severity = warning
+dotnet_style_prefer_inferred_tuple_names = true
+dotnet_style_prefer_inferred_anonymous_type_member_names = true
+
+# IDE0054: Compound assignment (`x += 1`).
+dotnet_diagnostic.IDE0054.severity = warning
+dotnet_style_prefer_compound_assignment = true
+
+# IDE0074: Coalesce compound assignment (`x ??= y`).
+dotnet_diagnostic.IDE0074.severity = warning
+
+# IDE0071: Simplified interpolation.
+dotnet_diagnostic.IDE0071.severity = warning
+dotnet_style_prefer_simplified_interpolation = true
+
+# IDE0019: Pattern matching instead of `as` plus a null check.
+dotnet_diagnostic.IDE0019.severity = warning
+csharp_style_pattern_matching_over_as_with_null_check = true
+
+# IDE0020: Pattern matching instead of `is` plus a cast.
+dotnet_diagnostic.IDE0020.severity = warning
+csharp_style_pattern_matching_over_is_with_cast_check = true
+
+# IDE0083: `is not` patterns.
+dotnet_diagnostic.IDE0083.severity = warning
+csharp_style_prefer_not_pattern = true
+
+# IDE0150: A null check instead of a type check when the type is known.
+dotnet_diagnostic.IDE0150.severity = warning
+csharp_style_prefer_null_check_over_type_check = true
+
+# IDE1005: `?.Invoke` for delegates.
+dotnet_diagnostic.IDE1005.severity = warning
+csharp_style_conditional_delegate_call = true
+
+# IDE0018: Inline `out` variable declarations.
+dotnet_diagnostic.IDE0018.severity = warning
+csharp_style_inlined_variable_declaration = true
+
+# IDE0056: Index operator (`^1`).
+dotnet_diagnostic.IDE0056.severity = warning
+csharp_style_prefer_index_operator = true
+
+# IDE0057: Range operator (`a..b`).
+dotnet_diagnostic.IDE0057.severity = warning
+csharp_style_prefer_range_operator = true
+
+# IDE0090: Target-typed `new()` when the type is apparent.
+dotnet_diagnostic.IDE0090.severity = warning
+csharp_style_implicit_object_creation_when_type_is_apparent = true
+
+# IDE0034: `default` instead of `default(T)`.
+dotnet_diagnostic.IDE0034.severity = warning
+csharp_prefer_simple_default_expression = true
+
+# IDE0063: Using declarations instead of using blocks.
+dotnet_diagnostic.IDE0063.severity = warning
+csharp_prefer_simple_using_statement = true
+
+# IDE0039: Local functions instead of lambdas stored in locals.
+dotnet_diagnostic.IDE0039.severity = warning
+csharp_style_prefer_local_over_anonymous_function = true
+
+# IDE0062: Static local functions when nothing is captured.
+dotnet_diagnostic.IDE0062.severity = warning
+csharp_prefer_static_local_function = true
+
+# IDE0170: Extended property patterns.
+dotnet_diagnostic.IDE0170.severity = warning
+csharp_style_prefer_extended_property_pattern = true
+
+# IDE0051: No unused private members.
+dotnet_diagnostic.IDE0051.severity = warning
+
+# IDE0052: No private members that are written but never read.
+dotnet_diagnostic.IDE0052.severity = warning
+
+# IDE0060: No unused parameters on non-public members.
+dotnet_diagnostic.IDE0060.severity = warning
+dotnet_code_quality_unused_parameters = non_public
+
+# IDE0059: No assignments whose value is never used.
+dotnet_diagnostic.IDE0059.severity = warning
+csharp_style_unused_value_assignment_preference = discard_variable
+
+# IDE0035: No unreachable code.
+dotnet_diagnostic.IDE0035.severity = warning
+
+# IDE0004: No unnecessary casts.
+dotnet_diagnostic.IDE0004.severity = warning
+
+# IDE0001: Simplified names.
+dotnet_diagnostic.IDE0001.severity = warning
+
+# IDE0002: Simplified member access.
+dotnet_diagnostic.IDE0002.severity = warning
+
+# IDE0100: No redundant `== true` comparisons.
+dotnet_diagnostic.IDE0100.severity = warning
+
+# IDE0079: No unnecessary suppressions.
+dotnet_diagnostic.IDE0079.severity = warning
+dotnet_remove_unnecessary_suppression_exclusions = none
+
+# IDE0072: Switch expressions handle every enum member, so a new member fails the build.
+dotnet_diagnostic.IDE0072.severity = warning

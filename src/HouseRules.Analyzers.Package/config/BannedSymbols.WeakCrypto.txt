@@ -1,0 +1,5 @@
+T:System.Security.Cryptography.MD5;Broken hash. Use SHA256, or HMACSHA256 for message authentication.
+T:System.Security.Cryptography.SHA1;Broken hash. Use SHA256, or HMACSHA256 for message authentication.
+T:System.Security.Cryptography.DES;Broken cipher. Use AesGcm.
+T:System.Security.Cryptography.TripleDES;Weak cipher. Use AesGcm.
+T:System.Security.Cryptography.RC2;Broken cipher. Use AesGcm.

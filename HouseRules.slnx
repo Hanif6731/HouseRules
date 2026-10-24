@@ -3,6 +3,9 @@
     <Project Path="src/HouseRules.Analyzers/HouseRules.Analyzers.csproj" />
     <Project Path="src/HouseRules.CodeFixes/HouseRules.CodeFixes.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Generate/Generate.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/HouseRules.Tests/HouseRules.Tests.csproj" />
   </Folder>

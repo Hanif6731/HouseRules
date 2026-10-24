@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>HouseRules.Generate</RootNamespace>
+    <!-- A command-line tool reports to the console; this is the documented opt-out, not an exemption. -->
+    <HouseRulesBanConsole>false</HouseRulesBanConsole>
+  </PropertyGroup>
+
+</Project>

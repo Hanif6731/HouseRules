@@ -1,0 +1,1 @@
+T:System.Console;Use ILogger<T>: console output bypasses structured logging. A command-line tool sets HouseRulesBanConsole to false.

@@ -354,6 +354,9 @@
           "xunit.v3.runner.common": "[4.0.2]"
         }
       },
+      "generate": {
+        "type": "Project"
+      },
       "houserules.analyzers": {
         "type": "Project"
       },
