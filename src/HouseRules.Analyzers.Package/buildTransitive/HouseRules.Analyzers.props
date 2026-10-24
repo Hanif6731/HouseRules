@@ -9,9 +9,13 @@
     <HouseRulesLevel Condition="'$(HouseRulesLevel)' == ''">Recommended</HouseRulesLevel>
     <_HouseRulesLevelAtProps>$(HouseRulesLevel)</_HouseRulesLevelAtProps>
     <_HouseRulesRank>0</_HouseRulesRank>
+    <!-- Linux file names are case-sensitive: spell the level as its config files do. -->
     <_HouseRulesRank Condition="'$(HouseRulesLevel)' == 'Baseline'">1</_HouseRulesRank>
+    <_HouseRulesLevelAtProps Condition="'$(HouseRulesLevel)' == 'Baseline'">Baseline</_HouseRulesLevelAtProps>
     <_HouseRulesRank Condition="'$(HouseRulesLevel)' == 'Recommended'">2</_HouseRulesRank>
+    <_HouseRulesLevelAtProps Condition="'$(HouseRulesLevel)' == 'Recommended'">Recommended</_HouseRulesLevelAtProps>
     <_HouseRulesRank Condition="'$(HouseRulesLevel)' == 'Strict'">3</_HouseRulesRank>
+    <_HouseRulesLevelAtProps Condition="'$(HouseRulesLevel)' == 'Strict'">Strict</_HouseRulesLevelAtProps>
     <_HouseRulesConfig>$(MSBuildThisFileDirectory)../config/</_HouseRulesConfig>
   </PropertyGroup>
 

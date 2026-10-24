@@ -181,9 +181,12 @@ public static class CatalogueGenerator
         text.Line(DefaultProperty("HouseRulesLevel", "Recommended"));
         text.Line("    <_HouseRulesLevelAtProps>$(HouseRulesLevel)</_HouseRulesLevelAtProps>");
         text.Line("    <_HouseRulesRank>0</_HouseRulesRank>");
+        text.Line("    <!-- Linux file names are case-sensitive: spell the level as its config files do. -->");
         foreach (var level in Levels)
         {
-            text.Line($"""    <_HouseRulesRank Condition="{LevelIs(level)}">{Rank(level)}</_HouseRulesRank>""");
+            var when = LevelIs(level);
+            text.Line($"""    <_HouseRulesRank Condition="{when}">{Rank(level)}</_HouseRulesRank>""");
+            text.Line($"""    <_HouseRulesLevelAtProps Condition="{when}">{level}</_HouseRulesLevelAtProps>""");
         }
 
         text.Line("    <_HouseRulesConfig>$(MSBuildThisFileDirectory)../config/</_HouseRulesConfig>");

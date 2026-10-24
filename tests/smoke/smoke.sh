@@ -126,6 +126,10 @@ dir=$(new_project strict Violations.cs Strict)
 build "$dir"
 check strict fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)"
 
+dir=$(new_project lowercase-level Violations.cs strict)
+build "$dir"
+check lowercase-level fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)"
+
 dir=$(new_project clean-strict Clean.cs Strict)
 build "$dir"
 check clean-strict passes "!warning [A-Z]+[0-9]+"
@@ -188,6 +192,11 @@ check ratchet-prune-drops-fixed-entries passes "!\|HR0001\|" "\|RCS0056\|"
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-init-refuses-to-grow fails "already exists, and a baseline never grows"
+
+dir=$(new_project ratchet-mode-casing Violations.cs Baseline)
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=Init 2>&1) || code=$?
+check ratchet-mode-casing passes "records [0-9]+ finding"
 
 dir=$(new_project ratchet-unrecordable Legacy.cs Baseline)
 code=0

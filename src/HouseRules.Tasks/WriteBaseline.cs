@@ -22,7 +22,10 @@ public sealed class WriteBaseline : Microsoft.Build.Utilities.Task
     {
         var directory = Path.GetDirectoryName(Path.GetFullPath(BaselineFile))!;
         var findings = Baseline.ReadErrorLog(File.ReadAllText(ErrorLog));
-        if (Mode == "init")
+
+        // MSBuild compares the mode case-insensitively before this task runs, so Init is init here too.
+        var init = string.Equals(Mode, "init", StringComparison.OrdinalIgnoreCase);
+        if (init)
         {
             var unrecordable = Baseline.Unrecordable(findings, SuppressibleIds.Value.Contains);
             if (unrecordable.Count > 0)
@@ -36,7 +39,7 @@ public sealed class WriteBaseline : Microsoft.Build.Utilities.Task
             }
         }
 
-        var entries = Mode == "init"
+        var entries = init
             ? Baseline.Init(findings, directory, File.ReadAllLines)
             : Baseline.Prune(Baseline.Parse(File.ReadAllText(BaselineFile)), findings, directory, File.ReadAllLines);
 
