@@ -44,7 +44,7 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | [RCS0028](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0028) | Roslynator | A wrapped conditional expression puts `?` and `:` first on the new line. | warning | yes |
 | [RCS0059](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0059) | Roslynator | A wrapped null-conditional access puts `?.` first on the new line. | warning | yes |
 | [RCS0055](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0055) | Roslynator | Once a binary expression wraps, it breaks at every operator. | warning | yes |
-| RS0030 | BannedApiAnalyzers | Banned APIs (see the ban categories). | warning | no |
+| [RS0030](https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md) | BannedApiAnalyzers | Banned APIs, in switchable categories. Categories: [Baseline](#banned-apis-at-baseline), [Recommended](#banned-apis-at-recommended). | warning | no |
 | [CA2100](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2100) | .NET SDK code analysis | SQL built from strings is reviewed for injection. | warning | no |
 | [CA3075](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca3075) | .NET SDK code analysis | No insecure DTD processing in XML. | warning | no |
 | [CA5350](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5350) | .NET SDK code analysis | No weak cryptographic algorithms. | warning | no |
@@ -52,7 +52,7 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | [CA5394](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5394) | .NET SDK code analysis | No insecure randomness. | warning | no |
 | [CA2007](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2007) | .NET SDK code analysis | Off: ConfigureAwait on every await is noise in apps without a synchronization context. | none | no |
 
-### Banned APIs
+### Banned APIs at Baseline
 
 | Category | Turn off with | What it bans |
 |---|---|---|
@@ -86,7 +86,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 |---|---|---|---|---|
 | [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters, Async suffix on async methods. | warning | yes |
 | [IDE0005](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0005) | .NET SDK code style | No unused using directives. | warning | yes |
-| CS1591 | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |
+| [CS1591](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591) | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |
 | [CA2016](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) | .NET SDK code analysis | Pass the CancellationToken on when the callee accepts one. | warning | yes |
 | [IDE0040](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0040) | .NET SDK code style | Explicit accessibility modifiers. | warning | yes |
 | [IDE0044](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0044) | .NET SDK code style | Fields that never change are readonly. | warning | yes |
@@ -134,7 +134,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0079](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0079) | .NET SDK code style | No unnecessary suppressions. | warning | yes |
 | [IDE0072](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0072) | .NET SDK code style | Switch expressions handle every enum member, so a new member fails the build. | warning | yes |
 
-### Banned APIs
+### Banned APIs at Recommended
 
 | Category | Turn off with | What it bans |
 |---|---|---|
@@ -166,10 +166,10 @@ Adds nullable reference types, every compiler warning wave, code metrics and the
 | [CA1502](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1502) | .NET SDK code analysis | Cyclomatic complexity at most 15 per method (CodeMetricsConfig.txt). | warning | no |
 | [CA1505](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1505) | .NET SDK code analysis | Maintainability index at least 20. | warning | no |
 | [CA1506](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1506) | .NET SDK code analysis | Class coupling at most 30 per method and 60 per type. | warning | no |
-| CS8602 | C# compiler | No dereference of a possibly null reference. | warning | no |
-| CS8618 | C# compiler | Non-nullable members are initialised by every constructor. | warning | no |
-| CS1572 | C# compiler | XML doc `param` tags name real parameters. | warning | no |
-| CS1573 | C# compiler | XML docs that document some parameters document all of them. | warning | no |
+| [CS8602](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/nullable-warnings#possible-dereference-of-null) | C# compiler | No dereference of a possibly null reference. | warning | no |
+| [CS8618](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/nullable-warnings#nonnullable-reference-not-initialized) | C# compiler | Non-nullable members are initialised by every constructor. | warning | no |
+| [CS1572](https://learn.microsoft.com/dotnet/csharp/misc/cs1572) | C# compiler | XML doc `param` tags name real parameters. | warning | no |
+| [CS1573](https://learn.microsoft.com/dotnet/csharp/misc/cs1573) | C# compiler | XML docs that document some parameters document all of them. | warning | no |
 | [IDE0010](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0010) | .NET SDK code style | Suggestion: switch statements over an enum handle every member. | suggestion | yes |
 | [IDE0007](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0007) | .NET SDK code style | Suggestion: `var`. | suggestion | yes |
 | [IDE0047](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0047) | .NET SDK code style | Suggestion: parentheses only where they clarify precedence. | suggestion | yes |

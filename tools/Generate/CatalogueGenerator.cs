@@ -319,7 +319,11 @@ public static class CatalogueGenerator
                 {
                     var fixable = rule.Fixable ? "yes" : "no";
                     var source = SourceName(rule.Source);
-                    text.Line($"| {RuleLink(rule)} | {source} | {rule.Description} | {rule.Severity} | {fixable} |");
+                    var description = rule.Source == "BannedApiAnalyzers"
+                        ? $"{rule.Description} {BanTableLinks(catalogue)}"
+                        : rule.Description;
+
+                    text.Line($"| {RuleLink(rule)} | {source} | {description} | {rule.Severity} | {fixable} |");
                 }
             }
 
@@ -327,7 +331,7 @@ public static class CatalogueGenerator
             if (bans.Count > 0)
             {
                 text.Line();
-                text.Line("### Banned APIs");
+                text.Line($"### Banned APIs at {level}");
                 text.Line();
                 text.Line("| Category | Turn off with | What it bans |");
                 text.Line("|---|---|---|");
@@ -371,8 +375,19 @@ public static class CatalogueGenerator
         _ => source,
     };
 
+    private static string BanTableLinks(Catalogue catalogue)
+    {
+        var links = catalogue.Banned
+            .Select(ban => ban.Level)
+            .Distinct()
+            .Select(level => $"[{level}](#banned-apis-at-{level.ToLowerInvariant()})");
+
+        return $"Categories: {string.Join(", ", links)}.";
+    }
+
     private static string RuleLink(RuleEntry rule) => rule.Source switch
     {
+        _ when rule.Docs is not null => $"[{rule.Id}]({rule.Docs})",
         "HouseRules" => $"[{rule.Id}](rules/{rule.Id}.md)",
         "IDE" => $"[{rule.Id}]({CodeAnalysisDocs}style-rules/{Lower(rule.Id)})",
         "CA" => $"[{rule.Id}]({CodeAnalysisDocs}quality-rules/{Lower(rule.Id)})",

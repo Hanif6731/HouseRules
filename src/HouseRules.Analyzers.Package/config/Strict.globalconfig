@@ -81,7 +81,7 @@ roslynator_null_conditional_operator_new_line = before
 # RCS0055: Once a binary expression wraps, it breaks at every operator.
 dotnet_diagnostic.RCS0055.severity = warning
 
-# RS0030: Banned APIs (see the ban categories).
+# RS0030: Banned APIs, in switchable categories.
 dotnet_diagnostic.RS0030.severity = warning
 
 # CA2100: SQL built from strings is reviewed for injection.

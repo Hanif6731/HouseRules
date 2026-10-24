@@ -28,6 +28,7 @@ public sealed record RuleEntry(
     bool Fixable,
     string Description,
     IReadOnlyDictionary<string, string>? Options,
-    string? AdditionalFile);
+    string? AdditionalFile,
+    string? Docs);
 
 public sealed record TestEntry(string Key, string Value, string Description);

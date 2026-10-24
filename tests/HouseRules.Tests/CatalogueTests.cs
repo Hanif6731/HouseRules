@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace HouseRules.Tests;
 
-public sealed class CatalogueTests
+public sealed partial class CatalogueTests
 {
     private const string FalsePositiveForm =
         "https://github.com/Hanif6731/HouseRules/issues/new?template=false-positive.yml";
@@ -105,10 +105,43 @@ public sealed class CatalogueTests
         }
     }
 
+    [Fact]
+    public void Every_rule_on_the_levels_page_links_its_documentation()
+    {
+        var unlinked = LevelsPage()
+            .Split('\n')
+            .Where(line => RuleRow().IsMatch(line))
+            .Where(line => !line.StartsWith("| [", StringComparison.Ordinal))
+            .ToList();
+
+        Assert.True(unlinked.Count == 0, "Rules without a docs link:\n" + string.Join('\n', unlinked));
+    }
+
+    [Fact]
+    public void The_banned_api_rule_links_every_level_that_bans_something()
+    {
+        var page = LevelsPage();
+        var row = page.Split('\n').Single(line => line.Contains("RS0030", StringComparison.Ordinal));
+
+        foreach (var level in CatalogueGenerator.Load(RepoRoot.Path).Banned.Select(ban => ban.Level).Distinct())
+        {
+            var anchor = $"banned-apis-at-{level.ToLowerInvariant()}";
+            Assert.Contains($"(#{anchor})", row, StringComparison.Ordinal);
+            Assert.Contains($"### Banned APIs at {level}\n", page, StringComparison.Ordinal);
+        }
+    }
+
+    private static string LevelsPage() =>
+        CatalogueGenerator.Generate(RepoRoot.Path)[CatalogueGenerator.LevelsDocPath];
+
     private static Dictionary<string, string> GlobalConfig(string level) =>
         File.ReadAllLines(Path.Combine(RepoRoot.Path, CatalogueGenerator.ConfigFolder, level + ".globalconfig"))
             .Where(line => !line.StartsWith('#'))
             .Select(line => line.Split(" = ", 2))
             .Where(parts => parts.Length == 2 && parts[0] != "is_global" && parts[0] != "global_level")
             .ToDictionary(parts => parts[0], parts => parts[1]);
+
+    // A rules-table row: "| <id or link> | <source> | ..." with an id such as CA1506, RS0030 or HR0001.
+    [GeneratedRegex(@"^\| \[?[A-Z]{2,3}\d{4}")]
+    private static partial Regex RuleRow();
 }
