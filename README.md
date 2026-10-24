@@ -121,7 +121,9 @@ A ban category, in the project file or `Directory.Build.props`; for example, cod
 
 The switches are `HouseRulesBanWeakCrypto`, `HouseRulesBanHttpClient`, `HouseRulesBanWallClock`,
 `HouseRulesBanRandom`, `HouseRulesBanConsole` and `HouseRulesBanEnvironment`. Any build setting the package sets,
-such as `TreatWarningsAsErrors`, keeps the value your project gives it.
+such as `TreatWarningsAsErrors`, keeps the value your project gives it. A project that sets its own
+`CodeAnalysisRuleSet` replaces the package's rule set, so `dotnet format` then sees only its `.editorconfig`
+severities; its `.editorconfig` still overrides everything.
 
 ### Use it with AI agents
 
