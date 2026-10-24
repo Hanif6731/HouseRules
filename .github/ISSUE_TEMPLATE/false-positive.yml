@@ -1,5 +1,6 @@
 name: False positive
 description: A rule reports code that it should not report.
+labels: [false-positive]
 body:
   - type: markdown
     attributes:
