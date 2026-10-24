@@ -15,7 +15,7 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | `TreatWarningsAsErrors` | `true` | Every reported warning fails the build. |
 | `EnforceCodeStyleInBuild` | `true` | Code style (IDE) rules run in the build, not only in the editor. |
 | `EnableNETAnalyzers` | `true` | The .NET SDK code analysis rules run in every project, including .NET Standard ones. |
-| `AnalysisLevel` | `8.0` | Which SDK rules exist is pinned per HouseRules major, so an SDK update adds no rules. |
+| `AnalysisLevel` | `10.0` | Which SDK rules exist is pinned per HouseRules major, so an SDK update adds no rules. |
 | `Deterministic` | `true` | Identical source gives identical binaries. |
 | `ContinuousIntegrationBuild` | `true` (when `'$(CI)' == 'true'`) | CI builds embed normalised paths. |
 
@@ -50,6 +50,13 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | [CA5350](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5350) | .NET SDK code analysis | No weak cryptographic algorithms. | warning | no |
 | [CA5351](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5351) | .NET SDK code analysis | No broken cryptographic algorithms. | warning | no |
 | [CA5394](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5394) | .NET SDK code analysis | No insecure randomness. | warning | no |
+| [CA2022](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2022) | .NET SDK code analysis | A `Stream.Read` handles a short read: use `ReadExactly` or the count it returns. | warning | yes |
+| [CA2023](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2023) | .NET SDK code analysis | Logging message templates have balanced braces. | warning | no |
+| [CA2024](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2024) | .NET SDK code analysis | No `StreamReader.EndOfStream` in async methods: it blocks. | warning | no |
+| [CA2025](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2025) | .NET SDK code analysis | No `IDisposable` handed to a task that may still run after it is disposed. | warning | no |
+| [CA2264](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2264) | .NET SDK code analysis | No `ArgumentNullException.ThrowIfNull` on a value that cannot be null: the check never fires. | warning | yes |
+| [CA2265](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2265) | .NET SDK code analysis | No comparing a `Span<T>` to `null` or `default`; test `IsEmpty`. | warning | yes |
+| [CA2266](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2266) | .NET SDK code analysis | Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only. | none | no |
 | [CA2007](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2007) | .NET SDK code analysis | Off: ConfigureAwait on every await is noise in apps without a synchronization context. | none | no |
 
 ### Banned APIs at Baseline
@@ -88,6 +95,14 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0005](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0005) | .NET SDK code style | No unused using directives. | warning | yes |
 | [CS1591](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591) | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |
 | [CA2016](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) | .NET SDK code analysis | Pass the CancellationToken on when the callee accepts one. | warning | yes |
+| [CA1514](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1514) | .NET SDK code analysis | No redundant length argument when slicing to the end. | warning | yes |
+| [CA1871](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1871) | .NET SDK code analysis | No nullable struct passed to `ArgumentNullException.ThrowIfNull`: it boxes. | warning | no |
+| [CA1872](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1872) | .NET SDK code analysis | `Convert.ToHexString` instead of `BitConverter.ToString` call chains. | warning | yes |
+| [CA1873](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1873) | .NET SDK code analysis | Logging arguments that are costly to compute are guarded by `IsEnabled`. | warning | no |
+| [CA1874](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1874) | .NET SDK code analysis | `Regex.IsMatch` instead of `Regex.Match(...).Success`. | warning | yes |
+| [CA1875](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1875) | .NET SDK code analysis | `Regex.Count` instead of `Regex.Matches(...).Count`. | warning | yes |
+| [CA2262](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2262) | .NET SDK code analysis | `MaxResponseHeadersLength` is set in kilobytes, not bytes. | warning | no |
+| [CA2263](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2263) | .NET SDK code analysis | The generic overload when the type is known at compile time. | warning | yes |
 | [IDE0040](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0040) | .NET SDK code style | Explicit accessibility modifiers. | warning | yes |
 | [IDE0044](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0044) | .NET SDK code style | Fields that never change are readonly. | warning | yes |
 | [IDE0036](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0036) | .NET SDK code style | Modifiers in one order. | warning | yes |

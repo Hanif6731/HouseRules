@@ -17,7 +17,7 @@ errors.
   a superset of the one below; [docs/levels.md](docs/levels.md) lists every setting and rule per level.
 - HR0001, blank line after a multi-line statement, with a code fix that `dotnet format` applies.
 - Strict build settings as overridable defaults: warnings as errors, code style enforced in the build, pinned
-  `AnalysisLevel` 8.0, deterministic builds; documentation files at `Recommended`; nullable reference types, strict
+  `AnalysisLevel` 10.0, deterministic builds; documentation files at `Recommended`; nullable reference types, strict
   compiler mode, every warning wave and checked arithmetic in Debug at `Strict`.
 - Roslynator.Formatting.Analyzers 5.0.1 wrapping rules configured to 120 columns.
 - Banned APIs in six categories, each with its own switch: `HouseRulesBanWeakCrypto`, `HouseRulesBanHttpClient`

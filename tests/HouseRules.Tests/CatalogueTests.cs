@@ -62,6 +62,19 @@ public sealed partial class CatalogueTests
         }
     }
 
+    [Theory]
+    [InlineData("CA1000")]
+    [InlineData("CA1052")]
+    [InlineData("CA5351")]
+    [InlineData("CA2025")]
+    [InlineData("CA1873")]
+    public void The_ratchet_can_record_rules_of_the_pinned_analysis_level(string id)
+    {
+        var ids = CatalogueGenerator.Generate(RepoRoot.Path)[CatalogueGenerator.SuppressibleIdsPath].Split('\n');
+
+        Assert.Contains(id, ids);
+    }
+
     [Fact]
     public void Every_own_rule_has_a_docs_page()
     {

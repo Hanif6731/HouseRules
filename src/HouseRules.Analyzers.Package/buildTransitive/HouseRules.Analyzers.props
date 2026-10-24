@@ -23,7 +23,7 @@
     <TreatWarningsAsErrors Condition="'$(TreatWarningsAsErrors)' == ''">true</TreatWarningsAsErrors>
     <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == ''">true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">true</EnableNETAnalyzers>
-    <AnalysisLevel Condition="'$(AnalysisLevel)' == ''">8.0</AnalysisLevel>
+    <AnalysisLevel Condition="'$(AnalysisLevel)' == ''">10.0</AnalysisLevel>
     <Deterministic Condition="'$(Deterministic)' == ''">true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and ('$(CI)' == 'true')">true</ContinuousIntegrationBuild>
     <AnalysisModeSecurity Condition="'$(AnalysisModeSecurity)' == ''">All</AnalysisModeSecurity>

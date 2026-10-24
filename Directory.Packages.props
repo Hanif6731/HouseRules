@@ -19,8 +19,8 @@
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.0.2" />
   </ItemGroup>
 
-  <ItemGroup Label="Rule ids of the SDK analyzers for AnalysisLevel 8.0, read by tools/Generate">
-    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
+  <ItemGroup Label="Rule ids of the SDK analyzers for AnalysisLevel 10.0 (.NET SDK 10.0.100), read by tools/Generate">
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers the package depends on; pinned per HouseRules major">

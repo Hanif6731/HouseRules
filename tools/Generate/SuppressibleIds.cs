@@ -37,9 +37,10 @@ internal static class SuppressibleIds
             .Single(attribute => attribute.Key == "NetAnalyzersPath")
             .Value!;
 
-        var folder = Path.Combine(root, "analyzers", "dotnet", "cs");
-        return Directory.GetFiles(folder, "*.dll")
-            .Order(StringComparer.Ordinal)
+        // The language-neutral assembly sits in analyzers/dotnet, the C# one in analyzers/dotnet/cs.
+        var shared = Path.Combine(root, "analyzers", "dotnet");
+        return Directory.GetFiles(shared, "*.dll")
+            .Concat(Directory.GetFiles(Path.Combine(shared, "cs"), "*.dll"))
             .SelectMany(file => AnalyzersIn(Assembly.LoadFrom(file)))
             .SelectMany(analyzer => analyzer.SupportedDiagnostics)
             .Select(descriptor => descriptor.Id);

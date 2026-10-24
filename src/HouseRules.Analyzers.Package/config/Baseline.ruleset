@@ -16,5 +16,8 @@
     <Rule Id="RCS0028" Action="Warning" />
     <Rule Id="RCS0059" Action="Warning" />
     <Rule Id="RCS0055" Action="Warning" />
+    <Rule Id="CA2022" Action="Warning" />
+    <Rule Id="CA2264" Action="Warning" />
+    <Rule Id="CA2265" Action="Warning" />
   </Rules>
 </RuleSet>

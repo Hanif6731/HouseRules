@@ -99,5 +99,26 @@ dotnet_diagnostic.CA5351.severity = warning
 # CA5394: No insecure randomness.
 dotnet_diagnostic.CA5394.severity = warning
 
+# CA2022: A `Stream.Read` handles a short read: use `ReadExactly` or the count it returns.
+dotnet_diagnostic.CA2022.severity = warning
+
+# CA2023: Logging message templates have balanced braces.
+dotnet_diagnostic.CA2023.severity = warning
+
+# CA2024: No `StreamReader.EndOfStream` in async methods: it blocks.
+dotnet_diagnostic.CA2024.severity = warning
+
+# CA2025: No `IDisposable` handed to a task that may still run after it is disposed.
+dotnet_diagnostic.CA2025.severity = warning
+
+# CA2264: No `ArgumentNullException.ThrowIfNull` on a value that cannot be null: the check never fires.
+dotnet_diagnostic.CA2264.severity = warning
+
+# CA2265: No comparing a `Span<T>` to `null` or `default`; test `IsEmpty`.
+dotnet_diagnostic.CA2265.severity = warning
+
+# CA2266: Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only.
+dotnet_diagnostic.CA2266.severity = none
+
 # CA2007: Off: ConfigureAwait on every await is noise in apps without a synchronization context.
 dotnet_diagnostic.CA2007.severity = none

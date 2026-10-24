@@ -99,6 +99,27 @@ dotnet_diagnostic.CA5351.severity = warning
 # CA5394: No insecure randomness.
 dotnet_diagnostic.CA5394.severity = warning
 
+# CA2022: A `Stream.Read` handles a short read: use `ReadExactly` or the count it returns.
+dotnet_diagnostic.CA2022.severity = warning
+
+# CA2023: Logging message templates have balanced braces.
+dotnet_diagnostic.CA2023.severity = warning
+
+# CA2024: No `StreamReader.EndOfStream` in async methods: it blocks.
+dotnet_diagnostic.CA2024.severity = warning
+
+# CA2025: No `IDisposable` handed to a task that may still run after it is disposed.
+dotnet_diagnostic.CA2025.severity = warning
+
+# CA2264: No `ArgumentNullException.ThrowIfNull` on a value that cannot be null: the check never fires.
+dotnet_diagnostic.CA2264.severity = warning
+
+# CA2265: No comparing a `Span<T>` to `null` or `default`; test `IsEmpty`.
+dotnet_diagnostic.CA2265.severity = warning
+
+# CA2266: Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only.
+dotnet_diagnostic.CA2266.severity = none
+
 # CA2007: Off: ConfigureAwait on every await is noise in apps without a synchronization context.
 dotnet_diagnostic.CA2007.severity = none
 
@@ -159,6 +180,30 @@ dotnet_diagnostic.CS1591.severity = none
 
 # CA2016: Pass the CancellationToken on when the callee accepts one.
 dotnet_diagnostic.CA2016.severity = warning
+
+# CA1514: No redundant length argument when slicing to the end.
+dotnet_diagnostic.CA1514.severity = warning
+
+# CA1871: No nullable struct passed to `ArgumentNullException.ThrowIfNull`: it boxes.
+dotnet_diagnostic.CA1871.severity = warning
+
+# CA1872: `Convert.ToHexString` instead of `BitConverter.ToString` call chains.
+dotnet_diagnostic.CA1872.severity = warning
+
+# CA1873: Logging arguments that are costly to compute are guarded by `IsEnabled`.
+dotnet_diagnostic.CA1873.severity = warning
+
+# CA1874: `Regex.IsMatch` instead of `Regex.Match(...).Success`.
+dotnet_diagnostic.CA1874.severity = warning
+
+# CA1875: `Regex.Count` instead of `Regex.Matches(...).Count`.
+dotnet_diagnostic.CA1875.severity = warning
+
+# CA2262: `MaxResponseHeadersLength` is set in kilobytes, not bytes.
+dotnet_diagnostic.CA2262.severity = warning
+
+# CA2263: The generic overload when the type is known at compile time.
+dotnet_diagnostic.CA2263.severity = warning
 
 # IDE0040: Explicit accessibility modifiers.
 dotnet_diagnostic.IDE0040.severity = warning

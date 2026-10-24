@@ -115,12 +115,12 @@ dir=$(new_project baseline Violations.cs Baseline)
 echo "HouseRules.Analyzers $version on SDK $(cd "$dir" && dotnet --version)"
 build "$dir"
 check baseline fails "$(reported HR0001)" "$(reported RCS0056)" "$(reported CA5351)" "$(reported IDE0161)" \
-  "!$(reported IDE1006)" "!$(reported CS8602)"
+  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)"
 
 dir=$(new_project recommended Violations.cs Recommended)
 build "$dir"
 check recommended fails "$(reported HR0001)" "$(reported IDE1006)" "'DateTime.UtcNow' is banned" \
-  "!$(reported CS8602)"
+  "$(reported CA1874)" "!$(reported CS8602)"
 
 dir=$(new_project strict Violations.cs Strict)
 build "$dir"

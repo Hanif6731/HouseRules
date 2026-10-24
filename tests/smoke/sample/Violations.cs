@@ -24,5 +24,13 @@ namespace Sample
         }
 
         public int Sum(int first, int second, int third, int fourth, int fifth, int sixth, int seventh) => first + second;
+
+        public void Check(int value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+        }
+
+        public bool Matches(string text, string pattern) =>
+            System.Text.RegularExpressions.Regex.Match(text, pattern).Success;
     }
 }

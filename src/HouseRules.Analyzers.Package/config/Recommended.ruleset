@@ -16,9 +16,17 @@
     <Rule Id="RCS0028" Action="Warning" />
     <Rule Id="RCS0059" Action="Warning" />
     <Rule Id="RCS0055" Action="Warning" />
+    <Rule Id="CA2022" Action="Warning" />
+    <Rule Id="CA2264" Action="Warning" />
+    <Rule Id="CA2265" Action="Warning" />
     <Rule Id="IDE1006" Action="Warning" />
     <Rule Id="IDE0005" Action="Warning" />
     <Rule Id="CA2016" Action="Warning" />
+    <Rule Id="CA1514" Action="Warning" />
+    <Rule Id="CA1872" Action="Warning" />
+    <Rule Id="CA1874" Action="Warning" />
+    <Rule Id="CA1875" Action="Warning" />
+    <Rule Id="CA2263" Action="Warning" />
     <Rule Id="IDE0040" Action="Warning" />
     <Rule Id="IDE0044" Action="Warning" />
     <Rule Id="IDE0036" Action="Warning" />
