@@ -13,7 +13,6 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | Property | Value | Why |
 |---|---|---|
 | `TreatWarningsAsErrors` | `true` | Every reported warning fails the build. |
-| `CodeAnalysisTreatWarningsAsErrors` | `true` | Code analysis warnings fail the build too. |
 | `EnforceCodeStyleInBuild` | `true` | Code style (IDE) rules run in the build, not only in the editor. |
 | `EnableNETAnalyzers` | `true` | The .NET SDK code analysis rules run in every project, including .NET Standard ones. |
 | `AnalysisLevel` | `8.0` | Which SDK rules exist is pinned per HouseRules major, so an SDK update adds no rules. |

@@ -1,7 +1,6 @@
 {
   "properties": [
     { "name": "TreatWarningsAsErrors", "value": "true", "level": "Baseline", "since": "1.0.0", "description": "Every reported warning fails the build." },
-    { "name": "CodeAnalysisTreatWarningsAsErrors", "value": "true", "level": "Baseline", "since": "1.0.0", "description": "Code analysis warnings fail the build too." },
     { "name": "EnforceCodeStyleInBuild", "value": "true", "level": "Baseline", "since": "1.0.0", "description": "Code style (IDE) rules run in the build, not only in the editor." },
     { "name": "EnableNETAnalyzers", "value": "true", "level": "Baseline", "since": "1.0.0", "description": "The .NET SDK code analysis rules run in every project, including .NET Standard ones." },
     { "name": "AnalysisLevel", "value": "8.0", "level": "Baseline", "since": "1.0.0", "description": "Which SDK rules exist is pinned per HouseRules major, so an SDK update adds no rules." },

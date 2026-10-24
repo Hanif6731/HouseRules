@@ -22,3 +22,47 @@ jobs:
       - run: dotnet format --verify-no-changes --no-restore
       - name: Line endings are LF
         run: "! git ls-files --eol | grep 'i/crlf'"
+
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: artifacts/*.nupkg
+
+  smoke-sdk10:
+    needs: pack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: artifacts
+      - run: tests/smoke/smoke.sh artifacts
+
+  smoke-sdk8:
+    needs: pack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          # 8.0.1xx ships Roslyn 4.8, the oldest compiler the package supports.
+          dotnet-version: 8.0.1xx
+      - uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: artifacts
+      - run: tests/smoke/smoke.sh artifacts
+        env:
+          SMOKE_SDK: 8.0.100
