@@ -28,6 +28,22 @@ public sealed class BaselineTests
     }
 
     [Fact]
+    public void Findings_the_suppressor_cannot_suppress_are_named_instead_of_recorded()
+    {
+        Finding[] findings =
+        [
+            new(FileA, 5, "HR0001", Suppressed: false),
+            new(FileA, 5, "LEGACY001", Suppressed: false),
+            new("", 0, "CS1234", Suppressed: false),
+            new(FileA, 3, "OTHER001", Suppressed: true),
+        ];
+
+        var unrecordable = Baseline.Unrecordable(findings, id => id is "HR0001" or "CS1234");
+
+        Assert.Equal(["CS1234", "LEGACY001"], unrecordable);
+    }
+
+    [Fact]
     public void Prune_drops_fixed_entries_and_never_adds_new_ones()
     {
         var recorded = new Dictionary<string, int>
@@ -81,14 +97,24 @@ public sealed class BaselineTests
                 { "ruleId": "CA1822", "level": "warning", "suppressions": [ { "kind": "inSource" } ],
                   "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "{{uri}}" },
                     "region": { "startLine": 3 } } } ] },
-                { "ruleId": "CS8032", "level": "warning" }
+                { "ruleId": "CS8032", "level": "warning" },
+                { "ruleId": "CS1030", "level": "warning",
+                  "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "Page.razor" },
+                    "region": { "startLine": 2 } } } ] }
               ] } ]
             }
             """;
 
         var findings = Baseline.ReadErrorLog(sarif);
 
-        Assert.Equal([new(FileA, 5, "HR0001", Suppressed: false), new(FileA, 3, "CA1822", Suppressed: true)], findings);
+        Assert.Equal(
+            [
+                new(FileA, 5, "HR0001", Suppressed: false),
+                new(FileA, 3, "CA1822", Suppressed: true),
+                new("", 0, "CS8032", Suppressed: false),
+                new("", 0, "CS1030", Suppressed: false),
+            ],
+            findings);
     }
 
     private static string[] ReadLines(string path) => path == FileA ? LinesOfA : [];

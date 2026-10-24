@@ -6,7 +6,7 @@
       Text="HouseRulesLevel is '$(HouseRulesLevel)'. Set it to Baseline, Recommended or Strict." />
     <Error
       Condition="'$(_HouseRulesRank)' != '0' and '$(HouseRulesLevel)' != '$(_HouseRulesLevelAtProps)'"
-      Text="HouseRulesLevel changes from '$(_HouseRulesLevelAtProps)' to '$(HouseRulesLevel)' in the project file, after HouseRules has applied the build settings for '$(_HouseRulesLevelAtProps)'. Set HouseRulesLevel in Directory.Build.props (a Directory.Build.props next to this project works for a single project) or on the command line." />
+      Text="HouseRulesLevel changes from '$(_HouseRulesLevelAtProps)' to '$(HouseRulesLevel)' in the project file, after HouseRules has applied the build settings for '$(_HouseRulesLevelAtProps)'. Set HouseRulesLevel in Directory.Build.props or on the command line. For this project alone, use a Directory.Build.props next to it that first imports the parent one: &lt;Import Project=&quot;%24([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '%24(MSBuildThisFileDirectory)../'))&quot; /&gt;" />
   </Target>
 
   <!-- The ratchet: houserules.baseline next to the project records existing findings, which the build then tolerates
@@ -33,20 +33,28 @@
     <Error
       Condition="'$(HouseRulesBaseline)' == 'prune' and !Exists('$(_HouseRulesBaselineFile)')"
       Text="There is no $(_HouseRulesBaselineFile) to prune. Create one with: dotnet build -p:HouseRulesBaseline=init" />
+    <Error
+      Condition="$(TargetFrameworks.Contains(';'))"
+      Text="HouseRulesBaseline does not support projects with several target frameworks ($(TargetFrameworks)): each framework would overwrite the other's houserules.baseline. Fix this project's findings before raising its level." />
 
-    <!-- Every finding must reach the error log, so warnings stay warnings and the compiler runs even when the
-         project is up to date. -->
+    <!-- Every finding must reach the error log, so warnings stay warnings. -->
     <PropertyGroup>
       <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
       <_HouseRulesErrorLog>$(IntermediateOutputPath)houserules.sarif</_HouseRulesErrorLog>
       <ErrorLog>$(_HouseRulesErrorLog),version=2.1</ErrorLog>
     </PropertyGroup>
+  </Target>
+
+  <!-- Every build records whether it ran in a baseline mode. Switching modes changes the file, so the compiler runs
+       again instead of trusting output built with warnings not treated as errors. -->
+  <Target Name="HouseRulesRecordBuildMode" BeforeTargets="CoreCompile">
     <WriteLinesToFile
-      File="$(IntermediateOutputPath)houserules.baseline.stamp"
-      Lines="$([System.Guid]::NewGuid())"
-      Overwrite="true" />
+      File="$(IntermediateOutputPath)houserules.mode"
+      Lines="mode=$(HouseRulesBaseline)"
+      Overwrite="true"
+      WriteOnlyWhenDifferent="true" />
     <ItemGroup>
-      <CustomAdditionalCompileInputs Include="$(IntermediateOutputPath)houserules.baseline.stamp" />
+      <CustomAdditionalCompileInputs Include="$(IntermediateOutputPath)houserules.mode" />
     </ItemGroup>
   </Target>
 

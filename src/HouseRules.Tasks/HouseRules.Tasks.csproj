@@ -12,6 +12,10 @@
 
   <ItemGroup>
     <Compile Include="..\HouseRules.Analyzers\BaselineKey.cs" Link="BaselineKey.cs" />
+    <EmbeddedResource
+      Include="..\HouseRules.Analyzers\SuppressibleIds.txt"
+      Link="SuppressibleIds.txt"
+      LogicalName="HouseRules.Tasks.SuppressibleIds.txt" />
   </ItemGroup>
 
 </Project>

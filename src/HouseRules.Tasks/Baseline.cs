@@ -55,6 +55,19 @@ public static class Baseline
     }
 
     /// <summary>
+    /// Rule ids of unsuppressed findings the baseline cannot hold: the suppressor does not handle the id, or the error
+    /// log gives no source file. Recording them would leave the build failing after <c>init</c>.
+    /// </summary>
+    public static IReadOnlyList<string> Unrecordable(IEnumerable<Finding> findings, Func<string, bool> isSuppressible)
+    {
+        return [.. findings.Where(finding => !finding.Suppressed)
+            .Where(finding => finding.Path.Length == 0 || !isSuppressible(finding.RuleId))
+            .Select(finding => finding.RuleId)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(id => id, StringComparer.Ordinal)];
+    }
+
+    /// <summary>
     /// Keeps each recorded entry only as often as it still occurs. Entries are never added, so the baseline only
     /// shrinks.
     /// </summary>
@@ -87,14 +100,25 @@ public static class Baseline
         var findings = new List<Finding>();
         foreach (var result in (log?.Runs ?? []).SelectMany(run => run.Results ?? []))
         {
-            var location = result.Locations?.FirstOrDefault()?.PhysicalLocation;
-            if (result.RuleId is null || location?.ArtifactLocation?.Uri is not { } uri || location.Region is null)
+            if (result.RuleId is null)
             {
                 continue;
             }
 
+            // A finding without an absolute file location (an analyzer load warning, a relative #line path) is kept
+            // with an empty path so that init can name it instead of silently leaving it out.
+            var location = result.Locations?.FirstOrDefault()?.PhysicalLocation;
             var suppressed = result.Suppressions is { Length: > 0 };
-            findings.Add(new Finding(new Uri(uri).LocalPath, location.Region.StartLine, result.RuleId, suppressed));
+            if (Uri.TryCreate(location?.ArtifactLocation?.Uri, UriKind.Absolute, out var uri)
+                && uri.IsFile
+                && location?.Region is { } region)
+            {
+                findings.Add(new Finding(uri.LocalPath, region.StartLine, result.RuleId, suppressed));
+            }
+            else
+            {
+                findings.Add(new Finding("", 0, result.RuleId, suppressed));
+            }
         }
 
         return findings;
@@ -107,7 +131,7 @@ public static class Baseline
     {
         var lines = new Dictionary<string, IReadOnlyList<string>>(StringComparer.OrdinalIgnoreCase);
         var counts = new Dictionary<string, int>(StringComparer.Ordinal);
-        foreach (var finding in findings)
+        foreach (var finding in findings.Where(finding => finding.Path.Length > 0))
         {
             if (!lines.TryGetValue(finding.Path, out var fileLines))
             {

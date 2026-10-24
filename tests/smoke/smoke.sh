@@ -189,6 +189,39 @@ code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-init-refuses-to-grow fails "already exists, and a baseline never grows"
 
+dir=$(new_project ratchet-unrecordable Legacy.cs Baseline)
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-init-names-what-it-cannot-record fails "LEGACY001 cannot be recorded"
+[ ! -e "$dir/houserules.baseline" ] || { echo "FAIL ratchet-unrecordable: a baseline was written"; failures=$((failures + 1)); }
+
+build "$dir"
+check ratchet-failed-init-leaves-no-false-green fails "error LEGACY001:"
+
+dir=$(new_project ratchet-multi-target Clean.cs Baseline '<TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks><LangVersion>latest</LangVersion>')
+sed -i.bak -e '/<TargetFramework>/d' "$dir/Sample.csproj"
+rm "$dir/Sample.csproj.bak"
+build "$dir"
+check multi-target-builds passes "!warning [A-Z]+[0-9]+"
+
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-multi-target-is-refused fails "does not support projects with several target frameworks"
+
+dir=$(new_project nested-level Violations.cs Strict)
+mkdir "$dir/app"
+mv "$dir/Sample.csproj" "$dir/Violations.cs" "$dir/app/"
+cat > "$dir/app/Directory.Build.props" <<'EOF'
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <PropertyGroup>
+    <HouseRulesLevel>Baseline</HouseRulesLevel>
+  </PropertyGroup>
+</Project>
+EOF
+build "$dir/app"
+check nested-level fails "$(reported HR0001)" "!$(reported IDE1006)"
+
 if [ "$failures" -ne 0 ]; then
   echo "$failures smoke check(s) failed"
   exit 1

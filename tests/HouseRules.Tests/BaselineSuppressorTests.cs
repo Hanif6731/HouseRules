@@ -88,6 +88,34 @@ public sealed class BaselineSuppressorTests
     }
 
     [Fact]
+    public async Task A_finding_in_mapped_code_is_keyed_on_the_mapped_file()
+    {
+        var page = Path.Combine(Root, "Page.razor").Replace('\\', '/');
+        var generated = $$"""
+            class C
+            {
+                void M()
+                {
+            #line 3 "{{page}}"
+                    Call(
+                        1);
+                    Call(2);
+            #line default
+                }
+
+                void Call(int value) { }
+            }
+            """;
+
+        var diagnostics = await AnalyzeAsync(
+            Entry("Page.razor", "HR0001", "Call(2);"),
+            ("Page.cs", generated),
+            ("Page.razor", "@code {\n  void M() {\n    Call(\n      1);\n    Call(2);\n  }\n}\n"));
+
+        Assert.True(diagnostics.Single().IsSuppressed);
+    }
+
+    [Fact]
     public async Task A_baselined_finding_stays_suppressed_when_lines_are_inserted_above_it()
     {
         var diagnostics = await AnalyzeAsync(
@@ -120,8 +148,16 @@ public sealed class BaselineSuppressorTests
         string baseline,
         params (string Path, string Source)[] files)
     {
+        // Files other than .cs reach the compiler as additional files, as .razor files do.
+        AdditionalText[] additional =
+        [
+            new InMemoryText(Path.Combine(Root, BaselineKey.FileName), baseline),
+            .. files.Where(file => !file.Path.EndsWith(".cs", StringComparison.Ordinal))
+                .Select(file => new InMemoryText(Path.Combine(Root, file.Path), file.Source)),
+        ];
+
         var options = new CompilationWithAnalyzersOptions(
-            new AnalyzerOptions([new InMemoryText(Path.Combine(Root, BaselineKey.FileName), baseline)]),
+            new AnalyzerOptions([.. additional]),
             onAnalyzerException: null,
             concurrentAnalysis: true,
             logAnalyzerExecutionTime: false,
@@ -139,7 +175,8 @@ public sealed class BaselineSuppressorTests
     private static CSharpCompilation Compile((string Path, string Source)[] files) =>
         CSharpCompilation.Create(
             "Sample",
-            files.Select(file => CSharpSyntaxTree.ParseText(file.Source, path: Path.Combine(Root, file.Path))),
+            files.Where(file => file.Path.EndsWith(".cs", StringComparison.Ordinal))
+                .Select(file => CSharpSyntaxTree.ParseText(file.Source, path: Path.Combine(Root, file.Path))),
             [MetadataReference.CreateFromFile(typeof(object).Assembly.Location)],
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 

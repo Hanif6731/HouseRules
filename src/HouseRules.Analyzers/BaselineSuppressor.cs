@@ -52,8 +52,9 @@ public sealed class BaselineSuppressor : DiagnosticSuppressor
 
         foreach (var diagnostic in ordered)
         {
-            var key = KeyOf(diagnostic, directory, context.CancellationToken);
-            if (remaining.TryGetValue(key, out var count)
+            var key = KeyOf(diagnostic, directory, context.Options.AdditionalFiles, context.CancellationToken);
+            if (key is not null
+                && remaining.TryGetValue(key, out var count)
                 && count > 0
                 && Descriptors.TryGetValue(diagnostic.Id, out var descriptor))
             {
@@ -63,13 +64,34 @@ public sealed class BaselineSuppressor : DiagnosticSuppressor
         }
     }
 
-    private static string KeyOf(Diagnostic diagnostic, string directory, CancellationToken cancellationToken)
+    // The compiler's error log, and therefore the baseline, names the mapped location of code under a #line
+    // directive (Razor's generated code maps to the .razor file). Its text comes from the additional file of that
+    // name; without one the finding has no key and stays reported.
+    private static string? KeyOf(
+        Diagnostic diagnostic,
+        string directory,
+        ImmutableArray<AdditionalText> additionalFiles,
+        CancellationToken cancellationToken)
     {
-        var tree = diagnostic.Location.SourceTree!;
-        var line = diagnostic.Location.GetLineSpan().StartLinePosition.Line;
-        var lineText = tree.GetText(cancellationToken).Lines[line].ToString();
-        return BaselineKey.Of(BaselineKey.RelativePath(directory, tree.FilePath), diagnostic.Id, lineText);
+        var mapped = diagnostic.Location.GetMappedLineSpan();
+        var line = mapped.StartLinePosition.Line;
+        var text = mapped.HasMappedPath
+            ? additionalFiles.FirstOrDefault(file => SamePath(file.Path, mapped.Path))?.GetText(cancellationToken)
+            : diagnostic.Location.SourceTree!.GetText(cancellationToken);
+
+        if (text is null || line >= text.Lines.Count)
+        {
+            return null;
+        }
+
+        var path = mapped.HasMappedPath ? mapped.Path : diagnostic.Location.SourceTree!.FilePath;
+        return BaselineKey.Of(BaselineKey.RelativePath(directory, path), diagnostic.Id, text.Lines[line].ToString());
     }
+
+    private static bool SamePath(string left, string right) =>
+        Path.IsPathRooted(left)
+            && Path.IsPathRooted(right)
+            && string.Equals(Path.GetFullPath(left), Path.GetFullPath(right), StringComparison.OrdinalIgnoreCase);
 
     // Only ids that can fail a build at some level are listed (generated from the catalogue, the compiler and the SDK
     // analyzers): every listed id costs compile time, and a bounded list keeps it negligible.

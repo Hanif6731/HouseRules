@@ -58,7 +58,17 @@ convention.
 
 Set `HouseRulesLevel` in `Directory.Build.props` (or on the command line), not in a project file: the package
 applies build settings before the project file is read, and the build stops if a project file changes the level.
-A `Directory.Build.props` next to one project sets the level for that project alone.
+To give one project its own level, put a `Directory.Build.props` next to it that imports the repository's one
+first; without the import, MSBuild would skip the root file and the project would lose the package:
+
+```xml
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <PropertyGroup>
+    <HouseRulesLevel>Baseline</HouseRulesLevel>
+  </PropertyGroup>
+</Project>
+```
 
 | Level | What it adds |
 |---|---|
@@ -85,7 +95,14 @@ dotnet build -p:HouseRulesBaseline=prune
 ```
 
 A baseline never grows: `prune` only removes entries, and `init` refuses to run over an existing file. An entry is
-the file, the rule and a hash of the line's text, so edits elsewhere in the file do not disturb it.
+the file, the rule and a hash of the line's text, so edits elsewhere in the file do not disturb it; renaming the file
+does.
+
+The ratchet covers the rules HouseRules configures, compiler warnings and the SDK code analysis rules. When `init`
+meets a finding it cannot record, such as another package's analyzer or a custom `[Obsolete]` id, it names the rule
+and writes nothing; fix those findings or set their severity in `.editorconfig` first. Projects with several target
+frameworks are not supported yet. Code generated with `#line` directives is matched on the mapped file when that
+file is an additional file, as Razor files are.
 
 ### Turn off a rule or a ban
 
@@ -171,8 +188,9 @@ analyzer, a code fix, tests and a docs page. `main` is kept green, and the repos
 
 - [Roslynator](https://github.com/dotnet/roslynator) provides the wrapping and line-length rules.
 - [Microsoft.CodeAnalysis.BannedApiAnalyzers](https://github.com/dotnet/roslyn-analyzers) enforces the banned APIs.
-- [Meziantou.DotNet.CodingStandard](https://github.com/meziantou/Meziantou.DotNet.CodingStandard) showed that a
-  coding standard can ship as one package.
+- [Meziantou.NET.Sdk](https://github.com/meziantou/Meziantou.NET.Sdk) is prior art for shipping a whole coding
+  standard as one reference; it is meant to be forked rather than consumed directly. HouseRules is meant to be
+  consumed directly, adds errors only in major versions, and ships a rollout path (levels and the ratchet).
 
 ## License
 
