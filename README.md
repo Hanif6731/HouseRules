@@ -163,6 +163,16 @@ Each major pins `AnalysisLevel` and the versions of Roslynator and BannedApiAnal
 come from your SDK, so upgrading the SDK can still change what an existing rule reports.
 See [CHANGELOG.md](CHANGELOG.md).
 
+## What's maintained
+
+- The latest major version. Fixes are not backported to older majors.
+- .NET SDK 8 and later; CI tests every change on SDK 8.0.1xx and SDK 10.
+- C# in SDK-style projects. VB and F# are not planned.
+- All three levels and the ratchet.
+
+HouseRules has one maintainer. Issues are usually looked at within a week, false positives first, because they break
+builds; there is no support agreement beyond that.
+
 ## Contributing
 
 Build, test and run the package smoke test:
