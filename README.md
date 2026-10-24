@@ -237,6 +237,10 @@ page. `main` is kept green, and the repository builds itself at `Strict`.
 
 - [Roslynator](https://github.com/dotnet/roslynator) provides the wrapping and line-length rules.
 - [Microsoft.CodeAnalysis.BannedApiAnalyzers](https://github.com/dotnet/roslyn-analyzers) enforces the banned APIs.
+- [Workleap.DotNet.CodingStandards](https://github.com/workleap/wl-dotnet-codingstandards) is prior art for a coding
+  standard consumed as one package reference, built on the SDK's own analyzers. HouseRules adds Roslynator's
+  wrapping rules and its own rules with code fixes, and ships a rollout path for existing code (levels and the
+  ratchet).
 - [Meziantou.NET.Sdk](https://github.com/meziantou/Meziantou.NET.Sdk) is prior art for shipping a whole coding
   standard as one reference; it is meant to be forked rather than consumed directly. HouseRules is meant to be
   consumed directly, adds errors only in major versions, and ships a rollout path (levels and the ratchet).
