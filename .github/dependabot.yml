@@ -4,6 +4,9 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
     ignore:
       # Pinned to .NET SDK 8.0.1xx, the oldest SDK the package supports: its Roslyn and MSBuild, and its rule ids.
       - dependency-name: Microsoft.CodeAnalysis.CSharp
@@ -24,6 +27,9 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
     groups:
       actions:
         patterns:
