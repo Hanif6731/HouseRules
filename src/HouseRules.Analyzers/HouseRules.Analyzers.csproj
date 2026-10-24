@@ -12,4 +12,12 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="SuppressibleIds.txt" LogicalName="HouseRules.Analyzers.SuppressibleIds.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HouseRules.Tests" />
+  </ItemGroup>
+
 </Project>

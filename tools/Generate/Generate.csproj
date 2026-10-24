@@ -8,4 +8,14 @@
     <HouseRulesBanConsole>false</HouseRulesBanConsole>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <!-- Downloaded only to read its rule ids; it never runs as an analyzer here. -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" GeneratePathProperty="true" ExcludeAssets="all" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="NetAnalyzersPath" Value="$(PkgMicrosoft_CodeAnalysis_NetAnalyzers)" />
+  </ItemGroup>
+
 </Project>

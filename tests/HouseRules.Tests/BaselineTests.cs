@@ -1,0 +1,95 @@
+using HouseRules.Analyzers;
+using HouseRules.Tasks;
+
+namespace HouseRules.Tests;
+
+public sealed class BaselineTests
+{
+    private static readonly string Root = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "baseline-tests"));
+
+    private static readonly string FileA = Path.Combine(Root, "A.cs");
+
+    private static readonly string[] LinesOfA =
+        ["class C", "{", "    void M()", "    {", "        Call(2);", "    }", "}"];
+
+    [Fact]
+    public void Init_records_every_finding_that_is_not_already_suppressed()
+    {
+        Finding[] findings =
+        [
+            new(FileA, 5, "HR0001", Suppressed: false),
+            new(FileA, 5, "HR0001", Suppressed: false),
+            new(FileA, 3, "CA1822", Suppressed: true),
+        ];
+
+        var recorded = Baseline.Init(findings, Root, ReadLines);
+
+        Assert.Equal(new Dictionary<string, int> { [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 2 }, recorded);
+    }
+
+    [Fact]
+    public void Prune_drops_fixed_entries_and_never_adds_new_ones()
+    {
+        var recorded = new Dictionary<string, int>
+        {
+            [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 2,
+            [BaselineKey.Of("A.cs", "CA1822", "void Fixed() { }")] = 1,
+        };
+
+        Finding[] findings = [new(FileA, 5, "HR0001", Suppressed: true), new(FileA, 3, "IDE0005", Suppressed: false)];
+
+        var pruned = Baseline.Prune(recorded, findings, Root, ReadLines);
+
+        Assert.Equal(new Dictionary<string, int> { [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 1 }, pruned);
+    }
+
+    [Fact]
+    public void A_baseline_round_trips_through_its_file_format()
+    {
+        var recorded = new Dictionary<string, int>
+        {
+            [BaselineKey.Of("src/B.cs", "CS0168", "int unused;")] = 1,
+            [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 2,
+        };
+
+        var text = Baseline.Format(recorded);
+
+        Assert.Equal(recorded, Baseline.Parse(text));
+        Assert.Equal(3, text.Split('\n', StringSplitOptions.RemoveEmptyEntries).Count(line => !line.StartsWith('#')));
+    }
+
+    [Fact]
+    public void A_key_is_the_relative_path_the_rule_and_a_hash_of_the_trimmed_line()
+    {
+        var key = BaselineKey.Of(BaselineKey.RelativePath(Root, Path.Combine(Root, "src", "B.cs")), "CS0168", "  x;  ");
+
+        Assert.Equal("src/B.cs|CS0168|" + BaselineKey.Of("", "", "x;").Split('|')[2], key);
+        Assert.Matches("^src/B.cs\\|CS0168\\|[0-9a-f]{64}$", key);
+    }
+
+    [Fact]
+    public void Findings_are_read_from_a_compiler_error_log()
+    {
+        var uri = new Uri(FileA).AbsoluteUri;
+        var sarif = $$"""
+            {
+              "version": "2.1.0",
+              "runs": [ { "results": [
+                { "ruleId": "HR0001", "level": "warning",
+                  "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "{{uri}}" },
+                    "region": { "startLine": 5 } } } ] },
+                { "ruleId": "CA1822", "level": "warning", "suppressions": [ { "kind": "inSource" } ],
+                  "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "{{uri}}" },
+                    "region": { "startLine": 3 } } } ] },
+                { "ruleId": "CS8032", "level": "warning" }
+              ] } ]
+            }
+            """;
+
+        var findings = Baseline.ReadErrorLog(sarif);
+
+        Assert.Equal([new(FileA, 5, "HR0001", Suppressed: false), new(FileA, 3, "CA1822", Suppressed: true)], findings);
+    }
+
+    private static string[] ReadLines(string path) => path == FileA ? LinesOfA : [];
+}

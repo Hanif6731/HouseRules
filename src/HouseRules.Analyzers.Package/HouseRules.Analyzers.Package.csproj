@@ -12,8 +12,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <!-- The package ships analyzers and MSBuild files only, so its dependency group has no lib folder. -->
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <!-- The package ships analyzers, an MSBuild task and MSBuild files, never a library: no lib folder (NU5128), and
+         the task assembly is loaded by MSBuild, not referenced (NU5100). -->
+    <NoWarn>$(NoWarn);NU5128;NU5100</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,11 +26,13 @@
   <ItemGroup>
     <ProjectReference Include="..\HouseRules.Analyzers\HouseRules.Analyzers.csproj" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\HouseRules.CodeFixes\HouseRules.CodeFixes.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\HouseRules.Tasks\HouseRules.Tasks.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\HouseRules.Analyzers\bin\$(Configuration)\netstandard2.0\HouseRules.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
     <None Include="..\HouseRules.CodeFixes\bin\$(Configuration)\netstandard2.0\HouseRules.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
+    <None Include="..\HouseRules.Tasks\bin\$(Configuration)\netstandard2.0\HouseRules.Tasks.dll" Pack="true" PackagePath="tasks/netstandard2.0" />
     <None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive" />
     <None Include="config\**" Pack="true" PackagePath="config" />
     <None Include="..\..\README.md" Pack="true" PackagePath="" />

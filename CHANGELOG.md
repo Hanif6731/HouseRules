@@ -21,4 +21,7 @@ errors.
 - Banned APIs in six categories, each with its own switch: `HouseRulesBanWeakCrypto`, `HouseRulesBanHttpClient`
   (`Baseline`), `HouseRulesBanWallClock`, `HouseRulesBanRandom`, `HouseRulesBanConsole`, `HouseRulesBanEnvironment`
   (`Recommended`), through Microsoft.CodeAnalysis.BannedApiAnalyzers 3.3.4.
-- Naming relaxations for test projects.
+- The ratchet: `dotnet build -p:HouseRulesBaseline=init` records a project's existing findings in
+  `houserules.baseline`, the build tolerates exactly those, and `dotnet build -p:HouseRulesBaseline=prune` drops the
+  fixed ones. The file never grows.
+- Naming and code-metric relaxations for test projects.

@@ -9,4 +9,49 @@
       Text="HouseRulesLevel changes from '$(_HouseRulesLevelAtProps)' to '$(HouseRulesLevel)' in the project file, after HouseRules has applied the build settings for '$(_HouseRulesLevelAtProps)'. Set HouseRulesLevel in Directory.Build.props (a Directory.Build.props next to this project works for a single project) or on the command line." />
   </Target>
 
+  <!-- The ratchet: houserules.baseline next to the project records existing findings, which the build then tolerates
+       while every new finding still fails it. -p:HouseRulesBaseline=init creates the file, -p:HouseRulesBaseline=prune
+       drops the entries that no longer occur. -->
+  <PropertyGroup>
+    <_HouseRulesBaselineFile>$(MSBuildProjectDirectory)/houserules.baseline</_HouseRulesBaselineFile>
+    <_HouseRulesTasksAssembly Condition="'$(_HouseRulesTasksAssembly)' == ''">$(MSBuildThisFileDirectory)../tasks/netstandard2.0/HouseRules.Tasks.dll</_HouseRulesTasksAssembly>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('$(_HouseRulesBaselineFile)')">
+    <AdditionalFiles Include="$(_HouseRulesBaselineFile)" />
+  </ItemGroup>
+
+  <UsingTask TaskName="HouseRules.Tasks.WriteBaseline" AssemblyFile="$(_HouseRulesTasksAssembly)" />
+
+  <Target Name="HouseRulesBaselinePrepare" BeforeTargets="CoreCompile" Condition="'$(HouseRulesBaseline)' != ''">
+    <Error
+      Condition="'$(HouseRulesBaseline)' != 'init' and '$(HouseRulesBaseline)' != 'prune'"
+      Text="HouseRulesBaseline is '$(HouseRulesBaseline)'. Use init to record the current findings or prune to drop the fixed ones." />
+    <Error
+      Condition="'$(HouseRulesBaseline)' == 'init' and Exists('$(_HouseRulesBaselineFile)')"
+      Text="$(_HouseRulesBaselineFile) already exists, and a baseline never grows. Fix findings, then run: dotnet build -p:HouseRulesBaseline=prune" />
+    <Error
+      Condition="'$(HouseRulesBaseline)' == 'prune' and !Exists('$(_HouseRulesBaselineFile)')"
+      Text="There is no $(_HouseRulesBaselineFile) to prune. Create one with: dotnet build -p:HouseRulesBaseline=init" />
+
+    <!-- Every finding must reach the error log, so warnings stay warnings and the compiler runs even when the
+         project is up to date. -->
+    <PropertyGroup>
+      <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+      <_HouseRulesErrorLog>$(IntermediateOutputPath)houserules.sarif</_HouseRulesErrorLog>
+      <ErrorLog>$(_HouseRulesErrorLog),version=2.1</ErrorLog>
+    </PropertyGroup>
+    <WriteLinesToFile
+      File="$(IntermediateOutputPath)houserules.baseline.stamp"
+      Lines="$([System.Guid]::NewGuid())"
+      Overwrite="true" />
+    <ItemGroup>
+      <CustomAdditionalCompileInputs Include="$(IntermediateOutputPath)houserules.baseline.stamp" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="HouseRulesBaselineWrite" AfterTargets="CoreCompile" Condition="'$(HouseRulesBaseline)' != ''">
+    <WriteBaseline Mode="$(HouseRulesBaseline)" ErrorLog="$(_HouseRulesErrorLog)" BaselineFile="$(_HouseRulesBaselineFile)" />
+  </Target>
+
 </Project>

@@ -14,6 +14,8 @@ public static class CatalogueGenerator
 
     public const string LevelsDocPath = "docs/levels.md";
 
+    public const string SuppressibleIdsPath = "src/HouseRules.Analyzers/SuppressibleIds.txt";
+
     public static readonly IReadOnlyList<string> Levels = ["Baseline", "Recommended", "Strict"];
 
     private const string GeneratedNote = "Generated from catalogue/rules.json by tools/Generate. Do not edit.";
@@ -49,6 +51,7 @@ public static class CatalogueGenerator
         files[$"{ConfigFolder}/Tests.globalconfig"] = TestsGlobalConfig(catalogue);
         files[PropsPath] = Props(catalogue);
         files[LevelsDocPath] = LevelsDoc(catalogue);
+        files[SuppressibleIdsPath] = string.Concat(SuppressibleIds.All(catalogue).Select(id => id + "\n"));
         return files;
     }
 
@@ -78,6 +81,17 @@ public static class CatalogueGenerator
         if (duplicateKey is not null)
         {
             throw new InvalidDataException($"'{duplicateKey.Key}' is configured twice in {CataloguePath}.");
+        }
+
+        var fixable = catalogue.Rules.Where(rule => rule.Fixable)
+            .Select(rule => $"dotnet_diagnostic.{rule.Id}.severity")
+            .ToHashSet(StringComparer.Ordinal);
+
+        var shadowed = catalogue.Tests.FirstOrDefault(entry => fixable.Contains(entry.Key));
+        if (shadowed is not null)
+        {
+            throw new InvalidDataException(
+                $"Test relaxation '{shadowed.Key}' targets a fixable rule; the level rule set would override it.");
         }
     }
 
@@ -124,7 +138,8 @@ public static class CatalogueGenerator
         return text.ToString();
     }
 
-    // `dotnet format` ignores severities from global configs; a rule set carries them to it.
+    // `dotnet format` ignores severities from global configs; a rule set carries them to it. It lists the fixable
+    // rules only: a rule set outranks global configs, so a rule listed here could not be relaxed by Tests.globalconfig.
     private static string RuleSet(Catalogue catalogue, string level)
     {
         var text = new Text();
@@ -132,7 +147,7 @@ public static class CatalogueGenerator
         text.Line($"<!-- {GeneratedNote} -->");
         text.Line($"""<RuleSet Name="HouseRules {level}" Description="HouseRules {level}" ToolsVersion="17.0">""");
         text.Line("""  <Rules AnalyzerId="HouseRules" RuleNamespace="HouseRules">""");
-        foreach (var rule in RulesUpTo(catalogue, level))
+        foreach (var rule in RulesUpTo(catalogue, level).Where(rule => rule.Fixable))
         {
             text.Line($"""    <Rule Id="{rule.Id}" Action="{RuleSetAction(rule.Severity)}" />""");
         }
@@ -324,7 +339,7 @@ public static class CatalogueGenerator
         text.Line("## Test projects");
         text.Line();
         text.Line("Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also get these "
-            + "relaxations (naming only, never bans):");
+            + "relaxations (naming and code metrics, never bans):");
 
         text.Line();
         text.Line("| Setting | Value | Why |");

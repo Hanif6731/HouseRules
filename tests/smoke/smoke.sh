@@ -162,6 +162,33 @@ dir=$(new_project add-package Clean.cs "")
 build "$dir"
 check add-package passes "!warning [A-Z]+[0-9]+"
 
+dir=$(new_project ratchet Violations.cs Baseline)
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-init passes "records [0-9]+ finding"
+
+build "$dir"
+check ratchet-baselined-findings-pass passes "!error [A-Z]+[0-9]+"
+
+sed -e 's/class Violations/class MoreViolations/' "$here/sample/Violations.cs" > "$dir/More.cs"
+build "$dir"
+check ratchet-new-findings-fail fails "More\.cs\([0-9,]+\): error HR0001" "!Violations\.cs\([0-9,]+\): error"
+
+rm "$dir/More.cs"
+sed -i.bak -e 's/^            return count;$/\n            return count;/' "$dir/Violations.cs"
+rm "$dir/Violations.cs.bak"
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=prune 2>&1) || code=$?
+check ratchet-prune passes "records [0-9]+ finding"
+
+code=0
+output=$(< "$dir/houserules.baseline")
+check ratchet-prune-drops-fixed-entries passes "!\|HR0001\|" "\|RCS0056\|"
+
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-init-refuses-to-grow fails "already exists, and a baseline never grows"
+
 if [ "$failures" -ne 0 ]; then
   echo "$failures smoke check(s) failed"
   exit 1

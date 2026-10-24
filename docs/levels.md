@@ -189,9 +189,12 @@ Adds nullable reference types, every compiler warning wave, code metrics and the
 
 ## Test projects
 
-Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also get these relaxations (naming only, never bans):
+Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also get these relaxations (naming and code metrics, never bans):
 
 | Setting | Value | Why |
 |---|---|---|
 | `dotnet_diagnostic.CA1707.severity` | `none` | Test names are sentences with underscores. |
 | `dotnet_naming_rule.async_methods_end_with_async.severity` | `none` | Async test methods describe behaviour, not mechanics, so no Async suffix. |
+| `dotnet_diagnostic.CA1502.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |
+| `dotnet_diagnostic.CA1505.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |
+| `dotnet_diagnostic.CA1506.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |

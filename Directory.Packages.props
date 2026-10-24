@@ -15,6 +15,14 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
   </ItemGroup>
 
+  <ItemGroup Label="MSBuild 17.8, the MSBuild of .NET SDK 8.0.1xx, for the baseline task">
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.8.43" />
+  </ItemGroup>
+
+  <ItemGroup Label="Rule ids of the SDK analyzers for AnalysisLevel 8.0, read by tools/Generate">
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
+  </ItemGroup>
+
   <ItemGroup Label="Analyzers the package depends on; pinned per HouseRules major">
     <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="5.0.1" />
     <!-- 3.3.4, not 5.x: 5.x needs Roslyn 4.12, which no .NET 8 SDK has. -->

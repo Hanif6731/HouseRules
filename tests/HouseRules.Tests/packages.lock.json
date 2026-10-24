@@ -367,7 +367,10 @@
         }
       },
       "generate": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp": "[4.8.0, )"
+        }
       },
       "houserules.analyzers": {
         "type": "Project"
@@ -377,6 +380,9 @@
         "dependencies": {
           "HouseRules.Analyzers": "[1.0.0, )"
         }
+      },
+      "houserules.tasks": {
+        "type": "Project"
       },
       "Microsoft.CodeAnalysis.CSharp": {
         "type": "CentralTransitive",
