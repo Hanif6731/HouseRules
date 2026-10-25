@@ -142,7 +142,8 @@ The switches are `HouseRulesBanHttpClient`, `HouseRulesBanWallClock`, `HouseRule
 `HouseRulesBanConsole` and `HouseRulesBanEnvironment`. Any build setting the package sets, such as
 `TreatWarningsAsErrors`, keeps the value your project gives it. That includes `AnalysisLevel`, but a mode suffix such
 as `latest-recommended` also replaces the per-category modes the levels set, so security and reliability rules
-quietly drop to the recommended set; give it a plain version such as `10.0`, or leave it to the package. A project
+quietly drop to the recommended set; give it a plain version such as `10.0`, or leave it to the package. With
+`GenerateDocumentationFile` off, IDE0005 (unused usings) is off too, because it needs the documentation file. A project
 that sets its own `CodeAnalysisRuleSet` replaces the package's rule set, so `dotnet format` then sees only its
 `.editorconfig` severities; its `.editorconfig` still overrides everything.
 
@@ -183,9 +184,9 @@ Roslynator's RCS0053 misreads two common layouts, and `dotnet format` cannot set
 or IDE0055 reports again.
 
 - An anonymous object that is a lambda's whole body, as the only argument: `.Select(x => new` with `{` on the next
-  line. A named type (`new Row`) is fine.
+  line. A named type (`new Row`) is fine. ([roslynator#1851](https://github.com/dotnet/roslynator/issues/1851))
 - A block lambda that is the only argument in a top-level statement, with `{` in column 0:
-  `builder.Services.AddCors(options =>`.
+  `builder.Services.AddCors(options =>`. ([roslynator#1852](https://github.com/dotnet/roslynator/issues/1852))
 
 Until Roslynator fixes them, record the sites in the baseline or turn RCS0053 off for the files concerned.
 

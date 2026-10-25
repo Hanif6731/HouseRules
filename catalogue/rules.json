@@ -6,7 +6,7 @@
     { "name": "AnalysisLevel", "value": "10.0", "level": "Baseline", "since": "1.0.0", "description": "Which SDK rules exist is pinned per HouseRules major, so an SDK update adds no rules." },
     { "name": "Deterministic", "value": "true", "level": "Baseline", "since": "1.0.0", "description": "Identical source gives identical binaries." },
     { "name": "ContinuousIntegrationBuild", "value": "true", "condition": "'$(CI)' == 'true'", "level": "Baseline", "since": "1.0.0", "description": "CI builds embed normalised paths." },
-    { "name": "GenerateDocumentationFile", "value": "true", "level": "Recommended", "since": "1.0.0", "description": "Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off." },
+    { "name": "GenerateDocumentationFile", "value": "true", "level": "Recommended", "since": "1.0.0", "description": "Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off. A project that sets it to false loses IDE0005 instead of failing the build." },
     { "name": "Nullable", "value": "enable", "level": "Strict", "since": "1.0.0", "description": "Nullable reference types." },
     { "name": "Features", "value": "strict", "level": "Strict", "since": "1.0.0", "description": "The compiler's strict mode." },
     { "name": "WarningLevel", "value": "9999", "level": "Strict", "since": "1.0.0", "description": "Every compiler warning wave." }
@@ -86,7 +86,7 @@
     { "id": "CA2266", "source": "CA", "severity": "none", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only." },
     { "id": "CA2007", "source": "CA", "severity": "none", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Off: ConfigureAwait on every await is noise in apps without a synchronization context." },
 
-    { "id": "IDE1006", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.", "options": {
+    { "id": "IDE1006", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members (not namespaces, which may start with a brand such as xUnit), _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.", "options": {
       "dotnet_naming_rule.interfaces_begin_with_i.symbols": "interfaces",
       "dotnet_naming_rule.interfaces_begin_with_i.style": "prefix_i",
       "dotnet_naming_rule.interfaces_begin_with_i.severity": "warning",
@@ -102,7 +102,7 @@
       "dotnet_naming_rule.types_and_members_pascal.symbols": "types_and_members",
       "dotnet_naming_rule.types_and_members_pascal.style": "pascal_case",
       "dotnet_naming_rule.types_and_members_pascal.severity": "warning",
-      "dotnet_naming_symbols.types_and_members.applicable_kinds": "class, struct, enum, delegate, method, property, event, namespace, local_function",
+      "dotnet_naming_symbols.types_and_members.applicable_kinds": "class, struct, enum, delegate, method, property, event, local_function",
       "dotnet_naming_rule.constants_pascal.symbols": "constants",
       "dotnet_naming_rule.constants_pascal.style": "pascal_case",
       "dotnet_naming_rule.constants_pascal.severity": "warning",
@@ -158,7 +158,7 @@
     { "id": "IDE0305", "source": "IDE", "severity": "suggestion", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls." },
     { "id": "IDE0029", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` instead of a null-check ternary.", "options": { "dotnet_style_coalesce_expression": "true" } },
     { "id": "IDE0030", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` for nullable value types." },
-    { "id": "IDE0031", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`?.` instead of a null-check ternary.", "options": { "dotnet_style_null_propagation": "true" } },
+    { "id": "IDE0031", "source": "IDE", "severity": "suggestion", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Suggestion: `?.` instead of a null-check ternary. Roslyn also suggests it after a `join` or a second `from` in a query over `IQueryable`, where `?.` does not compile (CS8072).", "options": { "dotnet_style_null_propagation": "true" } },
     { "id": "IDE0041", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`is null` instead of `ReferenceEquals`.", "options": { "dotnet_style_prefer_is_null_check_over_reference_equality_method": "true" } },
     { "id": "IDE0032", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Auto-properties instead of a property over a private field.", "options": { "dotnet_style_prefer_auto_properties": "true" } },
     { "id": "IDE0075", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Simplified conditional expressions.", "options": { "dotnet_style_prefer_simplified_boolean_expressions": "true" } },

@@ -66,7 +66,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 
 | Property | Value | Why |
 |---|---|---|
-| `GenerateDocumentationFile` | `true` | Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off. |
+| `GenerateDocumentationFile` | `true` | Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off. A project that sets it to false loses IDE0005 instead of failing the build. |
 
 ### Code analysis categories
 
@@ -83,7 +83,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 
 | ID | Source | What it enforces | Severity | Fixed by `dotnet format` |
 |---|---|---|---|---|
-| [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it. | warning | yes |
+| [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members (not namespaces, which may start with a brand such as xUnit), _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it. | warning | yes |
 | [IDE0005](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0005) | .NET SDK code style | No unused using directives. | warning | yes |
 | [CS1591](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591) | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |
 | [CA2016](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) | .NET SDK code analysis | Pass the CancellationToken on when the callee accepts one. | warning | yes |
@@ -107,7 +107,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0305](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0305) | .NET SDK code style | Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls. | suggestion | yes |
 | [IDE0029](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0029) | .NET SDK code style | `??` instead of a null-check ternary. | warning | yes |
 | [IDE0030](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0030) | .NET SDK code style | `??` for nullable value types. | warning | yes |
-| [IDE0031](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0031) | .NET SDK code style | `?.` instead of a null-check ternary. | warning | yes |
+| [IDE0031](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0031) | .NET SDK code style | Suggestion: `?.` instead of a null-check ternary. Roslyn also suggests it after a `join` or a second `from` in a query over `IQueryable`, where `?.` does not compile (CS8072). | suggestion | yes |
 | [IDE0041](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0041) | .NET SDK code style | `is null` instead of `ReferenceEquals`. | warning | yes |
 | [IDE0032](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0032) | .NET SDK code style | Auto-properties instead of a property over a private field. | warning | yes |
 | [IDE0075](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0075) | .NET SDK code style | Simplified conditional expressions. | warning | yes |

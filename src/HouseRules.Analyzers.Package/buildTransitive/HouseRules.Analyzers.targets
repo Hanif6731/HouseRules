@@ -14,6 +14,13 @@
       Text="HouseRulesLevel changes from '$(_HouseRulesLevelAtProps)' to '$(HouseRulesLevel)' in the project file, after HouseRules has applied the build settings for '$(_HouseRulesLevelAtProps)'. Set HouseRulesLevel in Directory.Build.props or on the command line. For this project alone, use a Directory.Build.props next to it that first imports the parent one: &lt;Import Project=&quot;%24([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '%24(MSBuildThisFileDirectory)../'))&quot; /&gt;" />
   </Target>
 
+  <!-- IDE0005 needs the documentation file. The project file has been read by now, so a project that turns
+       GenerateDocumentationFile off loses IDE0005 here instead of failing every build with
+       EnableGenerateDocumentationFile. -->
+  <PropertyGroup Condition="'$(_HouseRulesRank)' != '0' and '$(GenerateDocumentationFile)' != 'true'">
+    <NoWarn>$(NoWarn);IDE0005</NoWarn>
+  </PropertyGroup>
+
   <!-- The ratchet: houserules.baseline next to the project records existing findings, which the build then tolerates
        while every new finding still fails it. -p:HouseRulesBaseline=init creates the file, -p:HouseRulesBaseline=prune
        drops the entries that no longer occur. -->

@@ -131,6 +131,27 @@ dir=$(new_project lowercase-level Violations.cs strict)
 build "$dir"
 check lowercase-level fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)"
 
+# IDE0005 needs the documentation file; a project that turns it off loses IDE0005 instead of failing every build.
+dir=$(new_project doc-file-off UnusedUsing.cs Recommended '<GenerateDocumentationFile>false</GenerateDocumentationFile>')
+build "$dir"
+check doc-file-off passes "!warning [A-Z]+[0-9]+" "!EnableGenerateDocumentationFile"
+
+dir=$(new_project unused-using UnusedUsing.cs Recommended)
+build "$dir"
+check unused-using fails "$(reported IDE0005)"
+
+dir=$(new_project null-check-in-query Query.cs Recommended)
+build "$dir"
+check null-check-in-query passes "!$(reported IDE0031)"
+
+dir=$(new_project brand-namespace Brand.cs Recommended)
+build "$dir"
+check brand-namespace passes "!warning [A-Z]+[0-9]+"
+
+sed -e 's/class Brand/class lowercaseType/' "$here/sample/Brand.cs" > "$dir/Brand.cs"
+build "$dir"
+check lowercase-type-name fails "$(reported IDE1006)"
+
 dir=$(new_project clean-strict Clean.cs Strict)
 build "$dir"
 check clean-strict passes "!warning [A-Z]+[0-9]+"

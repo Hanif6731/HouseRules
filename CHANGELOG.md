@@ -16,6 +16,10 @@ errors.
   the step from the code, and a wrapped base list passed or failed depending on the machine. An `.editorconfig`
   that sets these options still wins. A project without one may now see RCS0053 on a top-level statement whose only
   argument is a block lambda with `{` in column 0, which is a Roslynator bug (see the README's known limitations).
+- IDE0031 (`?.` instead of a null-check ternary) is a suggestion instead of a warning. After a `join` or a second
+  `from` in a query over `IQueryable`, Roslyn suggests `?.` where an expression tree cannot hold it, and the fix does
+  not compile (CS8072).
+- The PascalCase naming rule no longer covers namespaces, which may start with a brand name such as xUnit or iOS.
 
 ### Fixed
 
@@ -24,6 +28,9 @@ errors.
   baseline failed; such a project now builds as usual and says there is nothing to prune.
 - `prune` drops an entry whose finding is now suppressed in source (a pragma or `[SuppressMessage]`) or by another
   suppressor. It kept such entries, although the build passed without them.
+- A project that sets `GenerateDocumentationFile` to false no longer fails at `Recommended` with
+  `EnableGenerateDocumentationFile` in every build: IDE0005 needs the documentation file, so it is off for that
+  project.
 
 ### Removed
 

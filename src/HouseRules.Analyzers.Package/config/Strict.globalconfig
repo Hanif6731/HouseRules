@@ -123,7 +123,7 @@ dotnet_diagnostic.CA2266.severity = none
 # CA2007: Off: ConfigureAwait on every await is noise in apps without a synchronization context.
 dotnet_diagnostic.CA2007.severity = none
 
-# IDE1006: Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.
+# IDE1006: Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members (not namespaces, which may start with a brand such as xUnit), _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.
 dotnet_diagnostic.IDE1006.severity = warning
 dotnet_naming_rule.interfaces_begin_with_i.symbols = interfaces
 dotnet_naming_rule.interfaces_begin_with_i.style = prefix_i
@@ -140,7 +140,7 @@ dotnet_naming_style.prefix_t.required_prefix = T
 dotnet_naming_rule.types_and_members_pascal.symbols = types_and_members
 dotnet_naming_rule.types_and_members_pascal.style = pascal_case
 dotnet_naming_rule.types_and_members_pascal.severity = warning
-dotnet_naming_symbols.types_and_members.applicable_kinds = class, struct, enum, delegate, method, property, event, namespace, local_function
+dotnet_naming_symbols.types_and_members.applicable_kinds = class, struct, enum, delegate, method, property, event, local_function
 dotnet_naming_rule.constants_pascal.symbols = constants
 dotnet_naming_rule.constants_pascal.style = pascal_case
 dotnet_naming_rule.constants_pascal.severity = warning
@@ -247,8 +247,8 @@ dotnet_style_coalesce_expression = true
 # IDE0030: `??` for nullable value types.
 dotnet_diagnostic.IDE0030.severity = warning
 
-# IDE0031: `?.` instead of a null-check ternary.
-dotnet_diagnostic.IDE0031.severity = warning
+# IDE0031: Suggestion: `?.` instead of a null-check ternary. Roslyn also suggests it after a `join` or a second `from` in a query over `IQueryable`, where `?.` does not compile (CS8072).
+dotnet_diagnostic.IDE0031.severity = suggestion
 dotnet_style_null_propagation = true
 
 # IDE0041: `is null` instead of `ReferenceEquals`.
