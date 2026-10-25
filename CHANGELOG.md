@@ -13,6 +13,18 @@ errors.
 
 - A package icon, shown on nuget.org and in IDE package managers.
 
+### Changed
+
+- The `HttpClient`, `WallClock`, `Random`, `Console` and `Environment` bans move to `Strict`. They push a design
+  (injected clocks, logging and configuration, `IHttpClientFactory`) rather than catch a bug, and Microsoft also
+  endorses a long-lived static `HttpClient`. `Baseline` and `Recommended` keep only the `WeakCrypto` ban.
+- IDE0305 (collection expressions instead of `ToList()`/`ToArray()`) is a suggestion instead of a warning.
+
+### Removed
+
+- `CheckForOverflowUnderflow` in Debug builds at `Strict`: Debug and Release behaved differently, and code that
+  relies on wrap-around, such as hash codes and checksums, threw in Debug only. A project can still set it.
+
 ## [1.0.0-preview.1] - 2026-10-24
 
 The first preview of 1.0.0. It carries no stability promise: the release policy above applies from 1.0.0.

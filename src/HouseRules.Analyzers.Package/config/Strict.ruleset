@@ -36,7 +36,7 @@
     <Rule Id="IDE0017" Action="Warning" />
     <Rule Id="IDE0028" Action="Warning" />
     <Rule Id="IDE0300" Action="Warning" />
-    <Rule Id="IDE0305" Action="Warning" />
+    <Rule Id="IDE0305" Action="Info" />
     <Rule Id="IDE0029" Action="Warning" />
     <Rule Id="IDE0030" Action="Warning" />
     <Rule Id="IDE0031" Action="Warning" />

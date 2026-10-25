@@ -244,8 +244,8 @@ dotnet_style_collection_initializer = true
 dotnet_diagnostic.IDE0300.severity = warning
 dotnet_style_prefer_collection_expression = when_types_loosely_match
 
-# IDE0305: Collection expressions instead of fluent `ToList()`/`ToArray()` calls.
-dotnet_diagnostic.IDE0305.severity = warning
+# IDE0305: Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls.
+dotnet_diagnostic.IDE0305.severity = suggestion
 
 # IDE0029: `??` instead of a null-check ternary.
 dotnet_diagnostic.IDE0029.severity = warning

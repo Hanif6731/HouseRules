@@ -9,8 +9,7 @@
     { "name": "GenerateDocumentationFile", "value": "true", "level": "Recommended", "since": "1.0.0", "description": "Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off." },
     { "name": "Nullable", "value": "enable", "level": "Strict", "since": "1.0.0", "description": "Nullable reference types." },
     { "name": "Features", "value": "strict", "level": "Strict", "since": "1.0.0", "description": "The compiler's strict mode." },
-    { "name": "WarningLevel", "value": "9999", "level": "Strict", "since": "1.0.0", "description": "Every compiler warning wave." },
-    { "name": "CheckForOverflowUnderflow", "value": "true", "condition": "'$(Configuration)' == 'Debug' or '$(Configuration)' == ''", "level": "Strict", "since": "1.0.0", "description": "Checked arithmetic in Debug builds: overflow is a bug, not a wrap-around." }
+    { "name": "WarningLevel", "value": "9999", "level": "Strict", "since": "1.0.0", "description": "Every compiler warning wave." }
   ],
   "categories": [
     { "name": "Security", "mode": "All", "level": "Baseline", "since": "1.0.0" },
@@ -24,11 +23,11 @@
   ],
   "banned": [
     { "category": "WeakCrypto", "switch": "HouseRulesBanWeakCrypto", "level": "Baseline", "since": "1.0.0", "description": "Broken hashes and ciphers (MD5, SHA1, DES, TripleDES, RC2)." },
-    { "category": "HttpClient", "switch": "HouseRulesBanHttpClient", "level": "Baseline", "since": "1.0.0", "description": "Constructing HttpClient or WebClient directly." },
-    { "category": "WallClock", "switch": "HouseRulesBanWallClock", "level": "Recommended", "since": "1.0.0", "description": "Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow)." },
-    { "category": "Random", "switch": "HouseRulesBanRandom", "level": "Recommended", "since": "1.0.0", "description": "System.Random." },
-    { "category": "Console", "switch": "HouseRulesBanConsole", "level": "Recommended", "since": "1.0.0", "description": "System.Console." },
-    { "category": "Environment", "switch": "HouseRulesBanEnvironment", "level": "Recommended", "since": "1.0.0", "description": "Reading environment variables directly." }
+    { "category": "HttpClient", "switch": "HouseRulesBanHttpClient", "level": "Strict", "since": "1.0.0", "description": "Constructing HttpClient or WebClient directly." },
+    { "category": "WallClock", "switch": "HouseRulesBanWallClock", "level": "Strict", "since": "1.0.0", "description": "Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow)." },
+    { "category": "Random", "switch": "HouseRulesBanRandom", "level": "Strict", "since": "1.0.0", "description": "System.Random." },
+    { "category": "Console", "switch": "HouseRulesBanConsole", "level": "Strict", "since": "1.0.0", "description": "System.Console." },
+    { "category": "Environment", "switch": "HouseRulesBanEnvironment", "level": "Strict", "since": "1.0.0", "description": "Reading environment variables directly." }
   ],
   "rules": [
     { "id": "HR0001", "source": "HouseRules", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Blank line after a multi-line statement." },
@@ -165,7 +164,7 @@
     { "id": "IDE0017", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Object initializers.", "options": { "dotnet_style_object_initializer": "true" } },
     { "id": "IDE0028", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Collection initializers.", "options": { "dotnet_style_collection_initializer": "true" } },
     { "id": "IDE0300", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Collection expressions for arrays.", "options": { "dotnet_style_prefer_collection_expression": "when_types_loosely_match" } },
-    { "id": "IDE0305", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Collection expressions instead of fluent `ToList()`/`ToArray()` calls." },
+    { "id": "IDE0305", "source": "IDE", "severity": "suggestion", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls." },
     { "id": "IDE0029", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` instead of a null-check ternary.", "options": { "dotnet_style_coalesce_expression": "true" } },
     { "id": "IDE0030", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` for nullable value types." },
     { "id": "IDE0031", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`?.` instead of a null-check ternary.", "options": { "dotnet_style_null_propagation": "true" } },

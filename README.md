@@ -15,6 +15,12 @@ brings strict build settings, the .NET SDK analyzers, Roslynator's wrapping rule
 own rules, in three levels a codebase can adopt one at a time, with a ratchet so existing code does not block the
 switch.
 
+The style is not a new one. Layout, naming and file structure follow the
+[.NET runtime coding style](https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/coding-style.md) and
+[Microsoft's C# conventions](https://learn.microsoft.com/dotnet/csharp/fundamentals/coding-style/coding-conventions),
+and long lines wrap the way [CSharpier](https://csharpier.com) wraps them: operator first, one call per line, one
+argument per line. Bans that push a design, such as reading `DateTime.UtcNow` directly, start at `Strict`.
+
 ## Install
 
 ```bash
@@ -60,8 +66,7 @@ dotnet format
 `dotnet format` fixes what it found before its first fix, so a statement it wraps gets its HR0001 blank line only on
 the next run: run `dotnet format` again if the build reports HR0001 after wrapping.
 
-What remains needs a decision: a weak hash, a clock read that a test cannot control, a name that breaks the
-convention.
+What remains needs a decision: a weak hash, a name that breaks the convention, a cancellation token not passed on.
 
 ## Usage
 
@@ -84,8 +89,8 @@ first; without the import, MSBuild would skip the root file and the project woul
 | Level | What it adds |
 |---|---|
 | `Baseline` | Security and reliability rules, warnings as errors, and the layout rules `dotnet format` fixes. Costs one mechanical commit plus the security fixes. |
-| `Recommended` (default) | Design, maintainability, naming and usage rules whose fixes need judgement; bans on the wall clock, `Random`, `Console` and environment reads. |
-| `Strict` | Nullable reference types, every compiler warning wave, code metrics and the remaining style rules. |
+| `Recommended` (default) | Design, maintainability, naming and usage rules whose fixes need judgement. |
+| `Strict` | Nullable reference types, every compiler warning wave, code metrics, the remaining style rules, and bans on the wall clock, `Random`, `Console`, environment reads and `new HttpClient()`. |
 
 Each level contains the one before it. [docs/levels.md](docs/levels.md) lists every setting and rule per level, so
 the cost of the next step is known before taking it.

@@ -119,12 +119,12 @@ check baseline fails "$(reported HR0001)" "$(reported RCS0056)" "$(reported CA53
 
 dir=$(new_project recommended Violations.cs Recommended)
 build "$dir"
-check recommended fails "$(reported HR0001)" "$(reported IDE1006)" "'DateTime.UtcNow' is banned" \
+check recommended fails "$(reported HR0001)" "$(reported IDE1006)" "!'DateTime.UtcNow' is banned" \
   "$(reported CA1874)" "!$(reported CS8602)"
 
 dir=$(new_project strict Violations.cs Strict)
 build "$dir"
-check strict fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)"
+check strict fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)" "'DateTime.UtcNow' is banned"
 
 dir=$(new_project lowercase-level Violations.cs strict)
 build "$dir"
@@ -162,7 +162,7 @@ rm "$dir/Directory.Build.props.bak"
 build "$dir"
 check warnings-not-errors-from-props passes "warning HR0001:" "!error [A-Z]+[0-9]+"
 
-dir=$(new_project wall-clock-ban-off Violations.cs Recommended '<HouseRulesBanWallClock>false</HouseRulesBanWallClock>')
+dir=$(new_project wall-clock-ban-off Violations.cs Strict '<HouseRulesBanWallClock>false</HouseRulesBanWallClock>')
 build "$dir"
 check wall-clock-ban-off fails "!'DateTime.UtcNow' is banned" "'MD5' is banned"
 
