@@ -6,7 +6,7 @@
     { "name": "AnalysisLevel", "value": "10.0", "level": "Baseline", "since": "1.0.0", "description": "Which SDK rules exist is pinned per HouseRules major, so an SDK update adds no rules." },
     { "name": "Deterministic", "value": "true", "level": "Baseline", "since": "1.0.0", "description": "Identical source gives identical binaries." },
     { "name": "ContinuousIntegrationBuild", "value": "true", "condition": "'$(CI)' == 'true'", "level": "Baseline", "since": "1.0.0", "description": "CI builds embed normalised paths." },
-    { "name": "GenerateDocumentationFile", "value": "true", "level": "Recommended", "since": "1.0.0", "description": "Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off." },
+    { "name": "GenerateDocumentationFile", "value": "true", "level": "Recommended", "since": "1.0.0", "description": "Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off. A project that sets it to false loses IDE0005 instead of failing the build." },
     { "name": "Nullable", "value": "enable", "level": "Strict", "since": "1.0.0", "description": "Nullable reference types." },
     { "name": "Features", "value": "strict", "level": "Strict", "since": "1.0.0", "description": "The compiler's strict mode." },
     { "name": "WarningLevel", "value": "9999", "level": "Strict", "since": "1.0.0", "description": "Every compiler warning wave." }
@@ -22,7 +22,6 @@
     { "name": "Globalization", "mode": "Recommended", "level": "Recommended", "since": "1.0.0" }
   ],
   "banned": [
-    { "category": "WeakCrypto", "switch": "HouseRulesBanWeakCrypto", "level": "Baseline", "since": "1.0.0", "description": "Broken hashes and ciphers (MD5, SHA1, DES, TripleDES, RC2)." },
     { "category": "HttpClient", "switch": "HouseRulesBanHttpClient", "level": "Strict", "since": "1.0.0", "description": "Constructing HttpClient or WebClient directly." },
     { "category": "WallClock", "switch": "HouseRulesBanWallClock", "level": "Strict", "since": "1.0.0", "description": "Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow)." },
     { "category": "Random", "switch": "HouseRulesBanRandom", "level": "Strict", "since": "1.0.0", "description": "System.Random." },
@@ -66,14 +65,13 @@
     { "id": "IDE0065", "source": "IDE", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Using directives outside the namespace.", "options": { "csharp_using_directive_placement": "outside_namespace" } },
     { "id": "RCS0056", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Lines are at most 120 characters long.", "options": { "roslynator_max_line_length": "120" } },
     { "id": "RCS0054", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Once a call chain wraps, one call per line." },
-    { "id": "RCS0053", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Argument and parameter lists: on one line, or one element per line." },
+    { "id": "RCS0053", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Argument and parameter lists: on one line, or one element per line, indented in 4-space steps unless an `.editorconfig` says otherwise.", "options": { "indent_style": "space", "indent_size": "4", "tab_width": "4" } },
     { "id": "RCS0032", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped expression body breaks after `=>`.", "options": { "roslynator_arrow_token_new_line": "after" } },
     { "id": "RCS0052", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped assignment breaks after `=`.", "options": { "roslynator_equals_token_new_line": "after" } },
     { "id": "RCS0027", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped binary expression puts the operator first on the new line.", "options": { "roslynator_binary_operator_new_line": "before" } },
     { "id": "RCS0028", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped conditional expression puts `?` and `:` first on the new line.", "options": { "roslynator_conditional_operator_new_line": "before" } },
     { "id": "RCS0059", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped null-conditional access puts `?.` first on the new line.", "options": { "roslynator_null_conditional_operator_new_line": "before" } },
     { "id": "RCS0055", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Once a binary expression wraps, it breaks at every operator." },
-    { "id": "RS0030", "docs": "https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md", "source": "BannedApiAnalyzers", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Banned APIs, in switchable categories." },
     { "id": "CA2100", "source": "CA", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "SQL built from strings is reviewed for injection." },
     { "id": "CA3075", "source": "CA", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "No insecure DTD processing in XML." },
     { "id": "CA5350", "source": "CA", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "No weak cryptographic algorithms." },
@@ -88,7 +86,7 @@
     { "id": "CA2266", "source": "CA", "severity": "none", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only." },
     { "id": "CA2007", "source": "CA", "severity": "none", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Off: ConfigureAwait on every await is noise in apps without a synchronization context." },
 
-    { "id": "IDE1006", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.", "options": {
+    { "id": "IDE1006", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members (not namespaces, which may start with a brand such as xUnit), _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.", "options": {
       "dotnet_naming_rule.interfaces_begin_with_i.symbols": "interfaces",
       "dotnet_naming_rule.interfaces_begin_with_i.style": "prefix_i",
       "dotnet_naming_rule.interfaces_begin_with_i.severity": "warning",
@@ -104,7 +102,7 @@
       "dotnet_naming_rule.types_and_members_pascal.symbols": "types_and_members",
       "dotnet_naming_rule.types_and_members_pascal.style": "pascal_case",
       "dotnet_naming_rule.types_and_members_pascal.severity": "warning",
-      "dotnet_naming_symbols.types_and_members.applicable_kinds": "class, struct, enum, delegate, method, property, event, namespace, local_function",
+      "dotnet_naming_symbols.types_and_members.applicable_kinds": "class, struct, enum, delegate, method, property, event, local_function",
       "dotnet_naming_rule.constants_pascal.symbols": "constants",
       "dotnet_naming_rule.constants_pascal.style": "pascal_case",
       "dotnet_naming_rule.constants_pascal.severity": "warning",
@@ -160,7 +158,7 @@
     { "id": "IDE0305", "source": "IDE", "severity": "suggestion", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls." },
     { "id": "IDE0029", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` instead of a null-check ternary.", "options": { "dotnet_style_coalesce_expression": "true" } },
     { "id": "IDE0030", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` for nullable value types." },
-    { "id": "IDE0031", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`?.` instead of a null-check ternary.", "options": { "dotnet_style_null_propagation": "true" } },
+    { "id": "IDE0031", "source": "IDE", "severity": "suggestion", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Suggestion: `?.` instead of a null-check ternary. Roslyn also suggests it after a `join` or a second `from` in a query over `IQueryable`, where `?.` does not compile (CS8072).", "options": { "dotnet_style_null_propagation": "true" } },
     { "id": "IDE0041", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`is null` instead of `ReferenceEquals`.", "options": { "dotnet_style_prefer_is_null_check_over_reference_equality_method": "true" } },
     { "id": "IDE0032", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Auto-properties instead of a property over a private field.", "options": { "dotnet_style_prefer_auto_properties": "true" } },
     { "id": "IDE0075", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Simplified conditional expressions.", "options": { "dotnet_style_prefer_simplified_boolean_expressions": "true" } },
@@ -197,6 +195,7 @@
     { "id": "IDE0079", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No unnecessary suppressions.", "options": { "dotnet_remove_unnecessary_suppression_exclusions": "none" } },
     { "id": "IDE0072", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Switch expressions handle every enum member, so a new member fails the build." },
 
+    { "id": "RS0030", "docs": "https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md", "source": "BannedApiAnalyzers", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": false, "description": "Banned APIs, in switchable categories." },
     { "id": "IDE0130", "source": "IDE", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": true, "description": "Namespaces match the folder structure.", "options": { "dotnet_style_namespace_match_folder": "true" } },
     { "id": "IDE0250", "source": "IDE", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": true, "description": "Readonly structs when no member mutates.", "options": { "csharp_style_prefer_readonly_struct": "true" } },
     { "id": "IDE0251", "source": "IDE", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": true, "description": "Readonly struct members when they do not mutate.", "options": { "csharp_style_prefer_readonly_struct_member": "true" } },

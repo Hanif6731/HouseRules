@@ -12,6 +12,9 @@ internal static class BaselineKey
 {
     public const string FileName = "houserules.baseline";
 
+    /// <summary>Prefix of the suppression ids the baseline reports, as the compiler's error log names them.</summary>
+    public const string SuppressionIdPrefix = "HRB_";
+
     public static string Of(string relativePath, string id, string lineText)
     {
         using var sha = SHA256.Create();

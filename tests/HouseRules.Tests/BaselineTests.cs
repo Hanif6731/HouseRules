@@ -17,9 +17,9 @@ public sealed class BaselineTests
     {
         Finding[] findings =
         [
-            new(FileA, 5, "HR0001", Suppressed: false),
-            new(FileA, 5, "HR0001", Suppressed: false),
-            new(FileA, 3, "CA1822", Suppressed: true),
+            new(FileA, 5, "HR0001", FindingSuppression.None),
+            new(FileA, 5, "HR0001", FindingSuppression.None),
+            new(FileA, 3, "CA1822", FindingSuppression.Source),
         ];
 
         var recorded = Baseline.Init(findings, Root, ReadLines);
@@ -32,10 +32,10 @@ public sealed class BaselineTests
     {
         Finding[] findings =
         [
-            new(FileA, 5, "HR0001", Suppressed: false),
-            new(FileA, 5, "LEGACY001", Suppressed: false),
-            new("", 0, "CS1234", Suppressed: false),
-            new(FileA, 3, "OTHER001", Suppressed: true),
+            new(FileA, 5, "HR0001", FindingSuppression.None),
+            new(FileA, 5, "LEGACY001", FindingSuppression.None),
+            new("", 0, "CS1234", FindingSuppression.None),
+            new(FileA, 3, "OTHER001", FindingSuppression.Source),
         ];
 
         var unrecordable = Baseline.Unrecordable(findings, id => id is "HR0001" or "CS1234");
@@ -52,7 +52,24 @@ public sealed class BaselineTests
             [BaselineKey.Of("A.cs", "CA1822", "void Fixed() { }")] = 1,
         };
 
-        Finding[] findings = [new(FileA, 5, "HR0001", Suppressed: true), new(FileA, 3, "IDE0005", Suppressed: false)];
+        Finding[] findings =
+            [new(FileA, 5, "HR0001", FindingSuppression.Baseline), new(FileA, 3, "IDE0005", FindingSuppression.None)];
+
+        var pruned = Baseline.Prune(recorded, findings, Root, ReadLines);
+
+        Assert.Equal(new Dictionary<string, int> { [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 1 }, pruned);
+    }
+
+    [Fact]
+    public void Prune_drops_entries_whose_findings_are_now_suppressed_in_source()
+    {
+        var recorded = new Dictionary<string, int> { [BaselineKey.Of("A.cs", "HR0001", "Call(2);")] = 3 };
+        Finding[] findings =
+        [
+            new(FileA, 5, "HR0001", FindingSuppression.Baseline),
+            new(FileA, 5, "HR0001", FindingSuppression.Source),
+            new(FileA, 5, "HR0001", FindingSuppression.Source),
+        ];
 
         var pruned = Baseline.Prune(recorded, findings, Root, ReadLines);
 
@@ -119,12 +136,40 @@ public sealed class BaselineTests
 
         Assert.Equal(
             [
-                new(FileA, 5, "HR0001", Suppressed: false),
-                new(FileA, 3, "CA1822", Suppressed: true),
-                new("", 0, "CS8032", Suppressed: false),
-                new("", 0, "CS1030", Suppressed: false),
+                new(FileA, 5, "HR0001", FindingSuppression.None),
+                new(FileA, 3, "CA1822", FindingSuppression.Baseline),
+                new("", 0, "CS8032", FindingSuppression.None),
+                new("", 0, "CS1030", FindingSuppression.None),
             ],
             findings);
+    }
+
+    [Theory]
+    [InlineData("Pragma Directive", FindingSuppression.Source)]
+    [InlineData("SuppressMessageAttribute", FindingSuppression.Source)]
+    [InlineData(
+        "DiagnosticSuppressor { Suppression Id: SPR0001, Suppression Justification: Generated. }",
+        FindingSuppression.Source)]
+    [InlineData(
+        "DiagnosticSuppressor { Suppression Id: HRB_HR0001, Suppression Justification: Recorded. }",
+        FindingSuppression.Baseline)]
+    public void An_error_log_suppression_is_the_baseline_only_when_it_names_the_baseline(
+        string suppressionType,
+        FindingSuppression expected)
+    {
+        var uri = new Uri(FileA).AbsoluteUri;
+        var sarif = $$"""
+            { "version": "2.1.0", "runs": [ { "results": [
+              { "ruleId": "HR0001", "level": "warning",
+                "suppressions": [ { "kind": "inSource", "properties": { "suppressionType": "{{suppressionType}}" } } ],
+                "locations": [ { "physicalLocation": { "artifactLocation": { "uri": "{{uri}}" },
+                  "region": { "startLine": 5 } } } ] }
+            ] } ] }
+            """;
+
+        var finding = Baseline.ReadErrorLog(sarif).Single();
+
+        Assert.Equal(expected, finding.Suppression);
     }
 
     [Fact]

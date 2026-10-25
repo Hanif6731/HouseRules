@@ -7,7 +7,23 @@ using HouseRules.Analyzers;
 namespace HouseRules.Tasks;
 
 /// <summary>A diagnostic from the compiler's error log, at a 1-based line.</summary>
-public sealed record Finding(string Path, int Line, string RuleId, bool Suppressed);
+public sealed record Finding(string Path, int Line, string RuleId, FindingSuppression Suppression);
+
+/// <summary>What, if anything, suppressed a finding.</summary>
+public enum FindingSuppression
+{
+    /// <summary>Not suppressed: the finding fails or warns the build.</summary>
+    None,
+
+    /// <summary>
+    /// Suppressed by <c>houserules.baseline</c>, or by a suppression the error log does not describe; either way the
+    /// baseline keeps its entry.
+    /// </summary>
+    Baseline,
+
+    /// <summary>Suppressed in source (a pragma or <c>[SuppressMessage]</c>) or by another suppressor.</summary>
+    Source,
+}
 
 /// <summary>Reads, writes and updates <c>houserules.baseline</c>: one key per recorded finding.</summary>
 public static class Baseline
@@ -51,7 +67,10 @@ public static class Baseline
         string baselineDirectory,
         Func<string, IReadOnlyList<string>> readLines)
     {
-        return Count(findings.Where(finding => !finding.Suppressed), baselineDirectory, readLines);
+        return Count(
+            findings.Where(finding => finding.Suppression == FindingSuppression.None),
+            baselineDirectory,
+            readLines);
     }
 
     /// <summary>
@@ -60,7 +79,7 @@ public static class Baseline
     /// </summary>
     public static IReadOnlyList<string> Unrecordable(IEnumerable<Finding> findings, Func<string, bool> isSuppressible)
     {
-        return [.. findings.Where(finding => !finding.Suppressed)
+        return [.. findings.Where(finding => finding.Suppression == FindingSuppression.None)
             .Where(finding => finding.Path.Length == 0 || !isSuppressible(finding.RuleId))
             .Select(finding => finding.RuleId)
             .Distinct(StringComparer.Ordinal)
@@ -69,7 +88,7 @@ public static class Baseline
 
     /// <summary>
     /// Keeps each recorded entry only as often as it still occurs. Entries are never added, so the baseline only
-    /// shrinks.
+    /// shrinks. A finding now suppressed in source no longer needs its entry, so it does not count.
     /// </summary>
     public static Dictionary<string, int> Prune(
         IReadOnlyDictionary<string, int> recorded,
@@ -77,7 +96,11 @@ public static class Baseline
         string baselineDirectory,
         Func<string, IReadOnlyList<string>> readLines)
     {
-        var current = Count(findings, baselineDirectory, readLines);
+        var current = Count(
+            findings.Where(finding => finding.Suppression != FindingSuppression.Source),
+            baselineDirectory,
+            readLines);
+
         var pruned = new Dictionary<string, int>(StringComparer.Ordinal);
         foreach (var entry in recorded)
         {
@@ -111,20 +134,37 @@ public static class Baseline
             // A finding without an absolute file location (an analyzer load warning, a relative #line path) is kept
             // with an empty path so that init can name it instead of silently leaving it out.
             var location = result.Locations?.FirstOrDefault()?.PhysicalLocation;
-            var suppressed = result.Suppressions is { Length: > 0 };
+            var suppression = SuppressionOf(result.Suppressions);
             if (Uri.TryCreate(location?.ArtifactLocation?.Uri, UriKind.Absolute, out var uri)
                 && uri.IsFile
                 && location?.Region is { } region)
             {
-                findings.Add(new Finding(uri.LocalPath, region.StartLine, result.RuleId, suppressed));
+                findings.Add(new Finding(uri.LocalPath, region.StartLine, result.RuleId, suppression));
             }
             else
             {
-                findings.Add(new Finding("", 0, result.RuleId, suppressed));
+                findings.Add(new Finding("", 0, result.RuleId, suppression));
             }
         }
 
         return findings;
+    }
+
+    // The compiler names each suppression's source in properties.suppressionType: "Pragma Directive",
+    // "SuppressMessageAttribute", or "DiagnosticSuppressor { Suppression Id: ..., ... }".
+    private static FindingSuppression SuppressionOf(SarifSuppression[]? suppressions)
+    {
+        if (suppressions is not { Length: > 0 })
+        {
+            return FindingSuppression.None;
+        }
+
+        var baselineId = "Suppression Id: " + BaselineKey.SuppressionIdPrefix;
+        return suppressions.Any(
+            suppression => suppression.Properties?.SuppressionType is { } type
+                && !type.Contains(baselineId))
+            ? FindingSuppression.Source
+            : FindingSuppression.Baseline;
     }
 
     private static Dictionary<string, int> Count(
@@ -214,7 +254,14 @@ public static class Baseline
     [DataContract]
     private sealed class SarifSuppression
     {
-        [DataMember(Name = "kind")]
-        public string? Kind { get; set; }
+        [DataMember(Name = "properties")]
+        public SarifSuppressionProperties? Properties { get; set; }
+    }
+
+    [DataContract]
+    private sealed class SarifSuppressionProperties
+    {
+        [DataMember(Name = "suppressionType")]
+        public string? SuppressionType { get; set; }
     }
 }

@@ -65,7 +65,7 @@ EOF
     <HouseRulesLevel>Strict</HouseRulesLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.2" PrivateAssets="all" />
+    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.3" PrivateAssets="all" />
   </ItemGroup>
 </Project>
 EOF
@@ -115,20 +115,42 @@ dir=$(new_project baseline Violations.cs Baseline)
 echo "HouseRules.Analyzers $version on SDK $(cd "$dir" && dotnet --version)"
 build "$dir"
 check baseline fails "$(reported HR0001)" "$(reported RCS0056)" "$(reported CA5351)" "$(reported IDE0161)" \
-  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)"
+  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)" "!$(reported RS0030)"
 
 dir=$(new_project recommended Violations.cs Recommended)
 build "$dir"
 check recommended fails "$(reported HR0001)" "$(reported IDE1006)" "!'DateTime.UtcNow' is banned" \
-  "$(reported CA1874)" "$(reported IDE0051)" "!$(reported CS8602)"
+  "$(reported CA1874)" "$(reported IDE0051)" "!$(reported CS8602)" "!$(reported RS0030)"
 
 dir=$(new_project strict Violations.cs Strict)
 build "$dir"
-check strict fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)" "'DateTime.UtcNow' is banned"
+check strict fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)" "'DateTime.UtcNow' is banned" \
+  "$(reported CA5351)" "!'MD5' is banned"
 
 dir=$(new_project lowercase-level Violations.cs strict)
 build "$dir"
 check lowercase-level fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)"
+
+# IDE0005 needs the documentation file; a project that turns it off loses IDE0005 instead of failing every build.
+dir=$(new_project doc-file-off UnusedUsing.cs Recommended '<GenerateDocumentationFile>false</GenerateDocumentationFile>')
+build "$dir"
+check doc-file-off passes "!warning [A-Z]+[0-9]+" "!EnableGenerateDocumentationFile"
+
+dir=$(new_project unused-using UnusedUsing.cs Recommended)
+build "$dir"
+check unused-using fails "$(reported IDE0005)"
+
+dir=$(new_project null-check-in-query Query.cs Recommended)
+build "$dir"
+check null-check-in-query passes "!$(reported IDE0031)"
+
+dir=$(new_project brand-namespace Brand.cs Recommended)
+build "$dir"
+check brand-namespace passes "!warning [A-Z]+[0-9]+"
+
+sed -e 's/class Brand/class lowercaseType/' "$here/sample/Brand.cs" > "$dir/Brand.cs"
+build "$dir"
+check lowercase-type-name fails "$(reported IDE1006)"
 
 dir=$(new_project clean-strict Clean.cs Strict)
 build "$dir"
@@ -164,7 +186,7 @@ check warnings-not-errors-from-props passes "warning HR0001:" "!error [A-Z]+[0-9
 
 dir=$(new_project wall-clock-ban-off Violations.cs Strict '<HouseRulesBanWallClock>false</HouseRulesBanWallClock>')
 build "$dir"
-check wall-clock-ban-off fails "!'DateTime.UtcNow' is banned" "'MD5' is banned"
+check wall-clock-ban-off fails "!'DateTime.UtcNow' is banned" "$(reported CA5351)"
 
 dir=$(new_project format-fixes-layout Violations.cs Baseline)
 (cd "$dir" && dotnet format > /dev/null 2>&1) || true
@@ -183,6 +205,16 @@ check format-twice-converges passes
 
 build "$dir"
 check format-twice-fixes-wrapped-statements passes "!$(reported HR0001)" "!$(reported RCS0056)"
+
+# RCS0053 measures indentation in 4-space steps without any .editorconfig (a Docker build context, say), as with
+# indent_size = 4; a consumer's own .editorconfig still decides.
+dir=$(new_project indent-without-editorconfig BaseList.cs Baseline)
+build "$dir"
+check indent-without-editorconfig passes "!warning [A-Z]+[0-9]+"
+
+printf 'root = true\n\n[*.cs]\nindent_size = 2\n' > "$dir/.editorconfig"
+build "$dir"
+check indent-from-editorconfig-wins fails "$(reported RCS0053)"
 
 dir=$(new_project level-in-project-file Clean.cs Baseline '<HouseRulesLevel>Strict</HouseRulesLevel>')
 build "$dir"
@@ -230,6 +262,44 @@ check ratchet-pruned-baseline-passes passes "!error [A-Z]+[0-9]+"
 code=0
 output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-init-refuses-to-grow fails "already exists, and a baseline never grows"
+
+# A finding suppressed in source after init no longer needs its entry: prune drops it.
+dir=$(new_project ratchet-prune-source-suppressed Violations.cs Baseline)
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-source-suppressed-init passes "records [0-9]+ finding"
+
+{ echo '#pragma warning disable HR0001'; cat "$here/sample/Violations.cs"; } > "$dir/Violations.cs"
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=prune 2>&1) || code=$?
+check ratchet-prune-source-suppressed passes "records [0-9]+ finding"
+
+code=0
+output=$(< "$dir/houserules.baseline")
+check ratchet-prune-drops-source-suppressed-entries passes "!\|HR0001\|" "\|RCS0056\|"
+
+# -p:HouseRulesBaseline=prune reaches every project of a solution and every project reference; one without a
+# baseline has nothing to prune and builds as usual.
+dir=$(new_project ratchet-prune-solution Violations.cs Baseline)
+mkdir "$dir/app" "$dir/lib"
+mv "$dir/Sample.csproj" "$dir/Violations.cs" "$dir/app/"
+cp "$dir/app/Sample.csproj" "$dir/lib/Lib.csproj"
+cp "$here/sample/Clean.cs" "$dir/lib/"
+sed -i.bak -e 's|^</Project>$|  <ItemGroup>\n    <ProjectReference Include="../lib/Lib.csproj" />\n  </ItemGroup>\n</Project>|' \
+  "$dir/app/Sample.csproj"
+rm "$dir/app/Sample.csproj.bak"
+(cd "$dir" && dotnet new sln -n Sample > /dev/null && dotnet sln add app/Sample.csproj lib/Lib.csproj > /dev/null)
+code=0
+output=$(cd "$dir/app" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
+check ratchet-solution-init passes "records [0-9]+ finding"
+
+code=0
+output=$(cd "$dir" && dotnet build -p:HouseRulesBaseline=prune 2>&1) || code=$?
+check ratchet-prune-solution passes "records [0-9]+ finding" "nothing to prune"
+
+code=0
+output=$(cd "$dir/app" && dotnet build -p:HouseRulesBaseline=prune 2>&1) || code=$?
+check ratchet-prune-project-with-reference passes "records [0-9]+ finding" "nothing to prune"
 
 dir=$(new_project ratchet-mode-casing Violations.cs Baseline)
 code=0

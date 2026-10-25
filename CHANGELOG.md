@@ -9,6 +9,40 @@ errors.
 
 ## [Unreleased]
 
+## [1.0.0-preview.3] - 2026-10-26
+
+The third preview of 1.0.0. It fixes what moving an ASP.NET Core and EF Core backend to `Recommended` showed:
+the ratchet's prune, builds without an `.editorconfig`, and three rules that failed correct code.
+
+### Changed
+
+- The levels set `indent_style = space`, `indent_size = 4` and `tab_width = 4`, so RCS0053 measures indentation the
+  same way with or without an `.editorconfig`, such as in a Docker build context; without them, Roslynator guessed
+  the step from the code, and a wrapped base list passed or failed depending on the machine. An `.editorconfig`
+  that sets these options still wins. A project without one may now see RCS0053 on a top-level statement whose only
+  argument is a block lambda with `{` in column 0, which is a Roslynator bug (see the README's known limitations).
+- IDE0031 (`?.` instead of a null-check ternary) is a suggestion instead of a warning. After a `join` or a second
+  `from` in a query over `IQueryable`, Roslyn suggests `?.` where an expression tree cannot hold it, and the fix does
+  not compile (CS8072).
+- The PascalCase naming rule no longer covers namespaces, which may start with a brand name such as xUnit or iOS.
+
+### Fixed
+
+- `-p:HouseRulesBaseline=prune` no longer fails on a project without `houserules.baseline`. The property reaches
+  every project of a solution and every project reference, so pruning a solution where only some projects have a
+  baseline failed; such a project now builds as usual and says there is nothing to prune.
+- `prune` drops an entry whose finding is now suppressed in source (a pragma or `[SuppressMessage]`) or by another
+  suppressor. It kept such entries, although the build passed without them.
+- A project that sets `GenerateDocumentationFile` to false no longer fails at `Recommended` with
+  `EnableGenerateDocumentationFile` in every build: IDE0005 needs the documentation file, so it is off for that
+  project.
+
+### Removed
+
+- The `WeakCrypto` ban and its `HouseRulesBanWeakCrypto` switch: CA5350 and CA5351, which `Baseline` already turns
+  on, report the same uses of MD5, SHA1, DES, TripleDES and RC2, so each was reported twice. Banned APIs now start at
+  `Strict`, and the banned-API analyzer does no work below it.
+
 ## [1.0.0-preview.2] - 2026-10-25
 
 The second preview of 1.0.0. The default levels drop rules that push a design or misfire on ASP.NET Core and EF

@@ -105,7 +105,7 @@ public sealed class BaselineSuppressor : DiagnosticSuppressor
         {
             if (id.Length > 0)
             {
-                builder[id] = new SuppressionDescriptor("HRB_" + id, id, Justification);
+                builder[id] = new SuppressionDescriptor(BaselineKey.SuppressionIdPrefix + id, id, Justification);
             }
         }
 
