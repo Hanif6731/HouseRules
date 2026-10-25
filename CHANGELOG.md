@@ -9,6 +9,11 @@ errors.
 
 ## [Unreleased]
 
+## [1.0.0-preview.3] - 2026-10-26
+
+The third preview of 1.0.0. It fixes what moving an ASP.NET Core and EF Core backend to `Recommended` showed:
+the ratchet's prune, builds without an `.editorconfig`, and three rules that failed correct code.
+
 ### Changed
 
 - The levels set `indent_style = space`, `indent_size = 4` and `tab_width = 4`, so RCS0053 measures indentation the

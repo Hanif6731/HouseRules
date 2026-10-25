@@ -65,7 +65,7 @@ EOF
     <HouseRulesLevel>Strict</HouseRulesLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.2" PrivateAssets="all" />
+    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.3" PrivateAssets="all" />
   </ItemGroup>
 </Project>
 EOF

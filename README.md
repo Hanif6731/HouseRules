@@ -35,12 +35,12 @@ For a whole repository, reference it once in `Directory.Build.props`:
     <HouseRulesLevel>Strict</HouseRulesLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.2" PrivateAssets="all" />
+    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.3" PrivateAssets="all" />
   </ItemGroup>
 </Project>
 ```
 
-1.0.0-preview.2 is a preview; 1.0.0 follows it, and the [release policy](CHANGELOG.md) applies from 1.0.0.
+1.0.0-preview.3 is a preview; 1.0.0 follows it, and the [release policy](CHANGELOG.md) applies from 1.0.0.
 
 ## Quick start
 
