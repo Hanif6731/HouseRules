@@ -21,9 +21,10 @@ jobs:
         run: |
           version=$(.github/scripts/release-version.sh "$GITHUB_REF_NAME")
           echo "version=$version" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-dotnet@v6
+      - uses: ./.github/actions/setup-dotnet
         with:
           global-json-file: global.json
+          fallback-version: 10.0.402
       - run: dotnet restore --locked-mode
       - run: dotnet build -c Release --no-restore
       - run: dotnet test -c Release --no-build
@@ -33,9 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-dotnet@v6
+      - uses: ./.github/actions/setup-dotnet
         with:
           global-json-file: global.json
+          fallback-version: 10.0.402
       - run: dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts "-p:Version=$VERSION"
         env:
           VERSION: ${{ needs.verify.outputs.version }}
@@ -45,6 +47,7 @@ jobs:
           path: artifacts/*.nupkg
 
   smoke:
+    name: smoke (${{ matrix.sdk }}${{ matrix.pin != '' && format(', {0}', matrix.pin) || '' }})
     needs: pack
     runs-on: ubuntu-latest
     strategy:
@@ -52,13 +55,16 @@ jobs:
         include:
           - sdk: 10.0.x
             pin: ""
+            fallback: 10.0.402
           - sdk: 10.0.1xx
             pin: 10.0.100
+            fallback: 10.0.113
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-dotnet@v6
+      - uses: ./.github/actions/setup-dotnet
         with:
           dotnet-version: ${{ matrix.sdk }}
+          fallback-version: ${{ matrix.fallback }}
       - uses: actions/download-artifact@v8
         with:
           name: package
@@ -74,9 +80,13 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/setup-dotnet@v6
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/actions
+      - uses: ./.github/actions/setup-dotnet
         with:
           dotnet-version: 10.0.x
+          fallback-version: 10.0.402
       - uses: actions/download-artifact@v8
         with:
           name: package
@@ -97,9 +107,13 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/setup-dotnet@v6
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/actions
+      - uses: ./.github/actions/setup-dotnet
         with:
           dotnet-version: 10.0.x
+          fallback-version: 10.0.402
       - uses: actions/download-artifact@v8
         with:
           name: package

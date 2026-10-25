@@ -1,0 +1,34 @@
+name: Set up .NET with a fallback
+description: >-
+  Installs the requested .NET SDK. When that download fails, as when Microsoft's "latest" links break on a .NET
+  release day, it installs the fallback version instead and says so in a warning.
+
+inputs:
+  dotnet-version:
+    description: The SDK to try first, such as 10.0.x. Leave empty to read global-json-file.
+    default: ""
+  global-json-file:
+    description: A global.json to read the SDK from when dotnet-version is empty.
+    default: ""
+  fallback-version:
+    description: The exact SDK to install when the first attempt fails, such as 10.0.402.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: requested
+      uses: actions/setup-dotnet@v6
+      continue-on-error: true
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+        global-json-file: ${{ inputs.global-json-file }}
+    - if: steps.requested.outcome == 'failure'
+      shell: bash
+      run: >-
+        echo "::warning::The requested .NET SDK (${{ inputs.dotnet-version || inputs.global-json-file }}) could not
+        be installed; using the fallback ${{ inputs.fallback-version }}."
+    - if: steps.requested.outcome == 'failure'
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: ${{ inputs.fallback-version }}
