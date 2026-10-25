@@ -110,7 +110,9 @@ shipping while old code is cleaned up. After fixing findings, shrink the file:
 dotnet build -p:HouseRulesBaseline=prune
 ```
 
-A baseline never grows: `prune` only removes entries, and `init` refuses to run over an existing file. An entry is
+A baseline never grows: `prune` only removes entries, and `init` refuses to run over an existing file. A finding
+that is now suppressed in source, with a pragma or `[SuppressMessage]`, counts as fixed. Run on a solution, `prune`
+skips the projects that have no baseline. An entry is
 the file's path relative to the project folder (also for a file linked from outside it), the rule and a hash of the
 line's text, so the file reads the same on every machine and edits elsewhere in the file do not disturb it; renaming
 the file does.
@@ -136,11 +138,33 @@ A ban category, in the project file or `Directory.Build.props`; for example, cod
 <HouseRulesBanWallClock>false</HouseRulesBanWallClock>
 ```
 
-The switches are `HouseRulesBanWeakCrypto`, `HouseRulesBanHttpClient`, `HouseRulesBanWallClock`,
-`HouseRulesBanRandom`, `HouseRulesBanConsole` and `HouseRulesBanEnvironment`. Any build setting the package sets,
-such as `TreatWarningsAsErrors`, keeps the value your project gives it. A project that sets its own
-`CodeAnalysisRuleSet` replaces the package's rule set, so `dotnet format` then sees only its `.editorconfig`
-severities; its `.editorconfig` still overrides everything.
+The switches are `HouseRulesBanHttpClient`, `HouseRulesBanWallClock`, `HouseRulesBanRandom`,
+`HouseRulesBanConsole` and `HouseRulesBanEnvironment`. Any build setting the package sets, such as
+`TreatWarningsAsErrors`, keeps the value your project gives it. That includes `AnalysisLevel`, but a mode suffix such
+as `latest-recommended` also replaces the per-category modes the levels set, so security and reliability rules
+quietly drop to the recommended set; give it a plain version such as `10.0`, or leave it to the package. A project
+that sets its own `CodeAnalysisRuleSet` replaces the package's rule set, so `dotnet format` then sees only its
+`.editorconfig` severities; its `.editorconfig` still overrides everything.
+
+### Exempt generated code
+
+Code a tool regenerates, such as EF Core migrations, is not worth reformatting. Mark it as generated in the
+repository's `.editorconfig`; layout and style rules then skip it, while security rules still run:
+
+```ini
+[**/Migrations/*.cs]
+generated_code = true
+```
+
+### Build in Docker
+
+Exemptions, severities and indentation options in `.editorconfig` change what the build reports, so a Docker build
+whose context leaves out the repository's `.editorconfig` reports differently from your machine. Copy it in with the
+sources, and keep it out of `.dockerignore`:
+
+```dockerfile
+COPY .editorconfig Directory.Build.props ./
+```
 
 ### Use it with AI agents
 
@@ -152,6 +176,18 @@ Never suppress a rule or edit `houserules.baseline` to make the build pass.
 ```
 
 The build output is the whole interface; no agent-specific tooling is needed.
+
+## Known limitations
+
+Roslynator's RCS0053 misreads two common layouts, and `dotnet format` cannot settle them: whatever it writes, RCS0053
+or IDE0055 reports again.
+
+- An anonymous object that is a lambda's whole body, as the only argument: `.Select(x => new` with `{` on the next
+  line. A named type (`new Row`) is fine.
+- A block lambda that is the only argument in a top-level statement, with `{` in column 0:
+  `builder.Services.AddCors(options =>`.
+
+Until Roslynator fixes them, record the sites in the baseline or turn RCS0053 off for the files concerned.
 
 ## Rules
 

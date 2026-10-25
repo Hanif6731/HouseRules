@@ -20,6 +20,7 @@
   <PropertyGroup>
     <_HouseRulesBaselineFile>$(MSBuildProjectDirectory)/houserules.baseline</_HouseRulesBaselineFile>
     <_HouseRulesTasksAssembly Condition="'$(_HouseRulesTasksAssembly)' == ''">$(MSBuildThisFileDirectory)../tasks/netstandard2.0/HouseRules.Tasks.dll</_HouseRulesTasksAssembly>
+    <_HouseRulesBaselineActive Condition="'$(HouseRulesBaseline)' == 'init' or ('$(HouseRulesBaseline)' == 'prune' and Exists('$(_HouseRulesBaselineFile)'))">true</_HouseRulesBaselineActive>
   </PropertyGroup>
 
   <ItemGroup Condition="Exists('$(_HouseRulesBaselineFile)')">
@@ -35,15 +36,18 @@
     <Error
       Condition="'$(HouseRulesBaseline)' == 'init' and Exists('$(_HouseRulesBaselineFile)')"
       Text="$(_HouseRulesBaselineFile) already exists, and a baseline never grows. Fix findings, then run: dotnet build -p:HouseRulesBaseline=prune" />
+    <!-- The property reaches every project of a solution and every project reference, so a project without a
+         baseline builds as usual. -->
+    <Message
+      Condition="'$(_HouseRulesBaselineActive)' != 'true'"
+      Importance="high"
+      Text="HouseRules: $(MSBuildProjectName) has no $(_HouseRulesBaselineFile), so there is nothing to prune." />
     <Error
-      Condition="'$(HouseRulesBaseline)' == 'prune' and !Exists('$(_HouseRulesBaselineFile)')"
-      Text="There is no $(_HouseRulesBaselineFile) to prune. Create one with: dotnet build -p:HouseRulesBaseline=init" />
-    <Error
-      Condition="$(TargetFrameworks.Contains(';'))"
+      Condition="'$(_HouseRulesBaselineActive)' == 'true' and $(TargetFrameworks.Contains(';'))"
       Text="HouseRulesBaseline does not support projects with several target frameworks ($(TargetFrameworks)): each framework would overwrite the other's houserules.baseline. Fix this project's findings before raising its level." />
 
     <!-- Every finding must reach the error log, so warnings stay warnings. -->
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(_HouseRulesBaselineActive)' == 'true'">
       <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
       <_HouseRulesErrorLog>$(IntermediateOutputPath)houserules.sarif</_HouseRulesErrorLog>
       <ErrorLog>$(_HouseRulesErrorLog),version=2.1</ErrorLog>
@@ -63,7 +67,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="HouseRulesBaselineWrite" AfterTargets="CoreCompile" Condition="'$(HouseRulesBaseline)' != ''">
+  <Target Name="HouseRulesBaselineWrite" AfterTargets="CoreCompile" Condition="'$(_HouseRulesBaselineActive)' == 'true'">
     <WriteBaseline Mode="$(HouseRulesBaseline)" ErrorLog="$(_HouseRulesErrorLog)" BaselineFile="$(_HouseRulesBaselineFile)" />
   </Target>
 

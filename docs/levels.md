@@ -37,14 +37,13 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | [IDE0065](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0065) | .NET SDK code style | Using directives outside the namespace. | warning | yes |
 | [RCS0056](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0056) | Roslynator | Lines are at most 120 characters long. | warning | yes |
 | [RCS0054](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0054) | Roslynator | Once a call chain wraps, one call per line. | warning | yes |
-| [RCS0053](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0053) | Roslynator | Argument and parameter lists: on one line, or one element per line. | warning | yes |
+| [RCS0053](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0053) | Roslynator | Argument and parameter lists: on one line, or one element per line, indented in 4-space steps unless an `.editorconfig` says otherwise. | warning | yes |
 | [RCS0032](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0032) | Roslynator | A wrapped expression body breaks after `=>`. | warning | yes |
 | [RCS0052](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0052) | Roslynator | A wrapped assignment breaks after `=`. | warning | yes |
 | [RCS0027](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0027) | Roslynator | A wrapped binary expression puts the operator first on the new line. | warning | yes |
 | [RCS0028](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0028) | Roslynator | A wrapped conditional expression puts `?` and `:` first on the new line. | warning | yes |
 | [RCS0059](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0059) | Roslynator | A wrapped null-conditional access puts `?.` first on the new line. | warning | yes |
 | [RCS0055](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0055) | Roslynator | Once a binary expression wraps, it breaks at every operator. | warning | yes |
-| [RS0030](https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md) | BannedApiAnalyzers | Banned APIs, in switchable categories. Categories: [Baseline](#banned-apis-at-baseline), [Strict](#banned-apis-at-strict). | warning | no |
 | [CA2100](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2100) | .NET SDK code analysis | SQL built from strings is reviewed for injection. | warning | no |
 | [CA3075](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca3075) | .NET SDK code analysis | No insecure DTD processing in XML. | warning | no |
 | [CA5350](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5350) | .NET SDK code analysis | No weak cryptographic algorithms. | warning | no |
@@ -58,12 +57,6 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | [CA2265](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2265) | .NET SDK code analysis | No comparing a `Span<T>` to `null` or `default`; test `IsEmpty`. | warning | yes |
 | [CA2266](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2266) | .NET SDK code analysis | Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only. | none | no |
 | [CA2007](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2007) | .NET SDK code analysis | Off: ConfigureAwait on every await is noise in apps without a synchronization context. | none | no |
-
-### Banned APIs at Baseline
-
-| Category | Turn off with | What it bans |
-|---|---|---|
-| WeakCrypto | `<HouseRulesBanWeakCrypto>false</HouseRulesBanWeakCrypto>` | Broken hashes and ciphers (MD5, SHA1, DES, TripleDES, RC2). |
 
 ## Recommended
 
@@ -164,6 +157,7 @@ Adds nullable reference types, every compiler warning wave, code metrics, the re
 
 | ID | Source | What it enforces | Severity | Fixed by `dotnet format` |
 |---|---|---|---|---|
+| [RS0030](https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md) | BannedApiAnalyzers | Banned APIs, in switchable categories. Categories: [Strict](#banned-apis-at-strict). | warning | no |
 | [IDE0130](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0130) | .NET SDK code style | Namespaces match the folder structure. | warning | yes |
 | [IDE0250](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0250) | .NET SDK code style | Readonly structs when no member mutates. | warning | yes |
 | [IDE0251](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0251) | .NET SDK code style | Readonly struct members when they do not mutate. | warning | yes |

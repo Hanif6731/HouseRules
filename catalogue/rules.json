@@ -22,7 +22,6 @@
     { "name": "Globalization", "mode": "Recommended", "level": "Recommended", "since": "1.0.0" }
   ],
   "banned": [
-    { "category": "WeakCrypto", "switch": "HouseRulesBanWeakCrypto", "level": "Baseline", "since": "1.0.0", "description": "Broken hashes and ciphers (MD5, SHA1, DES, TripleDES, RC2)." },
     { "category": "HttpClient", "switch": "HouseRulesBanHttpClient", "level": "Strict", "since": "1.0.0", "description": "Constructing HttpClient or WebClient directly." },
     { "category": "WallClock", "switch": "HouseRulesBanWallClock", "level": "Strict", "since": "1.0.0", "description": "Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow)." },
     { "category": "Random", "switch": "HouseRulesBanRandom", "level": "Strict", "since": "1.0.0", "description": "System.Random." },
@@ -66,14 +65,13 @@
     { "id": "IDE0065", "source": "IDE", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Using directives outside the namespace.", "options": { "csharp_using_directive_placement": "outside_namespace" } },
     { "id": "RCS0056", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Lines are at most 120 characters long.", "options": { "roslynator_max_line_length": "120" } },
     { "id": "RCS0054", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Once a call chain wraps, one call per line." },
-    { "id": "RCS0053", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Argument and parameter lists: on one line, or one element per line." },
+    { "id": "RCS0053", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Argument and parameter lists: on one line, or one element per line, indented in 4-space steps unless an `.editorconfig` says otherwise.", "options": { "indent_style": "space", "indent_size": "4", "tab_width": "4" } },
     { "id": "RCS0032", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped expression body breaks after `=>`.", "options": { "roslynator_arrow_token_new_line": "after" } },
     { "id": "RCS0052", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped assignment breaks after `=`.", "options": { "roslynator_equals_token_new_line": "after" } },
     { "id": "RCS0027", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped binary expression puts the operator first on the new line.", "options": { "roslynator_binary_operator_new_line": "before" } },
     { "id": "RCS0028", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped conditional expression puts `?` and `:` first on the new line.", "options": { "roslynator_conditional_operator_new_line": "before" } },
     { "id": "RCS0059", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "A wrapped null-conditional access puts `?.` first on the new line.", "options": { "roslynator_null_conditional_operator_new_line": "before" } },
     { "id": "RCS0055", "source": "Roslynator", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Once a binary expression wraps, it breaks at every operator." },
-    { "id": "RS0030", "docs": "https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md", "source": "BannedApiAnalyzers", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Banned APIs, in switchable categories." },
     { "id": "CA2100", "source": "CA", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "SQL built from strings is reviewed for injection." },
     { "id": "CA3075", "source": "CA", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "No insecure DTD processing in XML." },
     { "id": "CA5350", "source": "CA", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "No weak cryptographic algorithms." },
@@ -197,6 +195,7 @@
     { "id": "IDE0079", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No unnecessary suppressions.", "options": { "dotnet_remove_unnecessary_suppression_exclusions": "none" } },
     { "id": "IDE0072", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Switch expressions handle every enum member, so a new member fails the build." },
 
+    { "id": "RS0030", "docs": "https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md", "source": "BannedApiAnalyzers", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": false, "description": "Banned APIs, in switchable categories." },
     { "id": "IDE0130", "source": "IDE", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": true, "description": "Namespaces match the folder structure.", "options": { "dotnet_style_namespace_match_folder": "true" } },
     { "id": "IDE0250", "source": "IDE", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": true, "description": "Readonly structs when no member mutates.", "options": { "csharp_style_prefer_readonly_struct": "true" } },
     { "id": "IDE0251", "source": "IDE", "severity": "warning", "level": "Strict", "since": "1.0.0", "fixable": true, "description": "Readonly struct members when they do not mutate.", "options": { "csharp_style_prefer_readonly_struct_member": "true" } },

@@ -55,8 +55,11 @@ roslynator_max_line_length = 120
 # RCS0054: Once a call chain wraps, one call per line.
 dotnet_diagnostic.RCS0054.severity = warning
 
-# RCS0053: Argument and parameter lists: on one line, or one element per line.
+# RCS0053: Argument and parameter lists: on one line, or one element per line, indented in 4-space steps unless an `.editorconfig` says otherwise.
 dotnet_diagnostic.RCS0053.severity = warning
+indent_style = space
+indent_size = 4
+tab_width = 4
 
 # RCS0032: A wrapped expression body breaks after `=>`.
 dotnet_diagnostic.RCS0032.severity = warning
@@ -80,9 +83,6 @@ roslynator_null_conditional_operator_new_line = before
 
 # RCS0055: Once a binary expression wraps, it breaks at every operator.
 dotnet_diagnostic.RCS0055.severity = warning
-
-# RS0030: Banned APIs, in switchable categories.
-dotnet_diagnostic.RS0030.severity = warning
 
 # CA2100: SQL built from strings is reviewed for injection.
 dotnet_diagnostic.CA2100.severity = warning
