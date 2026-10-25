@@ -90,7 +90,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 
 | ID | Source | What it enforces | Severity | Fixed by `dotnet format` |
 |---|---|---|---|---|
-| [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters, Async suffix on async methods. | warning | yes |
+| [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it. | warning | yes |
 | [IDE0005](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0005) | .NET SDK code style | No unused using directives. | warning | yes |
 | [CS1591](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591) | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |
 | [CA2016](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) | .NET SDK code analysis | Pass the CancellationToken on when the callee accepts one. | warning | yes |
@@ -136,7 +136,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0039](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0039) | .NET SDK code style | Local functions instead of lambdas stored in locals. | warning | yes |
 | [IDE0062](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0062) | .NET SDK code style | Static local functions when nothing is captured. | warning | yes |
 | [IDE0170](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0170) | .NET SDK code style | Extended property patterns. | warning | yes |
-| [IDE0051](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0051) | .NET SDK code style | No unused private members. | warning | yes |
+| [IDE0051](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0051) | .NET SDK code style | No unused private members; constructors are exempt, since EF Core and serializers call them through reflection. | warning | yes |
 | [IDE0052](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0052) | .NET SDK code style | No private members that are written but never read. | warning | yes |
 | [IDE0060](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0060) | .NET SDK code style | No unused parameters on non-public members. | warning | yes |
 | [IDE0059](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0059) | .NET SDK code style | No assignments whose value is never used. | warning | yes |
@@ -208,7 +208,6 @@ Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also
 | Setting | Value | Why |
 |---|---|---|
 | `dotnet_diagnostic.CA1707.severity` | `none` | Test names are sentences with underscores. |
-| `dotnet_naming_rule.async_methods_end_with_async.severity` | `none` | Async test methods describe behaviour, not mechanics, so no Async suffix. |
 | `dotnet_diagnostic.CA1502.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |
 | `dotnet_diagnostic.CA1505.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |
 | `dotnet_diagnostic.CA1506.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |

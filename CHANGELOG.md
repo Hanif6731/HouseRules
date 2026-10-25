@@ -9,6 +9,11 @@ errors.
 
 ## [Unreleased]
 
+## [1.0.0-preview.2] - 2026-10-25
+
+The second preview of 1.0.0. The default levels drop rules that push a design or misfire on ASP.NET Core and EF
+Core code.
+
 ### Added
 
 - A package icon, shown on nuget.org and in IDE package managers.
@@ -19,11 +24,15 @@ errors.
   (injected clocks, logging and configuration, `IHttpClientFactory`) rather than catch a bug, and Microsoft also
   endorses a long-lived static `HttpClient`. `Baseline` and `Recommended` keep only the `WeakCrypto` ban.
 - IDE0305 (collection expressions instead of `ToList()`/`ToArray()`) is a suggestion instead of a warning.
+- IDE0051 (unused private member) no longer reports constructors. EF Core, serializers and dependency injection
+  call private constructors through reflection, so every EF Core entity's constructor was reported.
 
 ### Removed
 
 - `CheckForOverflowUnderflow` in Debug builds at `Strict`: Debug and Release behaved differently, and code that
   relies on wrap-around, such as hash codes and checksums, threw in Debug only. A project can still set it.
+- The naming rule requiring an `Async` suffix on async methods. ASP.NET Core drops the suffix from action names, so
+  controller actions go without it.
 
 ## [1.0.0-preview.1] - 2026-10-24
 

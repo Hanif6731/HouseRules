@@ -31,5 +31,9 @@ namespace Sample
         }
 
         public bool Matches(string text) => System.Text.RegularExpressions.Regex.Match(text, "a+").Success;
+
+        private void Unused()
+        {
+        }
     }
 }

@@ -65,7 +65,7 @@ EOF
     <HouseRulesLevel>Strict</HouseRulesLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.1" PrivateAssets="all" />
+    <PackageReference Include="HouseRules.Analyzers" Version="1.0.0-preview.2" PrivateAssets="all" />
   </ItemGroup>
 </Project>
 EOF
@@ -120,7 +120,7 @@ check baseline fails "$(reported HR0001)" "$(reported RCS0056)" "$(reported CA53
 dir=$(new_project recommended Violations.cs Recommended)
 build "$dir"
 check recommended fails "$(reported HR0001)" "$(reported IDE1006)" "!'DateTime.UtcNow' is banned" \
-  "$(reported CA1874)" "!$(reported CS8602)"
+  "$(reported CA1874)" "$(reported IDE0051)" "!$(reported CS8602)"
 
 dir=$(new_project strict Violations.cs Strict)
 build "$dir"

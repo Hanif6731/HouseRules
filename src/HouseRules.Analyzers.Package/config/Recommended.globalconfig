@@ -123,7 +123,7 @@ dotnet_diagnostic.CA2266.severity = none
 # CA2007: Off: ConfigureAwait on every await is noise in apps without a synchronization context.
 dotnet_diagnostic.CA2007.severity = none
 
-# IDE1006: Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters, Async suffix on async methods.
+# IDE1006: Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.
 dotnet_diagnostic.IDE1006.severity = warning
 dotnet_naming_rule.interfaces_begin_with_i.symbols = interfaces
 dotnet_naming_rule.interfaces_begin_with_i.style = prefix_i
@@ -160,17 +160,10 @@ dotnet_naming_rule.parameters_and_locals_camel.symbols = parameters_and_locals
 dotnet_naming_rule.parameters_and_locals_camel.style = camel_case
 dotnet_naming_rule.parameters_and_locals_camel.severity = warning
 dotnet_naming_symbols.parameters_and_locals.applicable_kinds = parameter, local
-dotnet_naming_rule.async_methods_end_with_async.symbols = async_methods
-dotnet_naming_rule.async_methods_end_with_async.style = end_with_async
-dotnet_naming_rule.async_methods_end_with_async.severity = warning
-dotnet_naming_symbols.async_methods.applicable_kinds = method
-dotnet_naming_symbols.async_methods.required_modifiers = async
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 dotnet_naming_style.camel_case.capitalization = camel_case
 dotnet_naming_style.underscore_camel_case.capitalization = camel_case
 dotnet_naming_style.underscore_camel_case.required_prefix = _
-dotnet_naming_style.end_with_async.capitalization = pascal_case
-dotnet_naming_style.end_with_async.required_suffix = Async
 
 # IDE0005: No unused using directives.
 dotnet_diagnostic.IDE0005.severity = warning
@@ -342,7 +335,7 @@ csharp_prefer_static_local_function = true
 dotnet_diagnostic.IDE0170.severity = warning
 csharp_style_prefer_extended_property_pattern = true
 
-# IDE0051: No unused private members.
+# IDE0051: No unused private members; constructors are exempt, since EF Core and serializers call them through reflection.
 dotnet_diagnostic.IDE0051.severity = warning
 
 # IDE0052: No private members that are written but never read.
