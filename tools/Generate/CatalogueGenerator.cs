@@ -364,7 +364,8 @@ public static class CatalogueGenerator
         "Baseline" => "Security and reliability rules, plus the layout rules `dotnet format` fixes without judgement. "
             + "Turning it on costs one mechanical commit and the security fixes.",
         "Recommended" => "Adds design, maintainability, naming and usage rules whose fixes need human judgement.",
-        _ => "Adds nullable reference types, every compiler warning wave, code metrics and the remaining style rules.",
+        _ => "Adds nullable reference types, every compiler warning wave, code metrics, the remaining style rules and "
+            + "bans that push a design: injected clocks, randomness, logging, configuration and HTTP clients.",
     };
 
     private static string SourceName(string source) => source switch

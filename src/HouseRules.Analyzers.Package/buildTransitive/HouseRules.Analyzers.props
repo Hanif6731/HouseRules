@@ -29,7 +29,6 @@
     <AnalysisModeSecurity Condition="'$(AnalysisModeSecurity)' == ''">All</AnalysisModeSecurity>
     <AnalysisModeReliability Condition="'$(AnalysisModeReliability)' == ''">All</AnalysisModeReliability>
     <HouseRulesBanWeakCrypto Condition="'$(HouseRulesBanWeakCrypto)' == ''">true</HouseRulesBanWeakCrypto>
-    <HouseRulesBanHttpClient Condition="'$(HouseRulesBanHttpClient)' == ''">true</HouseRulesBanHttpClient>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(_HouseRulesRank)' >= '2'">
@@ -40,17 +39,17 @@
     <AnalysisModeDesign Condition="'$(AnalysisModeDesign)' == ''">Recommended</AnalysisModeDesign>
     <AnalysisModeNaming Condition="'$(AnalysisModeNaming)' == ''">Recommended</AnalysisModeNaming>
     <AnalysisModeGlobalization Condition="'$(AnalysisModeGlobalization)' == ''">Recommended</AnalysisModeGlobalization>
-    <HouseRulesBanWallClock Condition="'$(HouseRulesBanWallClock)' == ''">true</HouseRulesBanWallClock>
-    <HouseRulesBanRandom Condition="'$(HouseRulesBanRandom)' == ''">true</HouseRulesBanRandom>
-    <HouseRulesBanConsole Condition="'$(HouseRulesBanConsole)' == ''">true</HouseRulesBanConsole>
-    <HouseRulesBanEnvironment Condition="'$(HouseRulesBanEnvironment)' == ''">true</HouseRulesBanEnvironment>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(_HouseRulesRank)' >= '3'">
     <Nullable Condition="'$(Nullable)' == ''">enable</Nullable>
     <Features Condition="'$(Features)' == ''">strict</Features>
     <WarningLevel Condition="'$(WarningLevel)' == ''">9999</WarningLevel>
-    <CheckForOverflowUnderflow Condition="'$(CheckForOverflowUnderflow)' == '' and ('$(Configuration)' == 'Debug' or '$(Configuration)' == '')">true</CheckForOverflowUnderflow>
+    <HouseRulesBanHttpClient Condition="'$(HouseRulesBanHttpClient)' == ''">true</HouseRulesBanHttpClient>
+    <HouseRulesBanWallClock Condition="'$(HouseRulesBanWallClock)' == ''">true</HouseRulesBanWallClock>
+    <HouseRulesBanRandom Condition="'$(HouseRulesBanRandom)' == ''">true</HouseRulesBanRandom>
+    <HouseRulesBanConsole Condition="'$(HouseRulesBanConsole)' == ''">true</HouseRulesBanConsole>
+    <HouseRulesBanEnvironment Condition="'$(HouseRulesBanEnvironment)' == ''">true</HouseRulesBanEnvironment>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(_HouseRulesRank)' != '0'">

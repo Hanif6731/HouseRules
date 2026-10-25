@@ -44,7 +44,7 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | [RCS0028](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0028) | Roslynator | A wrapped conditional expression puts `?` and `:` first on the new line. | warning | yes |
 | [RCS0059](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0059) | Roslynator | A wrapped null-conditional access puts `?.` first on the new line. | warning | yes |
 | [RCS0055](https://josefpihrt.github.io/docs/roslynator/analyzers/RCS0055) | Roslynator | Once a binary expression wraps, it breaks at every operator. | warning | yes |
-| [RS0030](https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md) | BannedApiAnalyzers | Banned APIs, in switchable categories. Categories: [Baseline](#banned-apis-at-baseline), [Recommended](#banned-apis-at-recommended). | warning | no |
+| [RS0030](https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md) | BannedApiAnalyzers | Banned APIs, in switchable categories. Categories: [Baseline](#banned-apis-at-baseline), [Strict](#banned-apis-at-strict). | warning | no |
 | [CA2100](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2100) | .NET SDK code analysis | SQL built from strings is reviewed for injection. | warning | no |
 | [CA3075](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca3075) | .NET SDK code analysis | No insecure DTD processing in XML. | warning | no |
 | [CA5350](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5350) | .NET SDK code analysis | No weak cryptographic algorithms. | warning | no |
@@ -64,7 +64,6 @@ Security and reliability rules, plus the layout rules `dotnet format` fixes with
 | Category | Turn off with | What it bans |
 |---|---|---|
 | WeakCrypto | `<HouseRulesBanWeakCrypto>false</HouseRulesBanWeakCrypto>` | Broken hashes and ciphers (MD5, SHA1, DES, TripleDES, RC2). |
-| HttpClient | `<HouseRulesBanHttpClient>false</HouseRulesBanHttpClient>` | Constructing HttpClient or WebClient directly. |
 
 ## Recommended
 
@@ -91,7 +90,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 
 | ID | Source | What it enforces | Severity | Fixed by `dotnet format` |
 |---|---|---|---|---|
-| [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters, Async suffix on async methods. | warning | yes |
+| [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it. | warning | yes |
 | [IDE0005](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0005) | .NET SDK code style | No unused using directives. | warning | yes |
 | [CS1591](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591) | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |
 | [CA2016](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016) | .NET SDK code analysis | Pass the CancellationToken on when the callee accepts one. | warning | yes |
@@ -112,7 +111,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0017](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0017) | .NET SDK code style | Object initializers. | warning | yes |
 | [IDE0028](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0028) | .NET SDK code style | Collection initializers. | warning | yes |
 | [IDE0300](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0300) | .NET SDK code style | Collection expressions for arrays. | warning | yes |
-| [IDE0305](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0305) | .NET SDK code style | Collection expressions instead of fluent `ToList()`/`ToArray()` calls. | warning | yes |
+| [IDE0305](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0305) | .NET SDK code style | Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls. | suggestion | yes |
 | [IDE0029](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0029) | .NET SDK code style | `??` instead of a null-check ternary. | warning | yes |
 | [IDE0030](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0030) | .NET SDK code style | `??` for nullable value types. | warning | yes |
 | [IDE0031](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0031) | .NET SDK code style | `?.` instead of a null-check ternary. | warning | yes |
@@ -137,7 +136,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0039](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0039) | .NET SDK code style | Local functions instead of lambdas stored in locals. | warning | yes |
 | [IDE0062](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0062) | .NET SDK code style | Static local functions when nothing is captured. | warning | yes |
 | [IDE0170](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0170) | .NET SDK code style | Extended property patterns. | warning | yes |
-| [IDE0051](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0051) | .NET SDK code style | No unused private members. | warning | yes |
+| [IDE0051](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0051) | .NET SDK code style | No unused private members; constructors are exempt, since EF Core and serializers call them through reflection. | warning | yes |
 | [IDE0052](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0052) | .NET SDK code style | No private members that are written but never read. | warning | yes |
 | [IDE0060](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0060) | .NET SDK code style | No unused parameters on non-public members. | warning | yes |
 | [IDE0059](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0059) | .NET SDK code style | No assignments whose value is never used. | warning | yes |
@@ -149,18 +148,9 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 | [IDE0079](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0079) | .NET SDK code style | No unnecessary suppressions. | warning | yes |
 | [IDE0072](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0072) | .NET SDK code style | Switch expressions handle every enum member, so a new member fails the build. | warning | yes |
 
-### Banned APIs at Recommended
-
-| Category | Turn off with | What it bans |
-|---|---|---|
-| WallClock | `<HouseRulesBanWallClock>false</HouseRulesBanWallClock>` | Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow). |
-| Random | `<HouseRulesBanRandom>false</HouseRulesBanRandom>` | System.Random. |
-| Console | `<HouseRulesBanConsole>false</HouseRulesBanConsole>` | System.Console. |
-| Environment | `<HouseRulesBanEnvironment>false</HouseRulesBanEnvironment>` | Reading environment variables directly. |
-
 ## Strict
 
-Adds nullable reference types, every compiler warning wave, code metrics and the remaining style rules.
+Adds nullable reference types, every compiler warning wave, code metrics, the remaining style rules and bans that push a design: injected clocks, randomness, logging, configuration and HTTP clients.
 
 ### Build settings
 
@@ -169,7 +159,6 @@ Adds nullable reference types, every compiler warning wave, code metrics and the
 | `Nullable` | `enable` | Nullable reference types. |
 | `Features` | `strict` | The compiler's strict mode. |
 | `WarningLevel` | `9999` | Every compiler warning wave. |
-| `CheckForOverflowUnderflow` | `true` (when `'$(Configuration)' == 'Debug' or '$(Configuration)' == ''`) | Checked arithmetic in Debug builds: overflow is a bug, not a wrap-around. |
 
 ### Rules
 
@@ -202,6 +191,16 @@ Adds nullable reference types, every compiler warning wave, code metrics and the
 | [IDE0058](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0058) | .NET SDK code style | Suggestion: discard an unused expression value explicitly. | suggestion | yes |
 | [IDE0022](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0022) | .NET SDK code style | Suggestion: expression bodies only for one-line members and accessors. | suggestion | yes |
 
+### Banned APIs at Strict
+
+| Category | Turn off with | What it bans |
+|---|---|---|
+| HttpClient | `<HouseRulesBanHttpClient>false</HouseRulesBanHttpClient>` | Constructing HttpClient or WebClient directly. |
+| WallClock | `<HouseRulesBanWallClock>false</HouseRulesBanWallClock>` | Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow). |
+| Random | `<HouseRulesBanRandom>false</HouseRulesBanRandom>` | System.Random. |
+| Console | `<HouseRulesBanConsole>false</HouseRulesBanConsole>` | System.Console. |
+| Environment | `<HouseRulesBanEnvironment>false</HouseRulesBanEnvironment>` | Reading environment variables directly. |
+
 ## Test projects
 
 Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also get these relaxations (naming and code metrics, never bans):
@@ -209,7 +208,6 @@ Test projects (`IsTestProject` or `IsTestingPlatformApplication` is `true`) also
 | Setting | Value | Why |
 |---|---|---|
 | `dotnet_diagnostic.CA1707.severity` | `none` | Test names are sentences with underscores. |
-| `dotnet_naming_rule.async_methods_end_with_async.severity` | `none` | Async test methods describe behaviour, not mechanics, so no Async suffix. |
 | `dotnet_diagnostic.CA1502.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |
 | `dotnet_diagnostic.CA1505.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |
 | `dotnet_diagnostic.CA1506.severity` | `none` | Code metrics judge production design; a test's size and coupling are its fixture. |

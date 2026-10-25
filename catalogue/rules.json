@@ -9,8 +9,7 @@
     { "name": "GenerateDocumentationFile", "value": "true", "level": "Recommended", "since": "1.0.0", "description": "Lets IDE0005 (unused usings) run in the build; missing doc comments (CS1591) stay off." },
     { "name": "Nullable", "value": "enable", "level": "Strict", "since": "1.0.0", "description": "Nullable reference types." },
     { "name": "Features", "value": "strict", "level": "Strict", "since": "1.0.0", "description": "The compiler's strict mode." },
-    { "name": "WarningLevel", "value": "9999", "level": "Strict", "since": "1.0.0", "description": "Every compiler warning wave." },
-    { "name": "CheckForOverflowUnderflow", "value": "true", "condition": "'$(Configuration)' == 'Debug' or '$(Configuration)' == ''", "level": "Strict", "since": "1.0.0", "description": "Checked arithmetic in Debug builds: overflow is a bug, not a wrap-around." }
+    { "name": "WarningLevel", "value": "9999", "level": "Strict", "since": "1.0.0", "description": "Every compiler warning wave." }
   ],
   "categories": [
     { "name": "Security", "mode": "All", "level": "Baseline", "since": "1.0.0" },
@@ -24,11 +23,11 @@
   ],
   "banned": [
     { "category": "WeakCrypto", "switch": "HouseRulesBanWeakCrypto", "level": "Baseline", "since": "1.0.0", "description": "Broken hashes and ciphers (MD5, SHA1, DES, TripleDES, RC2)." },
-    { "category": "HttpClient", "switch": "HouseRulesBanHttpClient", "level": "Baseline", "since": "1.0.0", "description": "Constructing HttpClient or WebClient directly." },
-    { "category": "WallClock", "switch": "HouseRulesBanWallClock", "level": "Recommended", "since": "1.0.0", "description": "Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow)." },
-    { "category": "Random", "switch": "HouseRulesBanRandom", "level": "Recommended", "since": "1.0.0", "description": "System.Random." },
-    { "category": "Console", "switch": "HouseRulesBanConsole", "level": "Recommended", "since": "1.0.0", "description": "System.Console." },
-    { "category": "Environment", "switch": "HouseRulesBanEnvironment", "level": "Recommended", "since": "1.0.0", "description": "Reading environment variables directly." }
+    { "category": "HttpClient", "switch": "HouseRulesBanHttpClient", "level": "Strict", "since": "1.0.0", "description": "Constructing HttpClient or WebClient directly." },
+    { "category": "WallClock", "switch": "HouseRulesBanWallClock", "level": "Strict", "since": "1.0.0", "description": "Reading the clock directly (DateTime.Now, UtcNow, Today; DateTimeOffset.Now, UtcNow)." },
+    { "category": "Random", "switch": "HouseRulesBanRandom", "level": "Strict", "since": "1.0.0", "description": "System.Random." },
+    { "category": "Console", "switch": "HouseRulesBanConsole", "level": "Strict", "since": "1.0.0", "description": "System.Console." },
+    { "category": "Environment", "switch": "HouseRulesBanEnvironment", "level": "Strict", "since": "1.0.0", "description": "Reading environment variables directly." }
   ],
   "rules": [
     { "id": "HR0001", "source": "HouseRules", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Blank line after a multi-line statement." },
@@ -89,7 +88,7 @@
     { "id": "CA2266", "source": "CA", "severity": "none", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Off: the SDK 10.0.1xx analyzers lack it, so turning it on would let an SDK update add a rule. It checks file-based programs only." },
     { "id": "CA2007", "source": "CA", "severity": "none", "level": "Baseline", "since": "1.0.0", "fixable": false, "description": "Off: ConfigureAwait on every await is noise in apps without a synchronization context." },
 
-    { "id": "IDE1006", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters, Async suffix on async methods.", "options": {
+    { "id": "IDE1006", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members, _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it.", "options": {
       "dotnet_naming_rule.interfaces_begin_with_i.symbols": "interfaces",
       "dotnet_naming_rule.interfaces_begin_with_i.style": "prefix_i",
       "dotnet_naming_rule.interfaces_begin_with_i.severity": "warning",
@@ -125,17 +124,10 @@
       "dotnet_naming_rule.parameters_and_locals_camel.style": "camel_case",
       "dotnet_naming_rule.parameters_and_locals_camel.severity": "warning",
       "dotnet_naming_symbols.parameters_and_locals.applicable_kinds": "parameter, local",
-      "dotnet_naming_rule.async_methods_end_with_async.symbols": "async_methods",
-      "dotnet_naming_rule.async_methods_end_with_async.style": "end_with_async",
-      "dotnet_naming_rule.async_methods_end_with_async.severity": "warning",
-      "dotnet_naming_symbols.async_methods.applicable_kinds": "method",
-      "dotnet_naming_symbols.async_methods.required_modifiers": "async",
       "dotnet_naming_style.pascal_case.capitalization": "pascal_case",
       "dotnet_naming_style.camel_case.capitalization": "camel_case",
       "dotnet_naming_style.underscore_camel_case.capitalization": "camel_case",
-      "dotnet_naming_style.underscore_camel_case.required_prefix": "_",
-      "dotnet_naming_style.end_with_async.capitalization": "pascal_case",
-      "dotnet_naming_style.end_with_async.required_suffix": "Async"
+      "dotnet_naming_style.underscore_camel_case.required_prefix": "_"
     } },
     { "id": "IDE0005", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No unused using directives." },
     { "id": "CS1591", "docs": "https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591", "source": "CS", "severity": "none", "level": "Recommended", "since": "1.0.0", "fixable": false, "description": "Off: documentation files are generated for IDE0005, doc comments stay optional." },
@@ -165,7 +157,7 @@
     { "id": "IDE0017", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Object initializers.", "options": { "dotnet_style_object_initializer": "true" } },
     { "id": "IDE0028", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Collection initializers.", "options": { "dotnet_style_collection_initializer": "true" } },
     { "id": "IDE0300", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Collection expressions for arrays.", "options": { "dotnet_style_prefer_collection_expression": "when_types_loosely_match" } },
-    { "id": "IDE0305", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Collection expressions instead of fluent `ToList()`/`ToArray()` calls." },
+    { "id": "IDE0305", "source": "IDE", "severity": "suggestion", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Suggestion: collection expressions instead of fluent `ToList()`/`ToArray()` calls." },
     { "id": "IDE0029", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` instead of a null-check ternary.", "options": { "dotnet_style_coalesce_expression": "true" } },
     { "id": "IDE0030", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`??` for nullable value types." },
     { "id": "IDE0031", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "`?.` instead of a null-check ternary.", "options": { "dotnet_style_null_propagation": "true" } },
@@ -193,7 +185,7 @@
     { "id": "IDE0039", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Local functions instead of lambdas stored in locals.", "options": { "csharp_style_prefer_local_over_anonymous_function": "true" } },
     { "id": "IDE0062", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Static local functions when nothing is captured.", "options": { "csharp_prefer_static_local_function": "true" } },
     { "id": "IDE0170", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Extended property patterns.", "options": { "csharp_style_prefer_extended_property_pattern": "true" } },
-    { "id": "IDE0051", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No unused private members." },
+    { "id": "IDE0051", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No unused private members; constructors are exempt, since EF Core and serializers call them through reflection." },
     { "id": "IDE0052", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No private members that are written but never read." },
     { "id": "IDE0060", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No unused parameters on non-public members.", "options": { "dotnet_code_quality_unused_parameters": "non_public" } },
     { "id": "IDE0059", "source": "IDE", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "No assignments whose value is never used.", "options": { "csharp_style_unused_value_assignment_preference": "discard_variable" } },
@@ -252,7 +244,6 @@
   ],
   "tests": [
     { "key": "dotnet_diagnostic.CA1707.severity", "value": "none", "description": "Test names are sentences with underscores." },
-    { "key": "dotnet_naming_rule.async_methods_end_with_async.severity", "value": "none", "description": "Async test methods describe behaviour, not mechanics, so no Async suffix." },
     { "key": "dotnet_diagnostic.CA1502.severity", "value": "none", "description": "Code metrics judge production design; a test's size and coupling are its fixture." },
     { "key": "dotnet_diagnostic.CA1505.severity", "value": "none", "description": "Code metrics judge production design; a test's size and coupling are its fixture." },
     { "key": "dotnet_diagnostic.CA1506.severity", "value": "none", "description": "Code metrics judge production design; a test's size and coupling are its fixture." }
