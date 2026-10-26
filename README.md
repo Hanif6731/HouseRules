@@ -183,12 +183,16 @@ The build output is the whole interface; no agent-specific tooling is needed.
 Roslynator's RCS0053 misreads two common layouts, and `dotnet format` cannot settle them: whatever it writes, RCS0053
 or IDE0055 reports again.
 
-- An anonymous object that is a lambda's whole body, as the only argument: `.Select(x => new` with `{` on the next
-  line. A named type (`new Row`) is fine. ([roslynator#1851](https://github.com/dotnet/roslynator/issues/1851))
-- A block lambda that is the only argument in a top-level statement, with `{` in column 0:
-  `builder.Services.AddCors(options =>`. ([roslynator#1852](https://github.com/dotnet/roslynator/issues/1852))
+- An anonymous object that is the only argument, or a lambda's whole body as the only argument, with `{` on the
+  next line: `Serialize(new` or `.Select(x => new`. A named type (`new Row`) is fine.
+  ([roslynator#1851](https://github.com/dotnet/roslynator/issues/1851))
+- A block (a lambda body, object initializer or switch expression) that is the only argument in a top-level
+  statement, with `{` in column 0: `builder.Services.AddCors(options =>`. It appears whenever Roslynator knows the
+  indentation step, from `indent_size` (which the levels set) or from the indentation of the file's other code.
+  ([roslynator#1852](https://github.com/dotnet/roslynator/issues/1852))
 
-Until Roslynator fixes them, record the sites in the baseline or turn RCS0053 off for the files concerned.
+Both are fixed in [roslynator#1858](https://github.com/dotnet/roslynator/pull/1858), which is under review. Until a
+Roslynator release includes it, record the sites in the baseline or turn RCS0053 off for the files concerned.
 
 ## Rules
 
