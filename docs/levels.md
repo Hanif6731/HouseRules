@@ -161,9 +161,9 @@ Adds nullable reference types, every compiler warning wave, code metrics, the re
 | [IDE0130](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0130) | .NET SDK code style | Namespaces match the folder structure. | warning | yes |
 | [IDE0250](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0250) | .NET SDK code style | Readonly structs when no member mutates. | warning | yes |
 | [IDE0251](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0251) | .NET SDK code style | Readonly struct members when they do not mutate. | warning | yes |
-| [CA1502](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1502) | .NET SDK code analysis | Cyclomatic complexity at most 15 per method (CodeMetricsConfig.txt). | warning | no |
-| [CA1505](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1505) | .NET SDK code analysis | Maintainability index at least 20. | warning | no |
-| [CA1506](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1506) | .NET SDK code analysis | Class coupling at most 30 per method and 60 per type. | warning | no |
+| [CA1502](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1502) | .NET SDK code analysis | Cyclomatic complexity at most 25 per method, the .NET default. | warning | no |
+| [CA1505](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1505) | .NET SDK code analysis | Maintainability index at least 10, the .NET default. | warning | no |
+| [CA1506](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1506) | .NET SDK code analysis | Class coupling at most 40 per method and 95 per type, the .NET defaults. | warning | no |
 | [CS8602](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/nullable-warnings#possible-dereference-of-null) | C# compiler | No dereference of a possibly null reference. | warning | no |
 | [CS8618](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/nullable-warnings#nonnullable-reference-not-initialized) | C# compiler | Non-nullable members are initialised by every constructor. | warning | no |
 | [CS1572](https://learn.microsoft.com/dotnet/csharp/misc/cs1572) | C# compiler | XML doc `param` tags name real parameters. | warning | no |

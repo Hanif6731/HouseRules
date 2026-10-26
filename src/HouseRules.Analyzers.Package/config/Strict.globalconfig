@@ -386,13 +386,13 @@ csharp_style_prefer_readonly_struct = true
 dotnet_diagnostic.IDE0251.severity = warning
 csharp_style_prefer_readonly_struct_member = true
 
-# CA1502: Cyclomatic complexity at most 15 per method (CodeMetricsConfig.txt).
+# CA1502: Cyclomatic complexity at most 25 per method, the .NET default.
 dotnet_diagnostic.CA1502.severity = warning
 
-# CA1505: Maintainability index at least 20.
+# CA1505: Maintainability index at least 10, the .NET default.
 dotnet_diagnostic.CA1505.severity = warning
 
-# CA1506: Class coupling at most 30 per method and 60 per type.
+# CA1506: Class coupling at most 40 per method and 95 per type, the .NET defaults.
 dotnet_diagnostic.CA1506.severity = warning
 
 # CS8602: No dereference of a possibly null reference.
