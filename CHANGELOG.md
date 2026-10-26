@@ -9,6 +9,10 @@ errors.
 
 ## [Unreleased]
 
+## [1.0.0-preview.4] - 2026-10-26
+
+The fourth preview of 1.0.0. `Strict` reports oversized code by the .NET default limits.
+
 ### Changed
 
 - `Strict` uses the .NET default code-metric limits: cyclomatic complexity 25 (was 15, CA1502), maintainability index
