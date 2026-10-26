@@ -9,6 +9,17 @@ errors.
 
 ## [Unreleased]
 
+## [1.0.0-preview.4] - 2026-10-26
+
+The fourth preview of 1.0.0. `Strict` reports oversized code by the .NET default limits.
+
+### Changed
+
+- `Strict` uses the .NET default code-metric limits: cyclomatic complexity 25 (was 15, CA1502), maintainability index
+  10 (was 20, CA1505), and class coupling 40 per member and 95 per type (was 30 and 60, CA1506). The stricter limits
+  reported ordinary EF Core handlers, which touch their entities, the DbContext and LINQ, and composition roots such
+  as `Program.cs` and a DbContext, which no refactoring can bring under them.
+
 ## [1.0.0-preview.3] - 2026-10-26
 
 The third preview of 1.0.0. It fixes what moving an ASP.NET Core and EF Core backend to `Recommended` showed:

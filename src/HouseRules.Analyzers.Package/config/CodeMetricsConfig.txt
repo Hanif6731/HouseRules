@@ -1,5 +1,6 @@
-# Code-metric thresholds for CA1502 (complexity), CA1505 (maintainability index) and CA1506 (coupling).
-CA1502: 15
-CA1505: 20
-CA1506(Method): 30
-CA1506(Type): 60
+# Code-metric thresholds for CA1502 (complexity), CA1505 (maintainability index) and CA1506 (coupling): the .NET
+# defaults, written out so the levels page and this file agree.
+CA1502: 25
+CA1505: 10
+CA1506(Method): 40
+CA1506(Type): 95
