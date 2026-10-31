@@ -64,7 +64,7 @@ public sealed class OneElementPerLineOnceWrappedAnalyzer : DiagnosticAnalyzer
 
     // True when two or more elements share one line that is not the opening token's line. A list split part-way
     // spans several lines and is RCS0053's to report; a comment between elements has no safe place once they split.
-    internal static bool IsPackedAfterOpening<TNode>(SyntaxToken open, SeparatedSyntaxList<TNode> elements)
+    private static bool IsPackedAfterOpening<TNode>(SyntaxToken open, SeparatedSyntaxList<TNode> elements)
         where TNode : SyntaxNode
     {
         if (elements.Count < 2 || open.SyntaxTree is not { } tree)
