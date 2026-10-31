@@ -275,12 +275,24 @@ dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts
 tests/smoke/smoke.sh artifacts
 ```
 
-Levels, rule severities and ban categories live in `catalogue/rules.json`. After changing it, regenerate the level
-configs and `docs/levels.md`; a test fails until you do:
+Levels, rule severities, ban categories and each HouseRules rule's title and message live in `catalogue/rules.json`.
+After changing it, regenerate the level configs, `docs/levels.md` and the rules' ids and descriptors; a test fails
+until you do:
 
 ```bash
 dotnet run --project tools/Generate
 ```
+
+Each project runs in a different host, so each may use only what its host provides; `ArchitectureTests` fails if a
+reference crosses that line.
+
+| Project | Loaded by | Holds |
+|---|---|---|
+| `src/HouseRules.Analyzers` | the compiler, in every build | `Rules/` (analyzers) and `Suppressors/` |
+| `src/HouseRules.CodeFixes` | the IDE and `dotnet format` | one code fix per fixable rule |
+| `src/HouseRules.Tasks` | MSBuild | the ratchet's `init` and `prune` steps |
+| `src/HouseRules.Analyzers.Package` | NuGet | the package: level configs, props and targets |
+| `tools/Generate` | you and CI | writes everything that comes from the catalogue |
 
 To propose a rule, [open a rule proposal](https://github.com/Hanif6731/HouseRules/issues/new?template=rule-proposal.yml)
 first. A new rule covers what no maintained analyzer does, and arrives with an analyzer, a code fix, tests and a docs
