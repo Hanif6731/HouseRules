@@ -3,6 +3,7 @@
 <RuleSet Name="HouseRules Strict" Description="HouseRules Strict" ToolsVersion="17.0">
   <Rules AnalyzerId="HouseRules" RuleNamespace="HouseRules">
     <Rule Id="HR0001" Action="Warning" />
+    <Rule Id="HR0002" Action="Warning" />
     <Rule Id="IDE0055" Action="Warning" />
     <Rule Id="IDE0011" Action="Warning" />
     <Rule Id="IDE0161" Action="Warning" />

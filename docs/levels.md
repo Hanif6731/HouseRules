@@ -83,6 +83,7 @@ Adds design, maintainability, naming and usage rules whose fixes need human judg
 
 | ID | Source | What it enforces | Severity | Fixed by `dotnet format` |
 |---|---|---|---|---|
+| [HR0002](rules/HR0002.md) | HouseRules | Once an argument or parameter list breaks after its opening parenthesis, one element per line. | warning | yes |
 | [IDE1006](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide1006) | .NET SDK code style | Naming: IPrefix interfaces, TPrefix type parameters, PascalCase types and members (not namespaces, which may start with a brand such as xUnit), _camelCase private fields, camelCase locals and parameters. No Async suffix rule: ASP.NET Core actions go without it. | warning | yes |
 | [IDE0005](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0005) | .NET SDK code style | No unused using directives. | warning | yes |
 | [CS1591](https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591) | C# compiler | Off: documentation files are generated for IDE0005, doc comments stay optional. | none | no |

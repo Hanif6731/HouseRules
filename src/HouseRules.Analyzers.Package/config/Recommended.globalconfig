@@ -5,6 +5,9 @@ global_level = -50
 # HR0001: Blank line after a multi-line statement.
 dotnet_diagnostic.HR0001.severity = warning
 
+# HR0002: Once an argument or parameter list breaks after its opening parenthesis, one element per line.
+dotnet_diagnostic.HR0002.severity = warning
+
 # IDE0055: Formatting: Allman braces, indentation, spacing.
 dotnet_diagnostic.IDE0055.severity = warning
 csharp_new_line_before_open_brace = all
