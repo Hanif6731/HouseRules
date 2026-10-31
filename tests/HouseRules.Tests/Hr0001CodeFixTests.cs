@@ -2,8 +2,6 @@ using HouseRules.Analyzers.Rules;
 using HouseRules.CodeFixes;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
 
 namespace HouseRules.Tests;
 
@@ -326,20 +324,9 @@ public sealed class Hr0001CodeFixTests
     private static Task VerifyAsync(
         string source,
         string fixedSource,
-        OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary)
-    {
-        var test = new CSharpCodeFixTest<
-            BlankLineAfterMultiLineStatementAnalyzer,
-            BlankLineAfterMultiLineStatementCodeFix,
-            DefaultVerifier>
-        {
-            TestCode = source,
-            FixedCode = fixedSource,
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
-        };
-
-        test.TestState.OutputKind = outputKind;
-        test.FixedState.OutputKind = outputKind;
-        return test.RunAsync(TestContext.Current.CancellationToken);
-    }
+        OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary) =>
+        Verify.CodeFixAsync<BlankLineAfterMultiLineStatementAnalyzer, BlankLineAfterMultiLineStatementCodeFix>(
+            source,
+            fixedSource,
+            outputKind);
 }

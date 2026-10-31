@@ -3,7 +3,6 @@ using System.Globalization;
 using HouseRules.Analyzers.Rules;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
 namespace HouseRules.Tests;
@@ -235,19 +234,6 @@ public sealed class Hr0002AnalyzerTests
             descriptor.HelpLinkUri);
     }
 
-    // The rule is off unless a level turns it on, as the Recommended and Strict configs do.
-    internal const string EnableRule = "is_global = true\ndotnet_diagnostic.HR0002.severity = warning\n";
-
-    private static Task VerifyAsync(string source, params DiagnosticResult[] expected)
-    {
-        var test = new CSharpAnalyzerTest<OneElementPerLineOnceWrappedAnalyzer, DefaultVerifier>
-        {
-            TestCode = source,
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
-        };
-
-        test.TestState.AnalyzerConfigFiles.Add(("/.globalconfig", EnableRule));
-        test.ExpectedDiagnostics.AddRange(expected);
-        return test.RunAsync(TestContext.Current.CancellationToken);
-    }
+    private static Task VerifyAsync(string source, params DiagnosticResult[] expected) =>
+        Verify.AnalyzerAsync<OneElementPerLineOnceWrappedAnalyzer>(source, expected);
 }
