@@ -9,6 +9,11 @@ errors.
 
 ## [Unreleased]
 
+### Added
+
+- HR0002, one element per line once an argument or parameter list breaks after its opening parenthesis
+  (`Recommended` and `Strict`), with a code fix that `dotnet format` applies.
+
 ## [1.0.0-preview.4] - 2026-10-26
 
 The fourth preview of 1.0.0. `Strict` reports oversized code by the .NET default limits.

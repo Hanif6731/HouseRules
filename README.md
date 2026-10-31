@@ -199,6 +199,7 @@ Roslynator release includes it, record the sites in the baseline or turn RCS0053
 | ID | Rule | Fixed by `dotnet format` |
 |---|---|---|
 | [HR0001](docs/rules/HR0001.md) | Blank line after a multi-line statement | yes |
+| [HR0002](docs/rules/HR0002.md) | One element per line once a list wraps | yes |
 
 Every SDK and Roslynator rule the levels configure is in [docs/levels.md](docs/levels.md).
 

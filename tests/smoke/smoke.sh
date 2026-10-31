@@ -115,17 +115,18 @@ dir=$(new_project baseline Violations.cs Baseline)
 echo "HouseRules.Analyzers $version on SDK $(cd "$dir" && dotnet --version)"
 build "$dir"
 check baseline fails "$(reported HR0001)" "$(reported RCS0056)" "$(reported CA5351)" "$(reported IDE0161)" \
-  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)" "!$(reported RS0030)"
+  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)" "!$(reported RS0030)" \
+  "!$(reported HR0002)"
 
 dir=$(new_project recommended Violations.cs Recommended)
 build "$dir"
 check recommended fails "$(reported HR0001)" "$(reported IDE1006)" "!'DateTime.UtcNow' is banned" \
-  "$(reported CA1874)" "$(reported IDE0051)" "!$(reported CS8602)" "!$(reported RS0030)"
+  "$(reported CA1874)" "$(reported IDE0051)" "!$(reported CS8602)" "!$(reported RS0030)" "$(reported HR0002)"
 
 dir=$(new_project strict Violations.cs Strict)
 build "$dir"
 check strict fails "$(reported HR0001)" "$(reported IDE1006)" "$(reported CS8602)" "'DateTime.UtcNow' is banned" \
-  "$(reported CA5351)" "!'MD5' is banned"
+  "$(reported CA5351)" "!'MD5' is banned" "$(reported HR0002)"
 
 dir=$(new_project lowercase-level Violations.cs strict)
 build "$dir"
@@ -205,6 +206,16 @@ check format-twice-converges passes
 
 build "$dir"
 check format-twice-fixes-wrapped-statements passes "!$(reported HR0001)" "!$(reported RCS0056)"
+
+# HR0002 splits a packed list in one dotnet format run and leaves nothing for RCS0053, HR0001 or a second run.
+dir=$(new_project hr0002-format-converges Packed.cs Recommended)
+(cd "$dir" && dotnet format > /dev/null 2>&1) || true
+code=0
+output=$(cd "$dir" && dotnet format --verify-no-changes 2>&1) || code=$?
+check hr0002-format-converges passes
+
+build "$dir"
+check hr0002-format-fixes-packed-lists passes "!$(reported HR0002)" "!$(reported RCS0053)" "!$(reported HR0001)"
 
 # RCS0053 measures indentation in 4-space steps without any .editorconfig (a Docker build context, say), as with
 # indent_size = 4; a consumer's own .editorconfig still decides.

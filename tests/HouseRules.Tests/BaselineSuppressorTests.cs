@@ -1,4 +1,5 @@
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Rules;
+using HouseRules.Analyzers.Suppressors;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

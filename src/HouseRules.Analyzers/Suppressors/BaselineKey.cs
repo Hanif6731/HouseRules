@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Suppressors;
 
 /// <summary>
 /// One entry of <c>houserules.baseline</c>: <c>path|rule id|SHA-256 of the trimmed source line</c>, with the path

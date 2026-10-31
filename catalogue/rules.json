@@ -30,6 +30,7 @@
   ],
   "rules": [
     { "id": "HR0001", "source": "HouseRules", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Blank line after a multi-line statement." },
+    { "id": "HR0002", "source": "HouseRules", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Once an argument or parameter list breaks after its opening parenthesis, one element per line." },
     { "id": "IDE0055", "source": "IDE", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Formatting: Allman braces, indentation, spacing.", "options": {
       "csharp_new_line_before_open_brace": "all",
       "csharp_new_line_before_else": "true",

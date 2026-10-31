@@ -1,4 +1,4 @@
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Rules;
 using HouseRules.CodeFixes;
 
 using Microsoft.CodeAnalysis;

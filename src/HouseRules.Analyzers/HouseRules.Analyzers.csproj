@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="SuppressibleIds.txt" LogicalName="HouseRules.Analyzers.SuppressibleIds.txt" />
+    <EmbeddedResource Include="Suppressors\SuppressibleIds.txt" LogicalName="HouseRules.Analyzers.SuppressibleIds.txt" />
   </ItemGroup>
 
   <ItemGroup>

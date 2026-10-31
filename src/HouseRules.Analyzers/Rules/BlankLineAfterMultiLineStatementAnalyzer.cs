@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Rules;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class BlankLineAfterMultiLineStatementAnalyzer : DiagnosticAnalyzer
