@@ -1,7 +1,7 @@
 using System.Reflection.PortableExecutable;
 using System.Text;
 
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Rules;
 using HouseRules.CodeFixes;
 using HouseRules.Tasks;
 

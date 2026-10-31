@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Suppressors;
 
 /// <summary>
 /// The ratchet: suppresses findings recorded in <c>houserules.baseline</c>, each key at most as often as it is

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Rules;
 using HouseRules.Generate;
 
 using Microsoft.CodeAnalysis.Diagnostics;

@@ -1,4 +1,4 @@
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Rules;
 
 public static class RuleIds
 {

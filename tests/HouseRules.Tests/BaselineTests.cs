@@ -1,4 +1,4 @@
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Suppressors;
 using HouseRules.Tasks;
 
 namespace HouseRules.Tests;

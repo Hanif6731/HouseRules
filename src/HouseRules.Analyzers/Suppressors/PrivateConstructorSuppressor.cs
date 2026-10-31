@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Suppressors;
 
 /// <summary>
 /// Suppresses IDE0051 (unused private member) on constructors. EF Core, serializers and dependency injection call

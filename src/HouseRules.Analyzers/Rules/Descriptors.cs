@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Rules;
 
 internal static class Descriptors
 {

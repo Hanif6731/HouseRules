@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Composition;
 
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Rules;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;

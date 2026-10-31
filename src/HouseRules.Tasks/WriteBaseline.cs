@@ -1,4 +1,4 @@
-using HouseRules.Analyzers;
+using HouseRules.Analyzers.Suppressors;
 
 using Microsoft.Build.Framework;
 

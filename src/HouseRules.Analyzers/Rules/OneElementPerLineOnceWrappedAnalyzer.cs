@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace HouseRules.Analyzers;
+namespace HouseRules.Analyzers.Rules;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class OneElementPerLineOnceWrappedAnalyzer : DiagnosticAnalyzer

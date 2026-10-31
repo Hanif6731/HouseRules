@@ -14,7 +14,7 @@ public static class CatalogueGenerator
 
     public const string LevelsDocPath = "docs/levels.md";
 
-    public const string SuppressibleIdsPath = "src/HouseRules.Analyzers/SuppressibleIds.txt";
+    public const string SuppressibleIdsPath = "src/HouseRules.Analyzers/Suppressors/SuppressibleIds.txt";
 
     public static readonly IReadOnlyList<string> Levels = ["Baseline", "Recommended", "Strict"];
 
