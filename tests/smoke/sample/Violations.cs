@@ -25,6 +25,9 @@ namespace Sample
 
         public int Sum(int first, int second, int third, int fourth, int fifth, int sixth, int seventh) => first + second;
 
+        public int Total() => Sum(
+            1, 2, 3, 4, 5, 6, 7);
+
         public void Check(int value)
         {
             ArgumentNullException.ThrowIfNull(value);
