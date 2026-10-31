@@ -238,8 +238,9 @@ shown here. Single builds varied by about a second, so compare the medians.
 
 Most of the extra time is the SDK's own analyzers and code-style rules that the levels turn on. At `Strict`,
 HouseRules' analyzer, Roslynator and the banned-API analyzer took under 1 s of the 16.5 s of analyzer time summed over
-the six projects, as reported by `-p:ReportAnalyzer=true`. A codebase that does not run the SDK analyzers yet starts
-from a faster build and pays more. Live analysis in an IDE is not measured.
+the six projects, as reported by `-p:ReportAnalyzer=true`. HR0002, added after that measurement, took 0.09–0.17 s of
+the 29–40 s of analyzer time on the same backend at `Strict` (three builds on 2026-11-01). A codebase that does not
+run the SDK analyzers yet starts from a faster build and pays more. Live analysis in an IDE is not measured.
 
 To measure your own codebase, time the same clean build several times with and without the package reference, and add
 `-p:ReportAnalyzer=true -bl` to one build to see the time per analyzer in the binary log.
@@ -275,12 +276,24 @@ dotnet pack src/HouseRules.Analyzers.Package -c Release -o artifacts
 tests/smoke/smoke.sh artifacts
 ```
 
-Levels, rule severities and ban categories live in `catalogue/rules.json`. After changing it, regenerate the level
-configs and `docs/levels.md`; a test fails until you do:
+Levels, rule severities, ban categories and each HouseRules rule's title and message live in `catalogue/rules.json`.
+After changing it, regenerate the level configs, `docs/levels.md` and the rules' ids and descriptors; a test fails
+until you do:
 
 ```bash
 dotnet run --project tools/Generate
 ```
+
+Each project runs in a different host, so each may use only what its host provides; `ArchitectureTests` fails if a
+reference crosses that line.
+
+| Project | Loaded by | Holds |
+|---|---|---|
+| `src/HouseRules.Analyzers` | the compiler, in every build | `Rules/` (analyzers) and `Suppressors/` |
+| `src/HouseRules.CodeFixes` | the IDE and `dotnet format` | one code fix per fixable rule |
+| `src/HouseRules.Tasks` | MSBuild | the ratchet's `init` and `prune` steps |
+| `src/HouseRules.Analyzers.Package` | NuGet | the package: level configs, props and targets |
+| `tools/Generate` | you and CI | writes everything that comes from the catalogue |
 
 To propose a rule, [open a rule proposal](https://github.com/Hanif6731/HouseRules/issues/new?template=rule-proposal.yml)
 first. A new rule covers what no maintained analyzer does, and arrives with an analyzer, a code fix, tests and a docs

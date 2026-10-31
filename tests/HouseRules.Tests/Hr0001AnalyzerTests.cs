@@ -3,8 +3,6 @@ using System.Globalization;
 using HouseRules.Analyzers.Rules;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
 
 namespace HouseRules.Tests;
 
@@ -225,15 +223,6 @@ public sealed class Hr0001AnalyzerTests
             descriptor.HelpLinkUri);
     }
 
-    private static Task VerifyAsync(string source, OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary)
-    {
-        var test = new CSharpAnalyzerTest<BlankLineAfterMultiLineStatementAnalyzer, DefaultVerifier>
-        {
-            TestCode = source,
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
-        };
-
-        test.TestState.OutputKind = outputKind;
-        return test.RunAsync(TestContext.Current.CancellationToken);
-    }
+    private static Task VerifyAsync(string source, OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary) =>
+        Verify.AnalyzerAsync<BlankLineAfterMultiLineStatementAnalyzer>(source, outputKind);
 }

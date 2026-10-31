@@ -144,6 +144,40 @@ public sealed partial class CatalogueTests
         }
     }
 
+    [Theory]
+    [InlineData("HouseRules", false)]
+    [InlineData("Roslynator", true)]
+    public void Only_and_every_own_rule_has_descriptor_metadata(string source, bool hasRuleEntry)
+    {
+        var root = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            var rule = hasRuleEntry
+                ? """
+                    , "rule": { "name": "X", "category": "Style", "title": "T", "message": "M", "enabledByDefault": true }
+                    """
+                : "";
+
+            Directory.CreateDirectory(Path.Combine(root, "catalogue"));
+            File.WriteAllText(
+                Path.Combine(root, CatalogueGenerator.CataloguePath),
+                $$"""
+                {
+                  "properties": [], "categories": [], "banned": [], "tests": [],
+                  "rules": [ { "id": "XX9999", "source": "{{source}}", "severity": "warning", "level": "Baseline",
+                    "since": "1.0.0", "fixable": false, "description": "D"{{rule}} } ]
+                }
+                """);
+
+            var error = Assert.Throws<InvalidDataException>(() => CatalogueGenerator.Load(root));
+            Assert.Contains("XX9999", error.Message, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
     private static string LevelsPage() =>
         CatalogueGenerator.Generate(RepoRoot.Path)[CatalogueGenerator.LevelsDocPath];
 

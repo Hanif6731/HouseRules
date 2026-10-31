@@ -1,9 +1,6 @@
 using HouseRules.Analyzers.Rules;
 using HouseRules.CodeFixes;
 
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-
 namespace HouseRules.Tests;
 
 public sealed class Hr0002CodeFixTests
@@ -149,18 +146,75 @@ public sealed class Hr0002CodeFixTests
             """);
     }
 
-    private static Task VerifyAsync(string source, string fixedSource)
+    [Fact]
+    public async Task A_lambda_as_the_first_element_keeps_its_own_parameter_list()
     {
-        var test = new CSharpCodeFixTest<
-            OneElementPerLineOnceWrappedAnalyzer,
-            OneElementPerLineOnceWrappedCodeFix,
-            DefaultVerifier>
-        {
-            TestCode = source,
-            FixedCode = fixedSource,
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
-        };
+        await VerifyAsync(
+            """
+            class C
+            {
+                void M()
+                {
+                    Run(
+                        {|HR0002:(a, b) => a + b|}, 2);
+                }
 
-        return test.RunAsync(TestContext.Current.CancellationToken);
+                void Run(System.Func<int, int, int> f, int x) { }
+            }
+            """,
+            """
+            class C
+            {
+                void M()
+                {
+                    Run(
+                        (a, b) => a + b,
+                        2);
+                }
+
+                void Run(System.Func<int, int, int> f, int x) { }
+            }
+            """);
     }
+
+    [Fact]
+    public async Task Fix_all_splits_every_packed_list_in_a_document()
+    {
+        await VerifyAsync(
+            """
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        {|HR0002:1|}, 2);
+                    Call(
+                        {|HR0002:3|}, 4);
+                }
+
+                void Call(int a, int b) { }
+            }
+            """,
+            """
+            class C
+            {
+                void M()
+                {
+                    Call(
+                        1,
+                        2);
+                    Call(
+                        3,
+                        4);
+                }
+
+                void Call(int a, int b) { }
+            }
+            """);
+    }
+
+    private static Task VerifyAsync(string source, string fixedSource) =>
+        Verify.CodeFixAsync<OneElementPerLineOnceWrappedAnalyzer, OneElementPerLineOnceWrappedCodeFix>(
+            source,
+            fixedSource);
 }
