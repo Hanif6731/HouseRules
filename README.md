@@ -191,7 +191,7 @@ or IDE0055 reports again.
   indentation step, from `indent_size` (which the levels set) or from the indentation of the file's other code.
   ([roslynator#1852](https://github.com/dotnet/roslynator/issues/1852))
 
-Both are fixed in [roslynator#1858](https://github.com/dotnet/roslynator/pull/1858), which is under review. Until a
+Both are fixed in [roslynator#1858](https://github.com/dotnet/roslynator/pull/1858), merged after 5.0.1. Until a
 Roslynator release includes it, record the sites in the baseline or turn RCS0053 off for the files concerned.
 
 ## Rules
