@@ -238,8 +238,9 @@ shown here. Single builds varied by about a second, so compare the medians.
 
 Most of the extra time is the SDK's own analyzers and code-style rules that the levels turn on. At `Strict`,
 HouseRules' analyzer, Roslynator and the banned-API analyzer took under 1 s of the 16.5 s of analyzer time summed over
-the six projects, as reported by `-p:ReportAnalyzer=true`. A codebase that does not run the SDK analyzers yet starts
-from a faster build and pays more. Live analysis in an IDE is not measured.
+the six projects, as reported by `-p:ReportAnalyzer=true`. HR0002, added after that measurement, took 0.09–0.17 s of
+the 29–40 s of analyzer time on the same backend at `Strict` (three builds on 2026-11-01). A codebase that does not
+run the SDK analyzers yet starts from a faster build and pays more. Live analysis in an IDE is not measured.
 
 To measure your own codebase, time the same clean build several times with and without the package reference, and add
 `-p:ReportAnalyzer=true -bl` to one build to see the time per analyzer in the binary log.
