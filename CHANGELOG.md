@@ -9,6 +9,11 @@ errors.
 
 ## [Unreleased]
 
+## [1.0.0-preview.5] - 2026-11-01
+
+The fifth preview of 1.0.0. `Recommended` and `Strict` report an argument or parameter list that breaks after its
+opening parenthesis but keeps its elements together; one `dotnet format` run splits them.
+
 ### Added
 
 - HR0002, one element per line once an argument or parameter list breaks after its opening parenthesis
