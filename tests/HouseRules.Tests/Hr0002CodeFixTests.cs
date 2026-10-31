@@ -104,18 +104,20 @@ public sealed class Hr0002CodeFixTests
     public async Task The_fix_keeps_tab_indentation()
     {
         await VerifyAsync(
-            "class C\n{\n\tvoid M()\n\t{\n\t\tCall(\n\t\t\t{|HR0002:1|}, 2);\n\t}\n\n\tvoid Call(int a, int b) { }\n}\n",
-            "class C\n{\n\tvoid M()\n\t{\n\t\tCall(\n\t\t\t1,\n\t\t\t2);\n\t}\n\n\tvoid Call(int a, int b) { }\n}\n");
+            "class C\n{\n\tvoid M()\n\t{\n\t\tCall(\n\t\t\t{|HR0002:1|}, 2);\n\t}\n\n"
+                + "\tvoid Call(int a, int b) { }\n}\n",
+            "class C\n{\n\tvoid M()\n\t{\n\t\tCall(\n\t\t\t1,\n\t\t\t2);\n\t}\n\n"
+                + "\tvoid Call(int a, int b) { }\n}\n");
     }
 
     [Fact]
     public async Task The_fix_keeps_crlf_line_endings()
     {
         await VerifyAsync(
-            "class C\r\n{\r\n    void M()\r\n    {\r\n        Call(\r\n            {|HR0002:1|}, 2);\r\n    }\r\n\r\n"
-                + "    void Call(int a, int b) { }\r\n}\r\n",
-            "class C\r\n{\r\n    void M()\r\n    {\r\n        Call(\r\n            1,\r\n            2);\r\n    }\r\n\r\n"
-                + "    void Call(int a, int b) { }\r\n}\r\n");
+            "class C\r\n{\r\n    void M()\r\n    {\r\n        Call(\r\n"
+                + "            {|HR0002:1|}, 2);\r\n    }\r\n\r\n    void Call(int a, int b) { }\r\n}\r\n",
+            "class C\r\n{\r\n    void M()\r\n    {\r\n        Call(\r\n"
+                + "            1,\r\n            2);\r\n    }\r\n\r\n    void Call(int a, int b) { }\r\n}\r\n");
     }
 
     [Fact]

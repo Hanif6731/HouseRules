@@ -115,7 +115,8 @@ dir=$(new_project baseline Violations.cs Baseline)
 echo "HouseRules.Analyzers $version on SDK $(cd "$dir" && dotnet --version)"
 build "$dir"
 check baseline fails "$(reported HR0001)" "$(reported RCS0056)" "$(reported CA5351)" "$(reported IDE0161)" \
-  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)" "!$(reported RS0030)" \n  "!$(reported HR0002)"
+  "$(reported CA2264)" "!$(reported CA1874)" "!$(reported IDE1006)" "!$(reported CS8602)" "!$(reported RS0030)" \
+  "!$(reported HR0002)"
 
 dir=$(new_project recommended Violations.cs Recommended)
 build "$dir"
