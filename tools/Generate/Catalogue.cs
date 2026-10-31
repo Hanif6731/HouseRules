@@ -29,6 +29,10 @@ public sealed record RuleEntry(
     string Description,
     IReadOnlyDictionary<string, string>? Options,
     string? AdditionalFile,
-    string? Docs);
+    string? Docs,
+    OwnRuleEntry? Rule);
+
+/// <summary>What a HouseRules analyzer's descriptor is generated from; only rules with source "HouseRules" have one.</summary>
+public sealed record OwnRuleEntry(string Name, string Category, string Title, string Message, bool EnabledByDefault);
 
 public sealed record TestEntry(string Key, string Value, string Description);

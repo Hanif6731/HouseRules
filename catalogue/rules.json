@@ -29,8 +29,8 @@
     { "category": "Environment", "switch": "HouseRulesBanEnvironment", "level": "Strict", "since": "1.0.0", "description": "Reading environment variables directly." }
   ],
   "rules": [
-    { "id": "HR0001", "source": "HouseRules", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Blank line after a multi-line statement." },
-    { "id": "HR0002", "source": "HouseRules", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Once an argument or parameter list breaks after its opening parenthesis, one element per line." },
+    { "id": "HR0001", "source": "HouseRules", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Blank line after a multi-line statement.", "rule": { "name": "BlankLineAfterMultiLineStatement", "category": "Style", "title": "Blank line after a multi-line statement", "message": "Add a blank line before this statement: the statement above spans several lines ('dotnet format' fixes this)", "enabledByDefault": true } },
+    { "id": "HR0002", "source": "HouseRules", "severity": "warning", "level": "Recommended", "since": "1.0.0", "fixable": true, "description": "Once an argument or parameter list breaks after its opening parenthesis, one element per line.", "rule": { "name": "OneElementPerLineOnceWrapped", "category": "Style", "title": "One element per line once a list wraps", "message": "Put each {0} on its own line: the list breaks after its opening '{1}' ('dotnet format' fixes this)", "enabledByDefault": false } },
     { "id": "IDE0055", "source": "IDE", "severity": "warning", "level": "Baseline", "since": "1.0.0", "fixable": true, "description": "Formatting: Allman braces, indentation, spacing.", "options": {
       "csharp_new_line_before_open_brace": "all",
       "csharp_new_line_before_else": "true",

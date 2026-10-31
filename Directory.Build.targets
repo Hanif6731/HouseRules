@@ -9,7 +9,9 @@
     <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" PrivateAssets="all" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(MSBuildProjectName)' != 'HouseRules.Analyzers' and '$(MSBuildProjectName)' != 'HouseRules.CodeFixes'">
+  <!-- Not in tools/Generate either: it writes the analyzers' descriptors, so it must build while they do not. -->
+  <ItemGroup
+    Condition="'$(MSBuildProjectName)' != 'HouseRules.Analyzers' and '$(MSBuildProjectName)' != 'HouseRules.CodeFixes' and '$(MSBuildProjectName)' != 'Generate'">
     <ProjectReference
       Include="$(MSBuildThisFileDirectory)src/HouseRules.Analyzers/HouseRules.Analyzers.csproj"
       OutputItemType="Analyzer"
