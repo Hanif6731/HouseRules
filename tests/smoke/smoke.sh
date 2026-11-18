@@ -299,7 +299,10 @@ cp "$here/sample/Clean.cs" "$dir/lib/"
 sed -i.bak -e 's|^</Project>$|  <ItemGroup>\n    <ProjectReference Include="../lib/Lib.csproj" />\n  </ItemGroup>\n</Project>|' \
   "$dir/app/Sample.csproj"
 rm "$dir/app/Sample.csproj.bak"
-(cd "$dir" && dotnet new sln -n Sample > /dev/null && dotnet sln add app/Sample.csproj lib/Lib.csproj > /dev/null)
+# Newer SDKs add a project's references along with it (`dotnet sln add --include-references`, on by default), so
+# naming lib as well fails as a duplicate. Add app, then lib only if it is not there yet: works on every SDK.
+(cd "$dir" && dotnet new sln -n Sample > /dev/null && dotnet sln add app/Sample.csproj > /dev/null \
+  && { dotnet sln list | grep -q "Lib.csproj" || dotnet sln add lib/Lib.csproj > /dev/null; })
 code=0
 output=$(cd "$dir/app" && dotnet build -p:HouseRulesBaseline=init 2>&1) || code=$?
 check ratchet-solution-init passes "records [0-9]+ finding"
